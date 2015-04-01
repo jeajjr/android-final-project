@@ -1,9 +1,9 @@
 DROP TABLE IF EXISTS usersAndGroups;
 DROP TABLE IF EXISTS usersAndBills;
+DROP TABLE IF EXISTS groupNotifications;
 DROP TABLE IF EXISTS bills;
 DROP TABLE IF EXISTS groups;
 DROP TABLE IF EXISTS users;
-DROP TABLE IF EXISTS groupNotifications;
 
 CREATE TABLE groups (
 	name varchar(50) NOT NULL,
@@ -17,9 +17,11 @@ CREATE TABLE users (
 );
 
 CREATE TABLE bills (
-	id varchar(50) NOT NULL,
+	-- bill id is the concatenation between group name and bill name
+	id varchar(100) NOT NULL,
+	name varchar(50) NOT NULL,
 	value float NOT NULL,
-	dateOcurred date DEFAULT NULL,
+	dateOccurred datetime DEFAULT NULL,
 	gid varchar(50) NOT NULL,
 	latitude float,
 	longitude float,
@@ -58,3 +60,24 @@ CREATE TABLE groupNotifications (
 	PRIMARY KEY (nid, gid),
 	FOREIGN KEY (gid) REFERENCES groups(name) ON UPDATE CASCADE
 );
+
+-- email, password
+INSERT INTO users VALUES ('user1', '1234');
+INSERT INTO users VALUES ('user2', '1234');
+
+-- name
+INSERT INTO groups VALUES ('group1');
+
+--	id, name, value, dateOcurred, gid, latitute, longitude, picture
+INSERT INTO bills VALUES ('group1bill1', 'bill1', 50.00, '2015-04-01 02:08','group1', '', '', '');
+
+-- uid, gid
+INSERT INTO usersAndGroups VALUES ('user1', 'group1');
+INSERT INTO usersAndGroups VALUES ('user2', 'group1');
+
+--	uid, bid, valueOwed, valuePaid
+INSERT INTO usersAndBills VALUES ('user1','group1bill1', 0, 50.00);
+INSERT INTO usersAndBills VALUES ('user2','group1bill1', 50.00, 0);
+
+-- nid, gid, uid, type, details, time
+INSERT INTO groupNotifications VALUES ('1', 'group1', 'user1', '1', 'bill1', '');
