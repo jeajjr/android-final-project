@@ -19,13 +19,21 @@ public class DBHandler {
             Class.forName(JDBC_DRIVER).newInstance();
 
         } catch (Exception e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
     }
 
+    void handleException(Exception e) {
+        System.out.println("Exception: " + e.getMessage());
+        for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+    }
+
+    String generateBillID(String groupName, String billName) {
+        return groupName + billName;
+    }
+
     /**
-     * Method for check the user credentials on the database.
+     * Method to check the user credentials on the database.
      * If there are no match, returns false.
      * If matches, return true.
      *
@@ -54,8 +62,7 @@ public class DBHandler {
             connect.close();
 
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
         return isValid;
     }
@@ -82,8 +89,7 @@ public class DBHandler {
 
             connect.close();
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
         return result;
     }
@@ -109,9 +115,39 @@ public class DBHandler {
 
             connect.close();
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
+        return result;
+    }
+
+    /**
+     * Method to get all the bill names of a group.
+     *
+     * @param groupName name of the group
+     * @return ArrayList<String> bills ID
+     */
+    public ArrayList<String> getGroupBillNames(String groupName){
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        try {
+
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT name FROM bills WHERE gid=?";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, groupName);
+            ResultSet resultSet = psmtm.executeQuery();
+
+            while (resultSet.next())
+                result.add(resultSet.getString(1));
+
+            connect.close();
+
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
         return result;
     }
 
@@ -139,8 +175,7 @@ public class DBHandler {
                 return true;
 
             } catch (SQLException e) {
-                System.out.println("Exception: " + e.getMessage());
-                for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+                handleException(e);
             }
         }
 
@@ -173,8 +208,7 @@ public class DBHandler {
             connect.close();
 
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
 
         return result;
@@ -200,12 +234,11 @@ public class DBHandler {
                 psmtm.executeUpdate();
 
                 connect.close();
-                //TODO
-                //this.postNotification(new Notification(sessionUserName, Notification.USER_ADDED,addedUserName), groupName);
+
+                this.postNotification(new Notification(groupName, sessionUserName, Notification.USER_ADDED,addedUserName));
                 return true;
             } catch (SQLException e) {
-                System.out.println("Exception: " + e.getMessage());
-                for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+                handleException(e);
             }
         }
         return false;
@@ -236,8 +269,7 @@ public class DBHandler {
 
             connect.close();
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
         return result;
     }
@@ -266,11 +298,54 @@ public class DBHandler {
 
                 return true;
             } catch (SQLException e) {
-                System.out.println("Exception: " + e.getMessage());
-                for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+                handleException(e);
             }
         }
         return false;
+    }
+
+    /**
+     * Method to get the users from a group and their respective balance.
+     *
+     * @param groupName name of the group
+     * @return ArrayList<TwoStringsClass> string uses floatValue balance
+     */
+    //TODO: alter array type
+    public ArrayList<String> getGroupUsersBalances(String groupName){
+        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> parcialMem = new ArrayList<>();
+        String query;
+
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            query = "SELECT uid,SUM(valuePaid)-SUM(valueOwed) FROM bills INNER JOIN groups AS billsAndGroups " +
+                    "ON bills.gid = billsAndGroups.name AND bills.gid=? " +
+                    "INNER JOIN usersAndBills ON usersAndBills.bid = bills.id GROUP BY usersAndBills.uid";
+
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, groupName);
+            ResultSet resultSet = psmtm.executeQuery();
+
+            while(resultSet.next()){
+                result.add(resultSet.getString(1) + ": " + Float.parseFloat(resultSet.getString(2)));
+                parcialMem.add(resultSet.getString(1));
+            }
+            connect.close();
+        }
+        catch (SQLException e) {
+            handleException(e);
+        }
+
+        ArrayList<String> members = this.getGroupMembers(groupName);
+
+        for (String member : members) {
+            if (!parcialMem.contains(member)) {
+                result.add(member + ": " + 0.0f);
+            }
+        }
+
+        return result;
     }
 
     /**
@@ -297,8 +372,7 @@ public class DBHandler {
 
             connect.close();
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
         return result;
     }
@@ -318,7 +392,7 @@ public class DBHandler {
             String query = "SELECT EXISTS(SELECT 1 FROM bills WHERE id=?)";
 
             PreparedStatement psmtm = connect.prepareStatement(query);
-            psmtm.setString(1, groupName + billName);
+            psmtm.setString(1, generateBillID(groupName, billName));
             ResultSet rs = psmtm.executeQuery();
 
             if (rs.next() && Integer.parseInt(rs.getString(1)) == 1) {
@@ -328,8 +402,7 @@ public class DBHandler {
             connect.close();
 
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
         return result;
     }
@@ -352,7 +425,7 @@ public class DBHandler {
             String query = "SELECT `name`,`value`,`dateOccurred`,`latitude`,`longitude` FROM bills WHERE id=?";
 
             PreparedStatement psmtm = connect.prepareStatement(query);
-            psmtm.setString(1, groupName + billName);
+            psmtm.setString(1, generateBillID(groupName, billName));
             ResultSet resultSet = psmtm.executeQuery();
 
             while (resultSet.next()) {
@@ -361,8 +434,7 @@ public class DBHandler {
                 try {
                     b.billDate.setTime(df.parse(resultSet.getString(3)));
                 } catch (Exception e){
-                    System.out.println("Exception: " + e.getMessage());
-                    for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+                    handleException(e);
                 }
                 b.billLocationLatitude = Double.parseDouble(resultSet.getString(4));
                 b.billLocationLongitude = Double.parseDouble(resultSet.getString(5));
@@ -370,8 +442,7 @@ public class DBHandler {
             connect.close();
 
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
 
         return b;
@@ -448,14 +519,13 @@ public class DBHandler {
             psmtm.executeUpdate();
 
             connect.close();
-            //TODO
 
-            //if (post) {this.postNotification(new Notification(sessionUserName,Notification.BILL_CREATED,bill.billName), bill.groupName);}
+            if (post) this.postNotification(
+                    new Notification(bill.groupName, sessionUserName, Notification.BILL_CREATED, bill.billName));
 
             return true;
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
 
         return false;
@@ -510,7 +580,7 @@ public class DBHandler {
 
             PreparedStatement psmtm = connect.prepareStatement(query);
             psmtm.setString(1, userName);
-            psmtm.setString(2, groupName + billName);
+            psmtm.setString(2, generateBillID(groupName, billName));
             psmtm.setDouble(3, valueOwn);
             psmtm.setDouble(4, valuePaid);
             psmtm.executeUpdate();
@@ -519,8 +589,7 @@ public class DBHandler {
 
             return true;
         } catch (SQLException e) {
-            System.out.println("Exception: " + e.getMessage());
-            for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+            handleException(e);
         }
 
         return false;
@@ -528,15 +597,237 @@ public class DBHandler {
 
     //TODO test
     /**
-     * Edit a bill
+     * Edit a updatedBill
      * @param sessionUserName current username
-     * @param bill bill to be edit
+     * @param updatedBill updatedBill to be edit
      */
-    public void editBill(Bill bill, String oldBillName, String sessionUserName){
+    public boolean editBill(Bill updatedBill, String oldBillName, String sessionUserName){
 
-        // TODO
-        //this.deleteBill(oldBillName, sessionUserName,bill.groupName, false);
-        this.createBill(bill, sessionUserName, false);
-        //this.postNotification(new Notification(sessionUserName, Notification.BILL_EDITED, bill.billName), bill.groupName);
+        if (billExists(updatedBill.groupName, oldBillName)
+                && !billExists(updatedBill.groupName, updatedBill.billName)) {
+            System.out.println("In editBill");
+
+            try {
+                Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+                String query = "UPDATE bills " +
+                        "SET id=?, name=?, value=?, latitude=?, longitude=? " +
+                        "WHERE id=?";
+
+                PreparedStatement psmtm = connect.prepareStatement(query);
+                psmtm.setString(1, generateBillID(updatedBill.groupName, updatedBill.billName));
+                psmtm.setString(2, updatedBill.billName);
+                psmtm.setFloat(3, updatedBill.billValue);
+                psmtm.setDouble(4, updatedBill.billLocationLatitude);
+                psmtm.setDouble(5, updatedBill.billLocationLongitude);
+                psmtm.setString(6, generateBillID(updatedBill.groupName, oldBillName));
+                System.out.println(psmtm);
+                psmtm.executeUpdate();
+
+                System.out.println(this.postNotification(new Notification(updatedBill.groupName, sessionUserName, Notification.BILL_EDITED, updatedBill.billName)));
+
+            } catch (SQLException e) {
+                handleException(e);
+            }
+
+            return true;
+        }
+        else
+            return false;
+    }
+
+    /**
+     * Method to get who not paid the bill
+     * @param groupName name of the bill's group
+     * @param billName name of the bill
+     * @return ArrayList<TwoStringsClass> paid bills
+     */
+    //TODO: alter array type
+    public ArrayList<String> getWhoPaidBill(String groupName, String billName){
+
+        ArrayList<String> result = new ArrayList<String>();
+
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT uid,valuePaid FROM usersAndBills WHERE bid = ? AND valuePaid>0";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, generateBillID(groupName, billName));
+            ResultSet resultSet = psmtm.executeQuery();
+
+            while (resultSet.next()) {
+                result.add(resultSet.getString(1)+ ": " + Float.parseFloat(resultSet.getString(2)));
+            }
+
+            connect.close();
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        return result;
+    }
+
+    /**
+     * Method to get users that have not paid the bill
+     * @param groupName name of the bill's group
+     * @param billName name of the bill
+     * @return ArrayList<TwoStringsClass> owns bill
+     */
+    //TODO: alter array type
+    public ArrayList<String> getWhoOwesBill(String groupName, String billName){
+
+        ArrayList<String> result = new ArrayList<>();
+
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT uid,valueOwed FROM usersAndBills WHERE bid = ? AND valueOwed>0";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, generateBillID(groupName, billName));
+            ResultSet resultSet = psmtm.executeQuery();
+
+            while (resultSet.next()) {
+                result.add(resultSet.getString(1)+ ": " + Float.parseFloat(resultSet.getString(2)));
+            }
+
+            connect.close();
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        return result;
+    }
+
+    /**
+     * public call to the delete bill method
+     * @param groupName name of the group
+     * @param billName name of a bill
+     * @param sessionUserName current username
+     */
+    public boolean deleteBill(String groupName, String billName, String sessionUserName){
+        return deleteBill(groupName, billName, sessionUserName, true);
+    }
+
+    /**
+     * Method to delete a bill
+     * @param groupName name of the group
+     * @param billName bill name
+     * @param sessionUserName current username
+     * @param post to post a notification
+     */
+    private boolean deleteBill(String groupName, String billName, String sessionUserName, boolean post){
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "DELETE FROM usersAndBills WHERE bid=?";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, generateBillID(groupName, billName));
+            psmtm.executeUpdate();
+
+            query = "DELETE FROM bills WHERE id=?";
+            psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, generateBillID(groupName, billName));
+            psmtm.executeUpdate();
+
+            connect.close();
+
+            //TODO
+            if (post) this.postNotification(
+                    new Notification(groupName, sessionUserName, Notification.BILL_DELETED, billName));
+
+            return true;
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        return false;
+    }
+    //TODO: remove
+    public void testing() {
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "DELETE FROM bills WHERE id=?";
+
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, generateBillID("group1", "bill1a"));
+
+            System.out.println(psmtm.executeUpdate());
+
+            connect.close();
+
+        } catch (SQLException e) {
+            handleException(e);
+        }
+    }
+    /**
+     * Method to get a group notification. Its ordered by time.
+     *
+     * @param groupName name of the group
+     * @return ArrayList<Notification>
+     */
+    public ArrayList<Notification> getGroupNotifications(String groupName) {
+        ArrayList<Notification> result = new ArrayList<>();
+
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT * FROM groupNotifications WHERE gid=? ORDER BY `time` DESC";
+
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, groupName);
+            ResultSet resultSet = psmtm.executeQuery();
+
+
+            while (resultSet.next()) {
+                Notification n = new Notification(groupName, resultSet.getString(3),
+                        (Integer.parseInt(resultSet.getString(4))), resultSet.getString(5));
+                try {
+                    n.date.setTime(df.parse(resultSet.getString(6)));
+                } catch (Exception e) {
+                    handleException(e);
+                }
+                result.add(n);
+            }
+            connect.close();
+
+        } catch (SQLException e) {
+            handleException(e);
+        }
+        return result;
+    }
+
+    /**
+     * Method to post a notification on the db.
+     *
+     * @param notification object notification created
+     * @return true if posted, false if not
+     */
+    public boolean postNotification(Notification notification) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "INSERT INTO groupNotifications(nid, gid, uid, type, details, time) VALUES " +
+                    "(?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setInt(1, notification.hashCode());
+            psmtm.setString(2, notification.groupName);
+            psmtm.setString(3, notification.owner);
+            psmtm.setInt(4, notification.type);
+            psmtm.setString(5, notification.description);
+            psmtm.setString(6, sdf.format(notification.date.getTime()));
+            psmtm.executeUpdate();
+
+            connect.close();
+            return true;
+
+        } catch (SQLException e) {
+            handleException(e);
+        }
+        return false;
     }
 }

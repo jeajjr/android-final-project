@@ -10,8 +10,11 @@ public class Main {
 		
 		DBHandler db = new DBHandler();
 
-		/*
+		//createUserBillRelation
+/*
 		System.out.println(db.checkLogin("user1", "1234"));
+		System.out.println(db.checkLogin("user1", "1221"));
+		System.out.println(db.checkLogin("user3", "1234"));
 		System.out.println(db.getUserGroups("user1"));
 		System.out.println(db.getGroupMembers("group1"));
 
@@ -23,13 +26,15 @@ public class Main {
 		System.out.println(db.createGroup("group2"));
 		System.out.println(db.groupExists("group2"));
 
+
 		System.out.println("----/2/----");
 
 		System.out.println(db.isUserMember("user1", "group1"));
 		System.out.println(db.isUserMember("user1", "group2"));
 
-		System.out.println(db.addUserToGroup("user2", "group2", null));
-		System.out.println(db.isUserMember("user2", "group2"));
+		System.out.println(db.addUserToGroup("user1", "group2", "user1"));
+		System.out.println(db.isUserMember("user1", "group2"));
+
 
 		System.out.println("----/3/----");
 
@@ -42,9 +47,6 @@ public class Main {
 		System.out.println(db.billExists("group1", "bill1"));
 		System.out.println(db.billExists("group1", "bill2"));
 
-*/
-		/*
-
 		System.out.println("----/4/----");
 
 		System.out.println(db.getBill("group1", "bill1"));
@@ -53,10 +55,51 @@ public class Main {
 		b.billValue = 10f;
 		b.billDate = Calendar.getInstance();
 		b.groupName = "group1";
-		db.createBill(b, "null");
+		System.out.println(db.createBill(b, "null"));
 
 		System.out.println(db.getBill("group1", "bill2"));
+
+		System.out.println(db.createUserBillRelation("user1", "group1", "bill2", 10d, 0d));
+		System.out.println(db.createUserBillRelation("user2", "group1", "bill2", 0d, 10d));
+
+		System.out.println(db.getWhoPaidBill("group1", "bill1"));
+		System.out.println(db.getWhoOwesBill("group1", "bill1"));
+
+		System.out.println(db.deleteBill("group1", "bill2", "user1"));
+
+		//Notification n = new Notification("group1", "user1", Notification.BILL_CREATED, "flango");
+		//System.out.println(db.postNotification(n));
+
+
+		System.out.println(db.getGroupNotifications("group1"));
 */
-		//System.out.println(db.createUserBillRelation("user1", "group1", "bill2", 10d, 0d));
+		/*
+		db.deleteBill("group1", "bill2", "user1");
+		db.deleteBill("group1", "bill1a", "user1");
+
+		System.out.println(db.getGroupBillNames("group1"));
+
+		Bill b2 = new Bill();
+		b2.billName = "bill2";
+		b2.billValue = 50f;
+		b2.billDate = Calendar.getInstance();
+		b2.groupName = "group1";
+		System.out.println("create: " + db.createBill(b2, "user1"));
+
+		System.out.println(db.getGroupBillNames("group1"));
+
+		b2.billName = "bill1a";
+		b2.billValue = 55f;
+		System.out.println("edit: " + db.editBill(b2, "bill2", "user2"));
+
+		System.out.println(db.getGroupBillNames("group1"));
+*/
+		//System.out.println(db.getGroupUsersBalances("group1"));
+/*
+		System.out.println(db.getGroupBillNames("group1"));
+		System.out.println(db.deleteBill("group1", "bill2", "user1"));
+		System.out.println(db.getGroupBillNames("group1"));
+*/
+		//db.testing();
 	}
 }

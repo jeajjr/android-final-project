@@ -56,7 +56,7 @@ CREATE TABLE groupNotifications (
 	details varchar(50) NOT NULL, -- details will hold aditional information about the notification's action.
 								  -- For example, if the notification is user1 created the bill bill1, details
 								  -- will contain the name bill1 and uid will contain the name user1.
-	time timestamp,
+	time datetime,
 	PRIMARY KEY (nid, gid),
 	FOREIGN KEY (gid) REFERENCES groups(name) ON UPDATE CASCADE
 );
@@ -80,4 +80,4 @@ INSERT INTO usersAndBills VALUES ('user1','group1bill1', 0, 50.00);
 INSERT INTO usersAndBills VALUES ('user2','group1bill1', 50.00, 0);
 
 -- nid, gid, uid, type, details, time
-INSERT INTO groupNotifications VALUES ('1', 'group1', 'user1', '1', 'bill1', '');
+INSERT INTO groupNotifications VALUES ('1', 'group1', 'user1', '1', 'bill1', '2015-04-01 12:00:00');

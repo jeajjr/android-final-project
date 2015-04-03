@@ -20,6 +20,7 @@ public class Bill {
     //TODO
     //Bitmap billPicture;
 
+    @Override
     public String toString() {
         return "Bill: " + billName + ", " +
                 "groupName: " + groupName + ", " +
