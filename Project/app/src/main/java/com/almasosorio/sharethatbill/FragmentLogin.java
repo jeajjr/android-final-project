@@ -3,6 +3,7 @@ package com.almasosorio.sharethatbill;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +14,7 @@ import android.widget.Button;
  * A simple {@link Fragment} subclass.
  */
 public class FragmentLogin extends Fragment {
-
+    private static final String TAG = "FragmentLogin";
 
     public FragmentLogin() {
         // Required empty public constructor
@@ -30,7 +31,17 @@ public class FragmentLogin extends Fragment {
 
         Button createAccountButton = (Button) v.findViewById(R.id.button_create_account);
         createAccountButton.setText(createAccountButton.getText().toString().toUpperCase());
+        createAccountButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "clicked createAccountButton");
 
+                getActivity().getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container, new FragmentCreateAccount())
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
         return v;
     }
 
