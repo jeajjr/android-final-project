@@ -2,7 +2,11 @@
 <resources>
 
     <string name="app_name">Share that Bill</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+
+    <string name="email">email</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
+    <string name="create_new_account">create new account</string>
+
 
 </resources>
