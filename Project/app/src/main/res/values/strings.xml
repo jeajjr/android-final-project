@@ -11,5 +11,10 @@
     <string name="first_name">first name</string>
     <string name="last_name">last name</string>
 
+    <!-- create group fragment -->
+    <string name="group_name">group name</string>
+    <string name="create_group">CREATE GROUP</string>
+    <string name="invited_members">INVITED MEMBERS</string>
+    <string name="add_member">ADD MEMBER</string>
 
 </resources>
