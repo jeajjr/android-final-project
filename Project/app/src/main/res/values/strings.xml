@@ -17,7 +17,7 @@
     <string name="invited_members">INVITED MEMBERS</string>
     <string name="add_member">ADD MEMBER</string>
     <string name="title_activity_activity_bill_details">ActivityBillDetails</string>
-
+    <string name="delete_bill">delete bill</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
