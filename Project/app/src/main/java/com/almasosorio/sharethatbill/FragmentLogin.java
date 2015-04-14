@@ -37,6 +37,8 @@ public class FragmentLogin extends Fragment {
                 Log.d(TAG, "clicked createAccountButton");
 
                 getActivity().getSupportFragmentManager().beginTransaction()
+                        .setCustomAnimations(R.anim.abc_fade_in, R.anim.abc_fade_out,
+                                R.anim.abc_fade_in, R.anim.abc_fade_out)
                         .replace(R.id.container, new FragmentCreateAccount())
                         .addToBackStack(null)
                         .commit();

@@ -25,7 +25,8 @@
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:layout_gravity="center_vertical"
-        android:background="#DFDFE0" />
+        android:background="#DFDFE0"
+        />
 
     <EditText
         android:layout_width="fill_parent"
@@ -54,7 +55,7 @@
         android:textSize="20dp"
         android:hint="@string/last_name"
         android:gravity="center_horizontal"
-        android:inputType="textWebEmailAddress"
+        android:inputType="textCapWords"
         />
 
     <EditText
@@ -115,6 +116,5 @@
         android:textColor="#DFDFE0"
         android:text="@string/create_new_account"
         />
-
 
 </LinearLayout>
