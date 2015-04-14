@@ -1,24 +1,138 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="CREATE GROUP"
+        android:text="@string/create_group"
         android:id="@+id/textView"
         android:textSize="26dp"
         android:layout_marginTop="35dp"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:textColor="#ffffffff"
+        android:layout_gravity="center_horizontal" />
 
     <ImageView
-        android:layout_width="360dp"
+        android:layout_width="fill_parent"
         android:layout_height="4px"
         android:id="@+id/imageView"
         android:layout_below="@+id/textView"
         android:layout_centerHorizontal="true"
         android:background="#ff000000"
-        android:layout_marginTop="6px" />
-</RelativeLayout>
+        android:layout_marginTop="6px"
+        android:src="#ffffffff"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#DFDFE0"
+        android:paddingBottom="2dp"
+        android:textSize="20dp"
+        android:hint="@string/group_name"
+        android:gravity="center_horizontal"
+        android:inputType="text"
+        android:id="@+id/editText"
+        android:layout_below="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginRight="30dp"
+        android:paddingTop="2dp" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/invited_members"
+            android:id="@+id/textView2"
+            android:textColor="#ffffffff"
+            android:layout_below="@+id/editText"
+            android:layout_alignLeft="@+id/editText"
+            android:layout_alignParentStart="false"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/add_member"
+            android:drawableLeft="@android:drawable/ic_input_add"
+            android:id="@+id/button"
+            android:layout_alignRight="@+id/editText"
+            android:layout_alignEnd="@+id/editText"
+            android:layout_alignBaseline="@+id/textView2"
+            android:background="@drawable/login_button_backgnd"
+            android:textColor="#ffffffff"
+            android:layout_gravity="center"
+            android:layout_marginRight="30dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="4px"
+        android:id="@+id/imageView2"
+        android:background="#ff000000"
+        android:src="#ffffffff"
+        android:layout_below="@+id/textView2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:layout_marginTop="15dp" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_below="@+id/imageView2"
+        android:layout_weight="1"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/RecyclerView_MemberList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        </LinearLayout>
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="4px"
+        android:id="@+id/imageView3"
+        android:background="#ff000000"
+        android:src="#ffffffff"
+        android:layout_above="@+id/button2"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create_group"
+        android:id="@+id/button2"
+        android:background="@drawable/login_button_backgnd"
+        android:textColor="#ffffffff"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="center_horizontal" />
+
+</LinearLayout>
