@@ -4,6 +4,7 @@ package com.almasosorio.sharethatbill;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -16,14 +17,15 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static String TAG = "RecyclerViewAdapter";
 
     public enum ItemType {PICTURE_WITH_TEXT, UPDATES_LIST_ITEM, BILL_LIST_ITEM, GROUP_MEMBERS_LIST_ITEM};
+    public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4};
 
     private Context context;
-    ArrayList<Map<String, ?>> dataSet;
+    ArrayList<Map<MapItemKey, String>> dataSet;
     private ItemType listType;
 
     private OnListItemClickListener onListItemClickListener;
 
-    public RecyclerViewAdapter(Context context, ArrayList<Map<String, ?>> dataSet, ItemType listType) {
+    public RecyclerViewAdapter(Context context, ArrayList<Map<MapItemKey, String>> dataSet, ItemType listType) {
         this.context = context;
         this.dataSet = dataSet;
         this.listType = listType;
@@ -38,9 +40,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         public ViewHolder(View v) {
             super(v);
+            textView1 = (TextView) v.findViewById(R.id.item_text1);
             switch (listType) {
                 case PICTURE_WITH_TEXT:
-                    //icon = (ImageView) v.findViewById(R.id.imageViewIcon);
+                    icon = (ImageView) v.findViewById(R.id.item_picture);
+
                     break;
 
                 case UPDATES_LIST_ITEM:
@@ -57,16 +61,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "adapter received click on item " + getPosition());
-                    
+
                     onListItemClickListener.onItemClick(getPosition());
                 }
             });
         }
 
-        public void bindItemData (Map<String, ?> data) {
+        public void bindItemData (Map<MapItemKey, String> data) {
             switch (listType) {
                 case PICTURE_WITH_TEXT:
-                    //icon.setImageResource(DataParser.getIconResource(iconString));
+                    icon.setImageResource(R.drawable.group_member);
+                    textView1.setText(data.get(MapItemKey.TEXT_1));
                     break;
 
                 case UPDATES_LIST_ITEM:
@@ -87,7 +92,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         switch (listType) {
             case PICTURE_WITH_TEXT:
-                //v = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_3_hour_item, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image_with_text, parent, false);
                 break;
 
             case UPDATES_LIST_ITEM:
@@ -106,7 +111,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder (ViewHolder holder, int position) {
-        Map<String, ?> data = dataSet.get(position);
+        Map<MapItemKey, String> data = dataSet.get(position);
         holder.bindItemData(data);
     }
 

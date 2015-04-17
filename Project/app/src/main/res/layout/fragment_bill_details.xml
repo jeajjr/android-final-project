@@ -46,6 +46,12 @@
             </LinearLayout>
         </LinearLayout>
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+
     <LinearLayout
         android:id="@+id/layout_delete_button"
         android:layout_width="wrap_content"
