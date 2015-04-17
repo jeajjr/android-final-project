@@ -63,7 +63,7 @@ public class FragmentBillDetails extends Fragment {
         TextView billValue = (TextView) v.findViewById(R.id.textViewBillValue);
 
         String[] args = {"group1", "bill1"};
-        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet)).execute(args);
+        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet, adapter)).execute(args);
 
         return v;
     }

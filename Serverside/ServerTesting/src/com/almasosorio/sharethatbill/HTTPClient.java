@@ -1,6 +1,5 @@
-package com.almasosorio.testing;
+package com.almasosorio.sharethatbill;
 
-import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.InputStream;

@@ -1,6 +1,4 @@
-package com.almasosorio.testing;
-
-import java.util.Calendar;
+package com.almasosorio.sharethatbill;
 
 public class Main {
 	private static final String URL_BASE = "http://www.final-proj.com/";
@@ -13,6 +11,9 @@ public class Main {
 		//createUserBillRelation
 
 		System.out.println(db.checkLogin("user1", "1234"));
+
+		System.out.println(db.getGroupMembersNames("group1"));
+
 		/*
 		System.out.println(db.checkLogin("user1", "1221"));
 		System.out.println(db.checkLogin("user3", "1234"));
@@ -101,6 +102,6 @@ public class Main {
 		System.out.println(db.deleteBill("group1", "bill2", "user1"));
 		System.out.println(db.getGroupBillNames("group1"));
 */
-		//db.testing();
+		//db.sharethatbill();
 	}
 }

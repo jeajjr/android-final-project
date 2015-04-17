@@ -20,8 +20,13 @@
     <string name="delete_bill">delete bill</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="did_not_participate">did not participate</string>
+    <string name="paid">paid</string>
+    <string name="and">and</string>
+    <string name="owes">owes</string>
 
-<!-- TODO: Remove or change this placeholder text -->
+
+    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

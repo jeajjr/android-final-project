@@ -1,4 +1,5 @@
-package com.almasosorio.testing;
+package com.almasosorio.sharethatbill;
+
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -7,14 +8,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DBHandler {
+    private static final String TAG = "DBHandler";
 
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String HOST = "jdbc:mysql://localhost/finalproj";
+    private static final String HOST = "jdbc:mysql://192.236.71.165/finalproj";
     private static final String DB_USER = "app";
     private static final String DB_PW = "app";
 
     public DBHandler() {
-
         try {
             Class.forName(JDBC_DRIVER).newInstance();
 
@@ -24,11 +25,12 @@ public class DBHandler {
     }
 
     void handleException(Exception e) {
-        System.out.println("Exception: " + e.getMessage());
-        for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+        System.out.println(e.getMessage());
+        System.out.println(e.getCause());
+        //Log.d(TAG, "Exception", e);
     }
 
-    String generateBillID(String groupName, String billName) {
+    private String generateBillID(String groupName, String billName) {
         return groupName + billName;
     }
 
@@ -117,6 +119,37 @@ public class DBHandler {
         } catch (SQLException e) {
             handleException(e);
         }
+        return result;
+    }
+
+    /**
+     * Method to get the group's members
+     *
+     * @param groupName name of the group
+     * @return ArrayList<String> members
+     */
+    public ArrayList<TwoStringsClass> getGroupMembersNames(String groupName) {
+        ArrayList<TwoStringsClass> result = new ArrayList<>();
+        ArrayList<String> emails = new ArrayList<>();
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT uid FROM usersAndGroups WHERE gid=?";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, groupName);
+            ResultSet rs = psmtm.executeQuery();
+
+            while (rs.next())
+                emails.add(rs.getString(1));
+
+            connect.close();
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        for (String email : emails)
+            result.add(new TwoStringsClass(email, getUserNamesByEmail(email)));
+
         return result;
     }
 
@@ -642,10 +675,9 @@ public class DBHandler {
      * @param billName name of the bill
      * @return ArrayList<TwoStringsClass> paid bills
      */
-    //TODO: alter array type
-    public ArrayList<String> getWhoPaidBill(String groupName, String billName){
+    public ArrayList<TwoStringsClass> getWhoPaidBill(String groupName, String billName){
 
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<TwoStringsClass> result = new ArrayList<>();
 
         try {
             Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
@@ -656,7 +688,30 @@ public class DBHandler {
             ResultSet resultSet = psmtm.executeQuery();
 
             while (resultSet.next()) {
-                result.add(resultSet.getString(1)+ ": " + Float.parseFloat(resultSet.getString(2)));
+                result.add( new TwoStringsClass(resultSet.getString(1),resultSet.getString(2)) );
+            }
+
+            connect.close();
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        return result;
+    }
+
+    public String getUserNamesByEmail(String userEmail) {
+        String result = "";
+
+        try {
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT firstName,lastName FROM users WHERE email=?";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, userEmail);
+            ResultSet resultSet = psmtm.executeQuery();
+
+            if (resultSet.next()) {
+                result = resultSet.getString(1) + " " + resultSet.getString(2);
             }
 
             connect.close();
@@ -673,10 +728,9 @@ public class DBHandler {
      * @param billName name of the bill
      * @return ArrayList<TwoStringsClass> owns bill
      */
-    //TODO: alter array type
-    public ArrayList<String> getWhoOwesBill(String groupName, String billName){
+    public ArrayList<TwoStringsClass> getWhoOwesBill(String groupName, String billName){
 
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<TwoStringsClass> result = new ArrayList<>();
 
         try {
             Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
@@ -687,7 +741,7 @@ public class DBHandler {
             ResultSet resultSet = psmtm.executeQuery();
 
             while (resultSet.next()) {
-                result.add(resultSet.getString(1)+ ": " + Float.parseFloat(resultSet.getString(2)));
+                result.add( new TwoStringsClass(resultSet.getString(1), resultSet.getString(2)) );
             }
 
             connect.close();

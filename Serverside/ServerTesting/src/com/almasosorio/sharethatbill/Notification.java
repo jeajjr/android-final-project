@@ -1,4 +1,4 @@
-package com.almasosorio.testing;
+package com.almasosorio.sharethatbill;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;

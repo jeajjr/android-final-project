@@ -23,26 +23,26 @@
   <component name="FileEditorManager">
     <leaf>
       <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Main.java">
+        <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="26" column="53" selection-start-line="26" selection-start-column="53" selection-end-line="26" selection-end-column="53" />
+              <caret line="14" column="50" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="50" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
       <file leaf-file-name="DBHandler.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/DBHandler.java">
+        <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.42288557">
-              <caret line="10" column="61" selection-start-line="10" selection-start-column="57" selection-end-line="10" selection-end-column="61" />
+            <state vertical-scroll-proportion="0.8055556">
+              <caret line="724" column="7" selection-start-line="724" selection-start-column="7" selection-end-line="724" selection-end-column="7" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#2247#2255#0" expanded="true" />
-                <element signature="e#3068#3076#0" expanded="true" />
-                <element signature="e#3902#3910#0" expanded="true" />
-                <element signature="e#20698#20706#0" expanded="true" />
+                <element signature="e#920#921#0" expanded="true" />
+                <element signature="e#963#964#0" expanded="true" />
+                <element signature="e#16233#16234#0" expanded="true" />
+                <element signature="e#16299#16300#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -68,8 +68,11 @@
         <option value="$PROJECT_DIR$/src/com/almasosorio/testing/HTTPClient.java" />
         <option value="$PROJECT_DIR$/src/com/almasosorio/testing/Bill.java" />
         <option value="$PROJECT_DIR$/src/com/almasosorio/testing/Notification.java" />
-        <option value="$PROJECT_DIR$/src/com/almasosorio/testing/Main.java" />
         <option value="$PROJECT_DIR$/src/com/almasosorio/testing/DBHandler.java" />
+        <option value="$PROJECT_DIR$/src/com/almasosorio/testing/Main.java" />
+        <option value="$PROJECT_DIR$/src/com/almasosorio/testing/TwoStringsClass.java" />
+        <option value="$PROJECT_DIR$/src/com/almasosorio/sharethatbill/TwoStringsClass.java" />
+        <option value="$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java" />
       </list>
     </option>
   </component>
@@ -105,9 +108,9 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="Scratches" />
-      <pane id="Scope" />
       <pane id="PackagesPane" />
+      <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -140,7 +143,7 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="testing" />
+              <option name="myItemId" value="sharethatbill" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -163,11 +166,11 @@
     <configuration default="false" name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
-          <option name="PATTERN" value="com.almasosorio.testing.*" />
+          <option name="PATTERN" value="com.almasosorio.sharethatbill.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
-      <option name="MAIN_CLASS_NAME" value="com.almasosorio.testing.Main" />
+      <option name="MAIN_CLASS_NAME" value="com.almasosorio.sharethatbill.Main" />
       <option name="VM_PARAMETERS" />
       <option name="PROGRAM_PARAMETERS" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
@@ -351,7 +354,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -362,10 +365,11 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.54593456" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.2935586" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.18333334" sideWeight="0.5" order="3" side_tool="false" content_ui="combo" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32946146" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -376,7 +380,6 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="5" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32946146" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
     </layout>
   </component>
   <component name="Vcs.Log.UiProperties">
@@ -399,9 +402,9 @@
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-method">
-          <url>file://$PROJECT_DIR$/src/com/almasosorio/testing/DBHandler.java</url>
-          <line>699</line>
-          <properties class="com.almasosorio.testing.DBHandler" />
+          <url>file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java</url>
+          <line>753</line>
+          <properties class="com.almasosorio.sharethatbill.DBHandler" />
         </line-breakpoint>
       </breakpoints>
       <option name="time" value="1" />
@@ -413,7 +416,29 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="26" column="53" selection-start-line="26" selection-start-column="53" selection-end-line="26" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#920#921#0" expanded="true" />
+            <element signature="e#963#964#0" expanded="true" />
+            <element signature="e#16233#16234#0" expanded="true" />
+            <element signature="e#16299#16300#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="95" column="2" selection-start-line="95" selection-start-column="2" selection-end-line="95" selection-end-column="2" />
@@ -421,21 +446,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/DBHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2247#2255#0" expanded="true" />
-            <element signature="e#3068#3076#0" expanded="true" />
-            <element signature="e#3902#3910#0" expanded="true" />
-            <element signature="e#20698#20706#0" expanded="true" />
+            <element signature="e#920#921#0" expanded="true" />
+            <element signature="e#963#964#0" expanded="true" />
+            <element signature="e#16233#16234#0" expanded="true" />
+            <element signature="e#16299#16300#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="45" column="10" selection-start-line="45" selection-start-column="10" selection-end-line="45" selection-end-column="10" />
@@ -443,21 +468,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/DBHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2247#2255#0" expanded="true" />
-            <element signature="e#3068#3076#0" expanded="true" />
-            <element signature="e#3902#3910#0" expanded="true" />
-            <element signature="e#20698#20706#0" expanded="true" />
+            <element signature="e#920#921#0" expanded="true" />
+            <element signature="e#963#964#0" expanded="true" />
+            <element signature="e#16233#16234#0" expanded="true" />
+            <element signature="e#16299#16300#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Bill.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Bill.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
@@ -467,7 +492,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="10" column="54" selection-start-line="10" selection-start-column="54" selection-end-line="10" selection-end-column="54" />
@@ -475,7 +500,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/HTTPClient.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/HTTPClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -492,7 +517,7 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Bill.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Bill.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="27" column="112" selection-start-line="27" selection-start-column="16" selection-end-line="27" selection-end-column="112" />
@@ -502,18 +527,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Notification.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Notification.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#1031#1032#0" expanded="true" />
+            <element signature="e#1037#1038#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/HTTPClient.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/HTTPClient.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="12" column="18" selection-start-line="12" selection-start-column="18" selection-end-line="12" selection-end-column="18" />
@@ -523,24 +548,32 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/Main.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/TwoStringsClass.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="26" column="53" selection-start-line="26" selection-start-column="53" selection-end-line="26" selection-end-column="53" />
+          <caret line="0" column="37" selection-start-line="0" selection-start-column="37" selection-end-line="0" selection-end-column="37" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/testing/DBHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42288557">
-          <caret line="10" column="61" selection-start-line="10" selection-start-column="57" selection-end-line="10" selection-end-column="61" />
+        <state vertical-scroll-proportion="0.0">
+          <caret line="14" column="50" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="50" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/almasosorio/sharethatbill/DBHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8055556">
+          <caret line="724" column="7" selection-start-line="724" selection-start-column="7" selection-end-line="724" selection-end-column="7" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#2247#2255#0" expanded="true" />
-            <element signature="e#3068#3076#0" expanded="true" />
-            <element signature="e#3902#3910#0" expanded="true" />
-            <element signature="e#20698#20706#0" expanded="true" />
+            <element signature="e#920#921#0" expanded="true" />
+            <element signature="e#963#964#0" expanded="true" />
+            <element signature="e#16233#16234#0" expanded="true" />
+            <element signature="e#16299#16300#0" expanded="true" />
           </folding>
         </state>
       </provider>
