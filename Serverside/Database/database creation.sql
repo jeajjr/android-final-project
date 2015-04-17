@@ -12,6 +12,8 @@ CREATE TABLE groups (
 
 CREATE TABLE users (
 	email varchar(50) NOT NULL,
+	firstName varchar(50) NOT NULL,
+	lastName varchar(50) NOT NULL,
 	password varchar(50) NOT NULL,
 	PRIMARY KEY (email)
 );
@@ -72,8 +74,8 @@ INSERT INTO groups VALUES ('group1');
 INSERT INTO bills VALUES ('group1bill1', 'bill1', 50.00, '2015-04-01 02:08','group1', '', '', '');
 
 -- uid, gid
-INSERT INTO usersAndGroups VALUES ('user1', 'group1');
-INSERT INTO usersAndGroups VALUES ('user2', 'group1');
+INSERT INTO usersAndGroups VALUES ('user1', 'Molson', 'Lucius, 'group1');
+INSERT INTO usersAndGroups VALUES ('user2', 'Bob', 'Dilan', 'group1');
 
 --	uid, bid, valueOwed, valuePaid
 INSERT INTO usersAndBills VALUES ('user1','group1bill1', 0, 50.00);

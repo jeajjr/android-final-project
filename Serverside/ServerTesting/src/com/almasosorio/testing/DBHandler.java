@@ -10,8 +10,8 @@ public class DBHandler {
 
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
     private static final String HOST = "jdbc:mysql://localhost/finalproj";
-    private static final String DB_USER = "root";
-    private static final String DB_PW = "sendubuntu";
+    private static final String DB_USER = "app";
+    private static final String DB_PW = "app";
 
     public DBHandler() {
 

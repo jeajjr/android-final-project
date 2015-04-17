@@ -11,8 +11,9 @@ public class Main {
 		DBHandler db = new DBHandler();
 
 		//createUserBillRelation
-/*
+
 		System.out.println(db.checkLogin("user1", "1234"));
+		/*
 		System.out.println(db.checkLogin("user1", "1221"));
 		System.out.println(db.checkLogin("user3", "1234"));
 		System.out.println(db.getUserGroups("user1"));
