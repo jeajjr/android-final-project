@@ -21,7 +21,7 @@ public class FragmentBillDetails extends Fragment {
 
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
-    ArrayList<Map<RecyclerViewAdapter.MapItemKey, String>> dataSet;
+    ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
 
     public FragmentBillDetails() {
         // Required empty public constructor
@@ -52,12 +52,18 @@ public class FragmentBillDetails extends Fragment {
 
         // RecyclerViewAdapter(Context context, ArrayList<Map<String, ?>> dataSet, ItemType listType)
         dataSet = new ArrayList<>();
-        Map<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
+        HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
         item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "Michael paid $6.00 and owes $3.30");
         dataSet.add(item);
 
         adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.PICTURE_WITH_TEXT);
         recyclerView.setAdapter(adapter);
+
+        TextView billName = (TextView) v.findViewById(R.id.textViewBillName);
+        TextView billValue = (TextView) v.findViewById(R.id.textViewBillValue);
+
+        String[] args = {"group1", "bill1"};
+        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet)).execute(args);
 
         return v;
     }

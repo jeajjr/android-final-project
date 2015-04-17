@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
@@ -20,12 +21,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4};
 
     private Context context;
-    ArrayList<Map<MapItemKey, String>> dataSet;
+    ArrayList<HashMap<MapItemKey, String>> dataSet;
     private ItemType listType;
 
     private OnListItemClickListener onListItemClickListener;
 
-    public RecyclerViewAdapter(Context context, ArrayList<Map<MapItemKey, String>> dataSet, ItemType listType) {
+    public RecyclerViewAdapter(Context context, ArrayList<HashMap<MapItemKey, String>> dataSet, ItemType listType) {
         this.context = context;
         this.dataSet = dataSet;
         this.listType = listType;
