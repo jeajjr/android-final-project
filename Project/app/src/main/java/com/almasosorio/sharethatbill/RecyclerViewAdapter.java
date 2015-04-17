@@ -68,7 +68,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 public void onClick(View v) {
                     Log.d(TAG, "adapter received click on item " + getPosition());
 
-                    onListItemClickListener.onItemClick(getPosition());
+                    if (onListItemClickListener != null)
+                        onListItemClickListener.onItemClick(getPosition());
                 }
             });
         }
