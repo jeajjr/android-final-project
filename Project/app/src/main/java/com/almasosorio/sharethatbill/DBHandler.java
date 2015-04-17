@@ -1,4 +1,6 @@
-package com.almasosorio.testing;
+package com.almasosorio.sharethatbill;
+
+import android.util.Log;
 
 import java.sql.*;
 import java.text.DateFormat;
@@ -7,14 +9,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 public class DBHandler {
+    private static final String TAG = "DBHandler";
 
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String HOST = "jdbc:mysql://localhost/finalproj";
-    private static final String DB_USER = "root";
-    private static final String DB_PW = "sendubuntu";
+    private static final String HOST = "jdbc:mysql://192.236.71.165/finalproj";
+    private static final String DB_USER = "app";
+    private static final String DB_PW = "app";
 
     public DBHandler() {
-
         try {
             Class.forName(JDBC_DRIVER).newInstance();
 
@@ -24,11 +26,10 @@ public class DBHandler {
     }
 
     void handleException(Exception e) {
-        System.out.println("Exception: " + e.getMessage());
-        for (StackTraceElement ste : e.getStackTrace()) System.out.println(ste);
+        Log.d(TAG, "Exception", e);
     }
 
-    String generateBillID(String groupName, String billName) {
+    private String generateBillID(String groupName, String billName) {
         return groupName + billName;
     }
 
