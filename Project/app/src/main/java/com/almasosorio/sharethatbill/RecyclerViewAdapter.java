@@ -17,7 +17,7 @@ import java.util.Map;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private static String TAG = "RecyclerViewAdapter";
 
-    public enum ItemType {PICTURE_WITH_TEXT, UPDATES_LIST_ITEM, BILL_LIST_ITEM, GROUP_MEMBERS_LIST_ITEM};
+    public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM, GROUP_MEMBERS_LIST_ITEM};
     public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4};
 
     private Context context;
@@ -45,16 +45,21 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             switch (listType) {
                 case PICTURE_WITH_TEXT:
                     icon = (ImageView) v.findViewById(R.id.item_picture);
-
                     break;
 
-                case UPDATES_LIST_ITEM:
+                case NOTIFICATION_LIST_ITEM:
+                    textView2 = (TextView) v.findViewById(R.id.item_text2);
                     break;
 
                 case BILL_LIST_ITEM:
+                    textView2 = (TextView) v.findViewById(R.id.item_text2);
+                    textView3 = (TextView) v.findViewById(R.id.item_text3);
+                    textView4 = (TextView) v.findViewById(R.id.item_text4);
                     break;
 
                 case GROUP_MEMBERS_LIST_ITEM:
+                    textView2 = (TextView) v.findViewById(R.id.item_text2);
+                    textView3 = (TextView) v.findViewById(R.id.item_text3);
                     break;
             }
 
@@ -69,19 +74,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void bindItemData (Map<MapItemKey, String> data) {
+            textView1.setText(data.get(MapItemKey.TEXT_1));
+
             switch (listType) {
                 case PICTURE_WITH_TEXT:
                     icon.setImageResource(R.drawable.group_member);
-                    textView1.setText(data.get(MapItemKey.TEXT_1));
                     break;
 
-                case UPDATES_LIST_ITEM:
+                case NOTIFICATION_LIST_ITEM:
+                    textView2.setText(data.get(MapItemKey.TEXT_2));
                     break;
 
                 case BILL_LIST_ITEM:
+                    textView2.setText(data.get(MapItemKey.TEXT_2));
+                    textView3.setText(data.get(MapItemKey.TEXT_3));
+                    textView4.setText(data.get(MapItemKey.TEXT_4));
                     break;
 
                 case GROUP_MEMBERS_LIST_ITEM:
+                    textView2.setText(data.get(MapItemKey.TEXT_2));
+                    textView3.setText(data.get(MapItemKey.TEXT_3));
                     break;
             }
         }
@@ -96,13 +108,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_image_with_text, parent, false);
                 break;
 
-            case UPDATES_LIST_ITEM:
+            case NOTIFICATION_LIST_ITEM:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_notification, parent, false);
                 break;
 
             case BILL_LIST_ITEM:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bills_list, parent, false);
                 break;
 
             case GROUP_MEMBERS_LIST_ITEM:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_members_list, parent, false);
                 break;
         }
 
