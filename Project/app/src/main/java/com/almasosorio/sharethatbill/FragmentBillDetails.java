@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 
 public class FragmentBillDetails extends Fragment {
@@ -27,6 +26,12 @@ public class FragmentBillDetails extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+        dataSet = new ArrayList<>();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,12 +56,16 @@ public class FragmentBillDetails extends Fragment {
         recyclerView.setLayoutManager(linearLayoutManager);
 
         // RecyclerViewAdapter(Context context, ArrayList<Map<String, ?>> dataSet, ItemType listType)
+        /*
         dataSet = new ArrayList<>();
         HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "Michael paid $6.00 and owes $3.30");
+        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "Restaurant NYC");
+        item.put(RecyclerViewAdapter.MapItemKey.TEXT_2, "$102.20");
+        item.put(RecyclerViewAdapter.MapItemKey.TEXT_3, "you lent");
+        item.put(RecyclerViewAdapter.MapItemKey.TEXT_4, "$30.10");
         dataSet.add(item);
-
-        adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.PICTURE_WITH_TEXT);
+*/
+        adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.BILL_LIST_ITEM);
         recyclerView.setAdapter(adapter);
 
         TextView billName = (TextView) v.findViewById(R.id.textViewBillName);

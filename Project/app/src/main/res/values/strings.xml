@@ -24,6 +24,9 @@
     <string name="paid">paid</string>
     <string name="and">and</string>
     <string name="owes">owes</string>
+    <string name="ok">OK</string>
+    <string name="login_failed">Login failed</string>
+    <string name="login_failed_message">Username or password incorrect</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->
