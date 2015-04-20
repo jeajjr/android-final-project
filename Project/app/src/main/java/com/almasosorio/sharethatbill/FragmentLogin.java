@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -66,10 +68,13 @@ public class FragmentLogin extends Fragment {
         return v;
     }
 
-    protected void loginSuccessful() {
+    protected void loginSuccessful(String firstGroupName) {
         Log.d(TAG, "loginSuccessful");
 
-        
+        if (firstGroupName != null)
+            Log.d(TAG, "user has groups. First: " + firstGroupName);
+        else
+            Log.d(TAG, "user has no groups.");
     }
 
     protected void loginFailed() {
@@ -83,26 +88,48 @@ public class FragmentLogin extends Fragment {
                 .show();
     }
 
-    private class LoginValidator extends AsyncTask<String, Void, Boolean> {
+    private class LoginValidator extends AsyncTask<String, Void, String[]> {
         private static final String TAG = "LoginValidator";
 
         @Override
-        protected Boolean doInBackground(String... params) {
+        protected String[] doInBackground(String... params) {
             Log.d(TAG, "doInBackground");
+
+            DBHandler db = new DBHandler();
 
             Log.d(TAG, "Login received: " + params[0] + ", " + params[1]);
 
-            return (Boolean) (new DBHandler()).checkLogin(params[0], params[1]);
+            Boolean loginSuccessful =  db.checkLogin(params[0], params[1]);
+
+            if (loginSuccessful) {
+                ArrayList<String> userGroups = db.getUserGroups(params[0]);
+
+                if (userGroups.size() == 0) {
+                    String[] results = {"true", null};
+                    return results;
+                }
+                else {
+                    String[] results = {"true", userGroups.get(0)};
+                    return results;
+                }
+            }
+            else {
+                String[] results = {"false"};
+                return results;
+            }
         }
 
         @Override
-        protected void onPostExecute(Boolean result) {
+        protected void onPostExecute(String... result) {
             Log.d(TAG, "Received for login: " + result);
 
-            if (result)
-                loginSuccessful();
-            else
+            // if login was successful
+            if (Boolean.parseBoolean(result[0])) {
+                loginSuccessful(result[1]);
+            }
+            else {
                 loginFailed();
+            }
         }
     }
 }
