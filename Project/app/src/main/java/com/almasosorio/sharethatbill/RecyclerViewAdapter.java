@@ -7,6 +7,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -17,7 +19,8 @@ import java.util.Map;
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     private static String TAG = "RecyclerViewAdapter";
 
-    public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM, GROUP_MEMBERS_LIST_ITEM};
+    public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM,
+        GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY};
     public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4};
 
     private Context context;
@@ -33,15 +36,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+
         public ImageView icon;
         public TextView textView1;
         public TextView textView2;
         public TextView textView3;
         public TextView textView4;
+        public ImageButton imageButton1, imageButton2;
 
         public ViewHolder(View v) {
             super(v);
+
             textView1 = (TextView) v.findViewById(R.id.item_text1);
+
             switch (listType) {
                 case PICTURE_WITH_TEXT:
                     icon = (ImageView) v.findViewById(R.id.item_picture);
@@ -61,6 +68,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     textView2 = (TextView) v.findViewById(R.id.item_text2);
                     textView3 = (TextView) v.findViewById(R.id.item_text3);
                     break;
+
+                case CREATE_GROUP_MEMBER_ENTRY:
+                    imageButton1 = (ImageButton) v.findViewById(R.id.editEntry);
+                    imageButton2 = (ImageButton) v.findViewById(R.id.removeEntry);
+                    v.setClickable(false);
+                    break;
+
             }
 
             v.setOnClickListener(new View.OnClickListener() {
@@ -75,6 +89,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
 
         public void bindItemData (Map<MapItemKey, String> data) {
+
             textView1.setText(data.get(MapItemKey.TEXT_1));
 
             switch (listType) {
@@ -119,6 +134,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             case GROUP_MEMBERS_LIST_ITEM:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_members_list, parent, false);
+                break;
+
+            case CREATE_GROUP_MEMBER_ENTRY:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_creategroup_addmember, parent, false);
                 break;
         }
 
