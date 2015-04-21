@@ -23,8 +23,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         this.groupName = groupName;
     }
 
-
-
     @Override
     public Fragment getItem(int position) {
         switch (position) {

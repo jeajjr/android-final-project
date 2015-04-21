@@ -3,9 +3,11 @@ package com.almasosorio.sharethatbill;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class ActivityViewGroup extends ActionBarActivity {
@@ -24,8 +26,18 @@ public class ActivityViewGroup extends ActionBarActivity {
             userName = extras.getString("user_name");
             groupName = extras.getString("group_name");
         }
+        else {
+            //TODO: remove
+            userName = "user1";
+            groupName = "group1";
+        }
 
         Log.d(TAG, "got bundle: " + userName + ", " + groupName);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
+        title.setText(groupName);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);
