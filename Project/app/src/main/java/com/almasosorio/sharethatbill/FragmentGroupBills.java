@@ -11,12 +11,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FragmentGroupBills extends Fragment {
+    private static final String TAG = "FragmentGroupBills";
 
     private String userName;
     private String groupName;
@@ -56,6 +58,19 @@ public class FragmentGroupBills extends Fragment {
 
         userName = getArguments().getString(getActivity().getString(R.string.bundle_user_name));
         groupName = getArguments().getString(getActivity().getString(R.string.bundle_group_name));
+
+
+        View deleteButton = v.findViewById(R.id.layout_add_button);
+        TextView buttonText = (TextView) v.findViewById(R.id.add_button_text);
+        buttonText.setText(buttonText.getText().toString().toUpperCase());
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d(TAG, "clicked on addButton");
+
+                //TODO: implement
+            }
+        });
 
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);

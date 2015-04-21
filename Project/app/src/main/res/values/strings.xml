@@ -32,6 +32,7 @@
     <string name="bills">bills</string>
     <string name="recent_activity">recent activity</string>
     <string name="members">members</string>
+    <string name="add_new_bill">Add new bill</string>
 
     <string name="bundle_user_name">user_name</string>
     <string name="bundle_group_name">group_name</string>

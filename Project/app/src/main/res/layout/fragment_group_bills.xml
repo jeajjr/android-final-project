@@ -8,10 +8,52 @@
     android:background="@drawable/background"
     >
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/recyclerViewContainer"
+        >
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/layout_delete_button"
+            />
+
+        <LinearLayout
+            android:id="@+id/layout_add_button"
+            android:layout_alignParentBottom="true"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/login_button_backgnd"
+            android:paddingTop="12sp"
+            android:paddingBottom="12sp"
+            android:paddingLeft="15sp"
+            android:paddingRight="15sp"
+            android:layout_marginTop="16sp"
+            android:layout_marginBottom="20sp"
+            >
+
+            <ImageView
+                android:layout_width="20sp"
+                android:layout_height="20sp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/picture"
+                />
+
+            <TextView
+                android:id="@+id/add_button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#DFDFE0"
+                android:text="@string/add_new_bill"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10sp"
+                />
+        </LinearLayout>
+    </RelativeLayout>
 
 </LinearLayout>

@@ -26,6 +26,7 @@ public class ActivityBillDetails extends ActionBarActivity {
             billName = extras.getString(getString(R.string.bundle_bill_name));
         }
         else {
+            //TODO: remove
             userName = "user1";
             groupName = "group1";
             billName = "bill1";

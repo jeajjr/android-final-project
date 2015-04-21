@@ -69,6 +69,7 @@ public class FragmentBillDetails extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "clicked on deleteButton");
+                //TODO: implement
             }
         });
 
