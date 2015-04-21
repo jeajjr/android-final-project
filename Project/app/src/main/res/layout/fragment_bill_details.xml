@@ -10,6 +10,7 @@
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/billHeader"
         >
 
         <ImageView
@@ -48,39 +49,53 @@
             </LinearLayout>
         </LinearLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        />
-
-    <LinearLayout
-        android:id="@+id/layout_delete_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/login_button_backgnd"
-        android:paddingTop="12sp"
-        android:paddingBottom="12sp"
-        android:paddingLeft="15sp"
-        android:paddingRight="15sp"
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:id="@+id/recyclerViewContainer"
         >
 
-        <ImageView
-            android:layout_width="20sp"
-            android:layout_height="20sp"
-            android:layout_gravity="center_vertical"
-            android:src="@drawable/picture"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_above="@+id/layout_delete_button"
             />
 
-        <TextView
-            android:id="@+id/delete_button_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="#DFDFE0"
-            android:text="@string/delete_bill"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10sp"
-            />
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layout_delete_button"
+                android:layout_alignParentBottom="true"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/login_button_backgnd"
+                android:paddingTop="12sp"
+                android:paddingBottom="12sp"
+                android:paddingLeft="15sp"
+                android:paddingRight="15sp"
+                android:layout_marginTop="16sp"
+                android:layout_marginBottom="20sp"
+                >
+
+                <ImageView
+                    android:layout_width="20sp"
+                    android:layout_height="20sp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/picture"
+                    />
+
+                <TextView
+                    android:id="@+id/delete_button_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#DFDFE0"
+                    android:text="@string/delete_bill"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="10sp"
+                    />
+            </LinearLayout>
+        </RelativeLayout>
+
+
     </LinearLayout>

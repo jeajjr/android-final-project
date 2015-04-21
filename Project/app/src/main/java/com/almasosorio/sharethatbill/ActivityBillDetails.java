@@ -25,6 +25,11 @@ public class ActivityBillDetails extends ActionBarActivity {
             groupName = extras.getString(getString(R.string.bundle_group_name));
             billName = extras.getString(getString(R.string.bundle_bill_name));
         }
+        else {
+            userName = "user1";
+            groupName = "group1";
+            billName = "bill1";
+        }
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, FragmentBillDetails.newInstance(this,
