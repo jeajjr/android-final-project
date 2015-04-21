@@ -78,7 +78,8 @@
             android:background="@drawable/login_button_backgnd"
             android:textColor="#ffffffff"
             android:layout_gravity="center"
-            android:layout_marginRight="30dp" />
+            android:layout_marginRight="30dp"
+            android:paddingRight="10dp" />
     </LinearLayout>
 
     <ImageView
