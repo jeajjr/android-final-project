@@ -35,6 +35,10 @@
     <string name="bundle_group_name">group_name</string>
     <string name="bundle_bill_name">bill_name</string>
 
+    <string name="you_lent">You lent</string>
+    <string name="you_borrowed">You borrowed</string>
+    <string name="not_involved">Not involved</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_activity_view_group">ActivityViewGroup</string>

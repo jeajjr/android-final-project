@@ -185,6 +185,66 @@ public class DBHandler {
         return result;
     }
 
+    /**
+     * Method to get all the bill names and values of a group.
+     *
+     * @param groupName name of the group
+     * @return ArrayList<String> bills ID
+     */
+    public ArrayList<TwoStringsClass> getGroupBillNamesValues(String groupName){
+
+        ArrayList<TwoStringsClass> result = new ArrayList<>();
+
+        try {
+
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT name,value FROM bills WHERE gid=?";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, groupName);
+            ResultSet resultSet = psmtm.executeQuery();
+
+            while (resultSet.next())
+                result.add(new TwoStringsClass(resultSet.getString(1), resultSet.getString(2)));
+
+            connect.close();
+
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        return result;
+    }
+
+    public float getUserParticipationInBill(String groupName, String billName, String userName) {
+        float result = 0f;
+
+        try {
+
+            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
+
+            String query = "SELECT valueOwed,valuePaid FROM usersandbills WHERE bid=? AND uid=?";
+            PreparedStatement psmtm = connect.prepareStatement(query);
+            psmtm.setString(1, generateBillID(groupName, billName));
+            psmtm.setString(2, userName);
+            ResultSet resultSet = psmtm.executeQuery();
+
+            while (resultSet.next()) {
+                float owes = Float.parseFloat(resultSet.getString(1));
+                float paid = Float.parseFloat(resultSet.getString(2));
+
+                result = paid - owes;
+            }
+
+            connect.close();
+
+        } catch (SQLException e) {
+            handleException(e);
+        }
+
+        return result;
+    }
+
     /** Method to create a group. It uses groupExists method
      * then creates the group or not. Adds the group on the groups table
      *

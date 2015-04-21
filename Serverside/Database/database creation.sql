@@ -64,8 +64,8 @@ CREATE TABLE groupNotifications (
 );
 
 -- email, password
-INSERT INTO users VALUES ('user1', '1234');
-INSERT INTO users VALUES ('user2', '1234');
+INSERT INTO users VALUES ('user1', 'Molson', 'Lucius', '1234');
+INSERT INTO users VALUES ('user2', 'Bob', 'Dilan', '1234');
 
 -- name
 INSERT INTO groups VALUES ('group1');
@@ -74,8 +74,8 @@ INSERT INTO groups VALUES ('group1');
 INSERT INTO bills VALUES ('group1bill1', 'bill1', 50.00, '2015-04-01 02:08','group1', '', '', '');
 
 -- uid, gid
-INSERT INTO usersAndGroups VALUES ('user1', 'Molson', 'Lucius, 'group1');
-INSERT INTO usersAndGroups VALUES ('user2', 'Bob', 'Dilan', 'group1');
+INSERT INTO usersAndGroups VALUES ('user1', 'group1');
+INSERT INTO usersAndGroups VALUES ('user2', 'group1');
 
 --	uid, bid, valueOwed, valuePaid
 INSERT INTO usersAndBills VALUES ('user1','group1bill1', 0, 50.00);

@@ -1,6 +1,5 @@
 package com.almasosorio.sharethatbill;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,7 +12,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
 
 public class FragmentBillDetails extends Fragment {
     private static final String TAG = "FragmentBillDetails";
@@ -49,7 +47,7 @@ public class FragmentBillDetails extends Fragment {
             }
         });
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.cardList);
+        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
