@@ -68,7 +68,7 @@ public class FragmentGroupBills extends Fragment {
         adapter.setOnListItemClickListener(new RecyclerViewAdapter.OnListItemClickListener() {
             @Override
             public void onItemClick(int position) {
-                Intent intent = new Intent(getActivity(), ActivityViewGroup.class);
+                Intent intent = new Intent(getActivity(), ActivityBillDetails.class);
                 intent.putExtra(getString(R.string.bundle_user_name), userName);
                 intent.putExtra(getString(R.string.bundle_group_name), groupName);
                 intent.putExtra(getString(R.string.bundle_bill_name),

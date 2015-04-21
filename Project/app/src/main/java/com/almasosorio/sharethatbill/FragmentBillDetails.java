@@ -1,5 +1,6 @@
 package com.almasosorio.sharethatbill;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -16,9 +17,13 @@ import java.util.HashMap;
 public class FragmentBillDetails extends Fragment {
     private static final String TAG = "FragmentBillDetails";
 
-    RecyclerView recyclerView;
-    RecyclerViewAdapter adapter;
-    ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
+    private RecyclerView recyclerView;
+    private RecyclerViewAdapter adapter;
+    private ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
+
+    private String userName;
+    private String groupName;
+    private String billName;
 
     public FragmentBillDetails() {
         // Required empty public constructor
@@ -31,11 +36,28 @@ public class FragmentBillDetails extends Fragment {
         dataSet = new ArrayList<>();
     }
 
+    public static FragmentBillDetails newInstance(Context context, String userName,
+                                                  String groupName, String billName) {
+        FragmentBillDetails fragment = new FragmentBillDetails();
+
+        Bundle args = new Bundle();
+        args.putSerializable(context.getString(R.string.bundle_user_name), userName);
+        args.putSerializable(context.getString(R.string.bundle_group_name), groupName);
+        args.putSerializable(context.getString(R.string.bundle_bill_name), billName);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bill_details, container, false);
+
+        this.userName = getArguments().getString(getActivity().getString(R.string.bundle_user_name));
+        this.groupName = getArguments().getString(getActivity().getString(R.string.bundle_group_name));
+        this.billName = getArguments().getString(getActivity().getString(R.string.bundle_bill_name));
 
         View deleteButton = v.findViewById(R.id.layout_delete_button);
         TextView buttonText = (TextView) v.findViewById(R.id.delete_button_text);
@@ -53,24 +75,14 @@ public class FragmentBillDetails extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        // RecyclerViewAdapter(Context context, ArrayList<Map<String, ?>> dataSet, ItemType listType)
-        /*
-        dataSet = new ArrayList<>();
-        HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "Restaurant NYC");
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_2, "$102.20");
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_3, "you lent");
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_4, "$30.10");
-        dataSet.add(item);
-*/
         adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.BILL_LIST_ITEM);
         recyclerView.setAdapter(adapter);
 
         TextView billName = (TextView) v.findViewById(R.id.textViewBillName);
         TextView billValue = (TextView) v.findViewById(R.id.textViewBillValue);
 
-        String[] args = {"group1", "bill1"};
-        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet, adapter)).execute(args);
+        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet, adapter))
+                .execute(this.groupName, this.billName);
 
         return v;
     }
