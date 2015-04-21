@@ -3,6 +3,7 @@ package com.almasosorio.sharethatbill;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,10 +17,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class FragmentLogin extends Fragment {
     private static final String TAG = "FragmentLogin";
 
@@ -71,8 +68,17 @@ public class FragmentLogin extends Fragment {
     protected void loginSuccessful(String firstGroupName) {
         Log.d(TAG, "loginSuccessful");
 
-        if (firstGroupName != null)
+        if (firstGroupName != null) {
             Log.d(TAG, "user has groups. First: " + firstGroupName);
+
+            final EditText userName = (EditText) getView().findViewById(R.id.email);
+            final String userNameString = userName.getText().toString();
+
+            Intent intent = new Intent(getActivity(), ActivityViewGroup.class);
+            intent.putExtra("user_name", userNameString);
+            intent.putExtra("group_name", firstGroupName);
+            startActivity(intent);
+        }
         else
             Log.d(TAG, "user has no groups.");
     }

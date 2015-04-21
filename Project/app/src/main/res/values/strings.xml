@@ -27,9 +27,16 @@
     <string name="ok">OK</string>
     <string name="login_failed">Login failed</string>
     <string name="login_failed_message">Username or password incorrect</string>
+    <string name="bills">bills</string>
+    <string name="recent_activity">recent activity</string>
+    <string name="members">members</string>
 
+    <string name="bundle_user_name">user_name</string>
+    <string name="bundle_group_name">group_name</string>
+    <string name="bundle_bill_name">bill_name</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_activity_view_group">ActivityViewGroup</string>
 
 </resources>
