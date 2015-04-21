@@ -372,7 +372,9 @@ public class DBHandler {
      * Method to create an user account.
      * Adds the username to users table on db
      *
-     * @param userName id of an user
+     * @param userEmail id of an user
+     * @param firstName user's first name
+     * @param lastName user's last name
      * @param userPassword password of an user
      * @return if creates (true) if not (false)
      */
@@ -407,9 +409,9 @@ public class DBHandler {
      * @return ArrayList<TwoStringsClass> string uses floatValue balance
      */
     //TODO: alter array type
-    public ArrayList<String> getGroupUsersBalances(String groupName){
-        ArrayList<String> result = new ArrayList<>();
-        ArrayList<String> parcialMem = new ArrayList<>();
+    public ArrayList<TwoStringsClass> getGroupUsersBalances(String groupName){
+        ArrayList<TwoStringsClass> result = new ArrayList<>();
+        ArrayList<String> partialMembers = new ArrayList<>();
         String query;
 
         try {
@@ -424,8 +426,8 @@ public class DBHandler {
             ResultSet resultSet = psmtm.executeQuery();
 
             while(resultSet.next()){
-                result.add(resultSet.getString(1) + ": " + Float.parseFloat(resultSet.getString(2)));
-                parcialMem.add(resultSet.getString(1));
+                result.add(new TwoStringsClass(resultSet.getString(1), resultSet.getString(2)));
+                partialMembers.add(resultSet.getString(1));
             }
             connect.close();
         }
@@ -436,8 +438,8 @@ public class DBHandler {
         ArrayList<String> members = this.getGroupMembers(groupName);
 
         for (String member : members) {
-            if (!parcialMem.contains(member)) {
-                result.add(member + ": " + 0.0f);
+            if (!partialMembers.contains(member)) {
+                result.add(new TwoStringsClass(member, "0.00"));
             }
         }
 

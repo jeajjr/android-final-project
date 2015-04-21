@@ -30,9 +30,11 @@
     <string name="login_failed">Login failed</string>
     <string name="login_failed_message">Username or password incorrect</string>
     <string name="bills">bills</string>
+    <string name="users">users</string>
     <string name="recent_activity">recent activity</string>
     <string name="members">members</string>
     <string name="add_new_bill">Add new bill</string>
+    <string name="add_new_member">Add new member</string>
 
     <string name="bundle_user_name">user_name</string>
     <string name="bundle_group_name">group_name</string>
@@ -41,6 +43,9 @@
     <string name="you_lent">You lent</string>
     <string name="you_borrowed">You borrowed</string>
     <string name="not_involved">Not involved</string>
+
+    <string name="lent_in_total">Lent in total</string>
+    <string name="borrowed_in_total">Borrowed in total</string>
 
     <string name="error">Error</string>
     <string name="account_creation_failed">Account creation failed</string>

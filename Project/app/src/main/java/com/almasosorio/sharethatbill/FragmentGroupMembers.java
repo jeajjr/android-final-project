@@ -1,5 +1,6 @@
 package com.almasosorio.sharethatbill;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -17,8 +18,9 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class FragmentGroupBills extends Fragment {
-    private static final String TAG = "FragmentGroupBills";
+
+public class FragmentGroupMembers extends Fragment {
+    private static final String TAG = "FragmentGroupMembers";
 
     private String userName;
     private String groupName;
@@ -28,12 +30,12 @@ public class FragmentGroupBills extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
-    public FragmentGroupBills() {
+    public FragmentGroupMembers() {
         // Required empty public constructor
     }
 
-    public static FragmentGroupBills newInstance(Context context, String userName, String groupName) {
-        FragmentGroupBills fragment = new FragmentGroupBills();
+    public static FragmentGroupMembers newInstance(Context context, String userName, String groupName) {
+        FragmentGroupMembers fragment = new FragmentGroupMembers();
 
         Bundle args = new Bundle();
         args.putSerializable(context.getString(R.string.bundle_user_name), userName);
@@ -54,15 +56,15 @@ public class FragmentGroupBills extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_group_bills, container, false);
+        View v = inflater.inflate(R.layout.fragment_group_members, container, false);
 
         userName = getArguments().getString(getActivity().getString(R.string.bundle_user_name));
         groupName = getArguments().getString(getActivity().getString(R.string.bundle_group_name));
 
-
-        View addButton = v.findViewById(R.id.layout_add_button);
         TextView buttonText = (TextView) v.findViewById(R.id.add_button_text);
         buttonText.setText(buttonText.getText().toString().toUpperCase());
+
+        View addButton = v.findViewById(R.id.layout_add_button);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,32 +80,21 @@ public class FragmentGroupBills extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.BILL_LIST_ITEM);
+        adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.GROUP_MEMBERS_LIST_ITEM);
         recyclerView.setAdapter(adapter);
-        adapter.setOnListItemClickListener(new RecyclerViewAdapter.OnListItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                Intent intent = new Intent(getActivity(), ActivityBillDetails.class);
-                intent.putExtra(getString(R.string.bundle_user_name), userName);
-                intent.putExtra(getString(R.string.bundle_group_name), groupName);
-                intent.putExtra(getString(R.string.bundle_bill_name),
-                        dataSet.get(position).get(RecyclerViewAdapter.MapItemKey.TEXT_1));
-                startActivity(intent);
-            }
-        });
 
-        (new GroupBillsDownloader(dataSet, adapter)).execute(groupName, userName);
+        (new GroupMembersDownloader(dataSet, adapter)).execute(groupName, userName);
 
         return v;
     }
 
-    private class GroupBillsDownloader extends AsyncTask<String, Void , ArrayList> {
-        private static final String TAG = "GroupBillsDownloader";
+    private class GroupMembersDownloader extends AsyncTask<String, Void , ArrayList> {
+        private static final String TAG = "GroupMembersDownloader";
 
         private WeakReference<ArrayList> dataSet;
         private WeakReference<RecyclerViewAdapter> adapter;
 
-        public GroupBillsDownloader(ArrayList dataSet, RecyclerViewAdapter adapter) {
+        public GroupMembersDownloader(ArrayList dataSet, RecyclerViewAdapter adapter) {
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
         }
@@ -114,42 +105,34 @@ public class FragmentGroupBills extends Fragment {
 
             DBHandler db = new DBHandler();
 
-            ArrayList<TwoStringsClass> bills = db.getGroupBillNamesValues(params[0]);
+            ArrayList<TwoStringsClass> members = db.getGroupUsersBalances(params[0]);
 
-            Log.d(TAG, params[0] + " bills: " + bills);
+            Log.d(TAG, params[0] + " members: " + members);
 
-            for (int i=0; i<bills.size(); i++) {
-                HashMap<RecyclerViewAdapter.MapItemKey, String> billItem = new HashMap<>();
+            for (int i=0; i<members.size(); i++) {
+                HashMap<RecyclerViewAdapter.MapItemKey, String> userItem = new HashMap<>();
 
-                Float userBalanceInBill = db.getUserParticipationInBill(params[0],
-                        bills.get(i).string1, params[1]);
+                Float userBalanceInGroup = Float.parseFloat(members.get(i).string2);
 
-                billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_1, bills.get(i).string1);
-                billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2,
-                        String.format("$ %.2f", Float.parseFloat(bills.get(i).string2)));
+                userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_1,
+                        db.getUserNamesByEmail(members.get(i).string1));
 
-                if (userBalanceInBill > 0) {
-                    billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            getActivity().getString(R.string.you_borrowed));
+                if (userBalanceInGroup >= 0) {
+                    userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2,
+                            getActivity().getString(R.string.lent_in_total));
 
-                    billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4,
-                            String.format("$ %.2f", userBalanceInBill));
-                }
-                else if (userBalanceInBill < 0) {
-                    billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            getActivity().getString(R.string.you_borrowed));
-
-                    billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4,
-                            String.format("$ %.2f", -userBalanceInBill));
+                    userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
+                            String.format("$ %.2f", userBalanceInGroup));
                 }
                 else {
-                    billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            getActivity().getString(R.string.not_involved));
+                    userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2,
+                            getActivity().getString(R.string.borrowed_in_total));
 
-                    billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4, "");
+                    userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
+                            String.format("$ %.2f", userBalanceInGroup));
                 }
 
-                results.add(billItem);
+                results.add(userItem);
             }
 
             return results;

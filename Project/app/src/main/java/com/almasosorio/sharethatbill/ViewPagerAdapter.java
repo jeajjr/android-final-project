@@ -29,6 +29,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
             case 0:
                 return FragmentGroupBills.newInstance(context, userName, groupName);
+            case 1:
+                return FragmentGroupMembers.newInstance(context, userName, groupName);
             /*
             case 1:
                 return new FragmentThreeHoursForecast();
@@ -41,7 +43,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 1;
+        return 2;
     }
 
     @Override
@@ -52,6 +54,9 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 name = context.getResources().getString(R.string.bills);
+                break;
+            case 1:
+                name = context.getResources().getString(R.string.users);
                 break;
             /*
             case 1:
