@@ -14,8 +14,10 @@
     <!-- create group fragment -->
     <string name="group_name">group name</string>
     <string name="create_group">CREATE GROUP</string>
+    <string name="create_first_group">CREATE FIRST GROUP</string>
     <string name="invited_members">INVITED MEMBERS</string>
     <string name="add_member">ADD MEMBER</string>
+
     <string name="title_activity_activity_bill_details">ActivityBillDetails</string>
     <string name="delete_bill">delete bill</string>
     <string name="hello_world">Hello world!</string>
