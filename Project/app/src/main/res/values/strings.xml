@@ -39,6 +39,15 @@
     <string name="you_borrowed">You borrowed</string>
     <string name="not_involved">Not involved</string>
 
+    <string name="error">Error</string>
+    <string name="account_creation_failed">Account creation failed</string>
+    <string name="did_not_complete_all_fields">You did not complete all fields</string>
+
+    <string name="invalid_email">Invalid email</string>
+    <string name="invalid_email_text">The typed email is invalid</string>
+
+    <string name="passwords_dont_match">The passwords do not match</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_activity_view_group">ActivityViewGroup</string>

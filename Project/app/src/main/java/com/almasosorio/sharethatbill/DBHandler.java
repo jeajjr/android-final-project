@@ -376,16 +376,18 @@ public class DBHandler {
      * @param userPassword password of an user
      * @return if creates (true) if not (false)
      */
-    public boolean createUserAccount(String userName, String userPassword) {
-        if (!userExists(userName)) {
+    public boolean createUserAccount(String userEmail, String firstName, String lastName, String userPassword) {
+        if (!userExists(userEmail)) {
             try {
                 Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
-                String query = "INSERT INTO `users`(`email`,`password`) VALUES (?, ?)";
+                String query = "INSERT INTO users(email,firstName,lastName,password) VALUES (?, ?, ?, ?)";
 
                 PreparedStatement psmtm = connect.prepareStatement(query);
-                psmtm.setString(1, userName);
-                psmtm.setString(2, userPassword);
+                psmtm.setString(1, userEmail);
+                psmtm.setString(2, firstName);
+                psmtm.setString(3, lastName);
+                psmtm.setString(4, userPassword);
                 psmtm.executeUpdate();
 
                 connect.close();

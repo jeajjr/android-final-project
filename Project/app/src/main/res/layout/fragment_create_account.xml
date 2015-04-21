@@ -29,6 +29,7 @@
         />
 
     <EditText
+        android:id="@+id/firstName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
@@ -44,6 +45,7 @@
         />
 
     <EditText
+        android:id="@+id/lastName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
@@ -59,6 +61,7 @@
         />
 
     <EditText
+        android:id="@+id/email"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
@@ -74,6 +77,7 @@
         />
 
     <EditText
+        android:id="@+id/password"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
@@ -89,6 +93,7 @@
         />
 
     <EditText
+        android:id="@+id/passwordConfirm"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
