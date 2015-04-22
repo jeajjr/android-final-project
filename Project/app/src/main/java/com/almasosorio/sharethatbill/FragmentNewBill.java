@@ -7,13 +7,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+
 
 public class FragmentNewBill extends Fragment {
 
     public static final String TAG = "FragmentNewBill";
+    private ArrayList<String> userList;
 
-    static public FragmentNewBill newInstance() {
+    static public FragmentNewBill newInstance(ArrayList<String> userList) {
         FragmentNewBill f = new FragmentNewBill();
+        f.userList = userList;
         return f;
     }
 
@@ -30,8 +34,7 @@ public class FragmentNewBill extends Fragment {
         View v = inflater.inflate(R.layout.fragment_newbill, container, false);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(
-                getActivity().getSupportFragmentManager(), getActivity(),
-                userName, groupName);
+                getActivity().getSupportFragmentManager(), getActivity(), userList);
 
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.view_pager);
         mViewPager.setAdapter(viewPagerAdapter);
