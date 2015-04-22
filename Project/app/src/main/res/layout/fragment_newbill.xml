@@ -30,7 +30,12 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:layout_alignTop="@+id/textView3"
-        android:layout_alignBottom="@+id/textView3" />
+        android:layout_alignBottom="@+id/textView3"
+        android:editable="true"
+        android:gravity="center"
+        android:textColor="#ffffffff"
+        android:textCursorDrawable="@null"
+        android:inputType="text" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,7 +47,7 @@
         android:gravity="center"
         android:layout_below="@+id/textView3"
         android:layout_toLeftOf="@+id/billName"
-        android:layout_toStartOf="@+id/billName"
+        android:layout_toStartOf="@+id/recyclerView"
         android:textSize="28dp"
         android:layout_marginTop="12dp" />
 
@@ -87,7 +92,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="$ 22.01"
-            android:id="@+id/textView6"
+            android:id="@+id/totalPaid"
             android:textColor="#ff42ff17"
             android:gravity="center"
             android:textSize="25dp"
@@ -122,5 +127,20 @@
 
         </android.support.v4.view.ViewPager>
     </LinearLayout>
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/click_set_date"
+        android:id="@+id/setDate"
+        android:layout_alignTop="@+id/textView4"
+        android:layout_alignStart="@+id/billName"
+        android:background="@drawable/addmember_background"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="5dp"
+        android:layout_toRightOf="@+id/textView4"
+        android:layout_alignBottom="@+id/textView4" />
 
 </RelativeLayout>

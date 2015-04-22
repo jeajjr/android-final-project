@@ -12,16 +12,28 @@
     <string name="last_name">last name</string>
 
     <!-- create group fragment -->
+    <string name="title_activity_activity_create_group">ActivityCreateGroup</string>
+    <string name="bundle_first_group_create">BundleFirstGroup</string>
     <string name="group_name">group name</string>
     <string name="create_group">CREATE GROUP</string>
     <string name="create_first_group">CREATE FIRST GROUP</string>
     <string name="invited_members">INVITED MEMBERS</string>
     <string name="add_member">ADD MEMBER</string>
+    <string name="cant_create_group">Can\'t Create Group</string>
+    <string name="group_name_invalid">Group name must be valid.</string>
+    <string name="edit_member">Edit Member</string>
+    <string name="enter_new_email">Enter member\'s new email</string>
 
     <!-- create new bill fragment -->
+    <string name="title_activity_activity_new_bill">ActivityNewBill</string>
+    <string name="click_set_date">CLICK TO SET DATE</string>
+    <string name="new_bill">NEW BILL</string>
     <string name="who_paid">WHO PAID</string>
     <string name="split_options">SPLIT OPTIONS</string>
     <string name="split_method">Splitting Method:</string>
+    <string-array name="split_method_options">
+        <item>Split Equally</item>
+    </string-array>
 
     <string name="title_activity_activity_bill_details">ActivityBillDetails</string>
     <string name="delete_bill">Delete bill</string>

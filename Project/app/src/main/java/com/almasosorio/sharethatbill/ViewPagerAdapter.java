@@ -30,6 +30,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     public ViewPagerAdapter (FragmentManager fm, Context context, ArrayList<String> userList) {
         super(fm);
+        this.fm = fm;
+        this.context = context;
         this.userList = userList;
         this.pagerType = PagerType.NEWBILL_PAGER;
     }
@@ -52,8 +54,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             }
         } else if (pagerType == PagerType.NEWBILL_PAGER) {
             switch (position) {
-                case 0:
-                case 1:
+                case 0: return FragmentWhoPaid.newInstance();
+                case 1: return FragmentSplitOptions.newInstance();
                 default:
                     break;
             }
