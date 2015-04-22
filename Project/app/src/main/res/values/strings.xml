@@ -18,6 +18,10 @@
     <string name="invited_members">INVITED MEMBERS</string>
     <string name="add_member">ADD MEMBER</string>
 
+    <!-- create new bill fragment -->
+    <string name="who_paid">WHO PAID</string>
+    <string name="split_options">SPLIT OPTIONS</string>
+
     <string name="title_activity_activity_bill_details">ActivityBillDetails</string>
     <string name="delete_bill">delete bill</string>
     <string name="hello_world">Hello world!</string>

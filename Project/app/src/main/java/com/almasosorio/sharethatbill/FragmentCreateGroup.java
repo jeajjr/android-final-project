@@ -23,12 +23,14 @@ import java.util.HashMap;
 
 public class FragmentCreateGroup extends Fragment {
 
-    private static final String TAG = "FragmentCreateGroup";
+    public static final String TAG = "FragmentCreateGroup";
     private static final String EXTRA_ENTRY_EMAIL = "ENTRY_EMAIL";
     private static final int ADD_MEMBER_REQUEST = 0;
+    private static final int EDIT_MEMBER_REQUEST = 1;
     private boolean mIsFirstGroup;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mRecyclerAdapter;
+    private int mLastEditPosition;
     ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
 
     static public FragmentCreateGroup newInstance(boolean isFirstGroup) {
@@ -71,13 +73,36 @@ public class FragmentCreateGroup extends Fragment {
         ((Button)v.findViewById(R.id.addMember)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AddMemberDialog dialog = new AddMemberDialog();
+                MemberDialog dialog = new MemberDialog("Add Member", "Enter member email", "");
                 dialog.setTargetFragment(FragmentCreateGroup.this, ADD_MEMBER_REQUEST);
                 dialog.show(getFragmentManager(), "AddMemberDialog");
             }
         });
 
+        ((Button)v.findViewById(R.id.createGroup)).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO:
+                // Code to go to other activity where groups are displayed
+                // This should be the group being displayed
+                // Add members to group/db that are inside ArrayList "dataSet".
+            }
+        });
+
         return v;
+    }
+
+    public void editMember(int position) {
+
+        if (position < 0 || position >= dataSet.size())
+            return;
+
+        mLastEditPosition = position;
+
+        MemberDialog dialog = new MemberDialog("Edit Member", "Enter member's new email",
+                dataSet.get(position).get(RecyclerViewAdapter.MapItemKey.TEXT_1));
+        dialog.setTargetFragment(FragmentCreateGroup.this, EDIT_MEMBER_REQUEST);
+        dialog.show(getFragmentManager(), "EditMemberDialog");
     }
 
     @Override
@@ -93,21 +118,34 @@ public class FragmentCreateGroup extends Fragment {
             item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
             dataSet.add(item);
             mRecyclerAdapter.notifyItemInserted(dataSet.size() - 1);
+        } else if (requestCode == EDIT_MEMBER_REQUEST && dataSet != null) {
+            dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
+            mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    private class AddMemberDialog extends DialogFragment {
+    public static class MemberDialog extends DialogFragment {
+
+        private String title, message, defaultText;
+
+        public MemberDialog(String title, String message, String defaultText) {
+            super();
+            this.title = title;
+            this.message = message;
+            this.defaultText = defaultText;
+        }
+
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             final EditText textEdit = new EditText(getActivity());
-
+            textEdit.setText(defaultText);
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(textEdit)
-                .setTitle("Add Member")
-                .setMessage("Enter member email")
+                .setTitle(title)
+                .setMessage(message)
                 .setPositiveButton(android.R.string.ok,
                         new DialogInterface.OnClickListener() {
                             @Override
