@@ -45,7 +45,7 @@ public class ActivityViewGroup extends ActionBarActivity {
         pagerTabStrip.setDrawFullUnderline(true);
         pagerTabStrip.setTabIndicatorColor(Color.WHITE);
         pagerTabStrip.setTextColor(Color.WHITE);
-        
+
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);

@@ -1,7 +1,10 @@
 package com.almasosorio.sharethatbill;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Point;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -69,7 +73,8 @@ public class FragmentBillDetails extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d(TAG, "clicked on deleteButton");
-                //TODO: implement
+
+                createDeleteBillDialog();
             }
         });
 
@@ -90,5 +95,37 @@ public class FragmentBillDetails extends Fragment {
         return v;
     }
 
+    private void createDeleteBillDialog() {
+        new AlertDialog.Builder(getActivity())
+                .setTitle(getActivity().getString(R.string.delete_bill))
+                .setMessage(getActivity().getString(R.string.delete_bill_sure) + " " +
+                    billName + "?")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        (new BillDeleter()).execute(groupName, billName, userName);
+                    }
+                })
+                .setNeutralButton(android.R.string.cancel, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
+    private class BillDeleter extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... params) {
+            DBHandler db = new DBHandler();
+
+            db.deleteBill(params[0], params[1], params[2]);
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            Toast.makeText(getActivity(), getString(R.string.bill) + " " + billName + " " +
+            getString(R.string.was_deleted), Toast.LENGTH_LONG).show();
+            getActivity().finish();
+        }
+    }
 }

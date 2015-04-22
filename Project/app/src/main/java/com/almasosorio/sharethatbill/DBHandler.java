@@ -408,7 +408,6 @@ public class DBHandler {
      * @param groupName name of the group
      * @return ArrayList<TwoStringsClass> string uses floatValue balance
      */
-    //TODO: alter array type
     public ArrayList<TwoStringsClass> getGroupUsersBalances(String groupName){
         ArrayList<TwoStringsClass> result = new ArrayList<>();
         ArrayList<String> partialMembers = new ArrayList<>();
@@ -861,24 +860,7 @@ public class DBHandler {
 
         return false;
     }
-    //TODO: remove
-    public void testing() {
-        try {
-            Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
-            String query = "DELETE FROM bills WHERE id=?";
-
-            PreparedStatement psmtm = connect.prepareStatement(query);
-            psmtm.setString(1, generateBillID("group1", "bill1a"));
-
-            System.out.println(psmtm.executeUpdate());
-
-            connect.close();
-
-        } catch (SQLException e) {
-            handleException(e);
-        }
-    }
     /**
      * Method to get a group notification. Its ordered by time.
      *

@@ -23,7 +23,10 @@
     <string name="split_options">SPLIT OPTIONS</string>
 
     <string name="title_activity_activity_bill_details">ActivityBillDetails</string>
-    <string name="delete_bill">delete bill</string>
+    <string name="delete_bill">Delete bill</string>
+    <string name="delete_bill_sure">Are you sure you want to delete the bill</string>
+    <string name="bill">Bill</string>
+    <string name="was_deleted">was deleted</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="did_not_participate">did not participate</string>
@@ -74,7 +77,6 @@
     <string name="days_ago">days ago</string>
     <string name="weeks_ago">weeks ago</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_activity_view_group">ActivityViewGroup</string>
 
