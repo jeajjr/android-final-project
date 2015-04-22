@@ -13,6 +13,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class FragmentSplitOptions extends Fragment {
+public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSelectedListener {
 
     public static final String TAG = "FragmentSplitOptions";
 
@@ -49,6 +51,11 @@ public class FragmentSplitOptions extends Fragment {
         View v = inflater.inflate(R.layout.fragment_split_options, container, false);
 
         mSpinner = (Spinner) v.findViewById(R.id.spinner);
+        mSpinner.setOnItemSelectedListener(this);
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.split_method_options, android.R.layout.simple_spinner_item);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        mSpinner.setAdapter(adapter);
 
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
@@ -61,4 +68,13 @@ public class FragmentSplitOptions extends Fragment {
         return v;
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }
