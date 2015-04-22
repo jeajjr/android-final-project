@@ -5,4 +5,5 @@
 
     <dimen name="list_separator_margin">30sp</dimen>
 
+    <dimen name="drawer_text_size">18sp</dimen>
 </resources>

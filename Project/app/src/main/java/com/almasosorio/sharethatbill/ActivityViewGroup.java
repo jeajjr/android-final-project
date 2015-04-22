@@ -26,6 +26,8 @@ public class ActivityViewGroup extends ActionBarActivity {
     private String userName;
     private String groupName;
 
+    private ArrayList<String> groupsList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,27 +72,14 @@ public class ActivityViewGroup extends ActionBarActivity {
         };
 
         drawerLayout.setDrawerListener(drawerToggle);
-        // only open navigation drawer via button on toolbar
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-        ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet = new ArrayList<>();
-        HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "blah1");
-        dataSet.add(item);
-        item = new HashMap<>();
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "blah2");
-        dataSet.add(item);
-        item = new HashMap<>();
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "blah3");
-        dataSet.add(item);
-        item = new HashMap<>();
-        item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, "blah4");
-        dataSet.add(item);
+        groupsList = new ArrayList<>();
 
         RecyclerView drawerList = (RecyclerView) findViewById(R.id.recyclerView1);
         drawerList.setLayoutManager(new LinearLayoutManager(this));
-        RecyclerViewAdapter recyclerViewAdapter =
-                new RecyclerViewAdapter(this, dataSet, RecyclerViewAdapter.ItemType.PICTURE_WITH_TEXT);
+        DrawerRecyclerViewAdapter recyclerViewAdapter =
+                new DrawerRecyclerViewAdapter(this, groupsList);
         drawerList.setAdapter(recyclerViewAdapter);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
@@ -99,4 +88,6 @@ public class ActivityViewGroup extends ActionBarActivity {
         ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(viewPagerAdapter);
     }
+
+    
 }
