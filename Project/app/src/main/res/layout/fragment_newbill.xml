@@ -65,7 +65,9 @@
         android:layout_below="@+id/imageView4"
         android:gravity="center_horizontal"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="10dp"
+        android:id="@+id/linearLayout"
+        android:layout_marginBottom="2dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -91,6 +93,34 @@
             android:textSize="25dp"
             android:layout_below="@+id/imageView4"
             android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/linearLayout"
+        android:background="#ffffffff"
+        android:layout_margin="3dp"
+        android:padding="1dp">
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/view_pager"
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_below="@+id/linearLayout"
+            android:background="#ff000000">
+
+            <android.support.v4.view.PagerTabStrip
+                android:id="@+id/pager_tab_strip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"/>
+
+        </android.support.v4.view.ViewPager>
     </LinearLayout>
 
 </RelativeLayout>
