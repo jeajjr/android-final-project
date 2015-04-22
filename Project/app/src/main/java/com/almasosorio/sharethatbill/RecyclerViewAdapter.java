@@ -21,7 +21,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM,
         GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY};
-    public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4};
+    public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4, CLICKABLE_BILL_NAME};
 
     private Context context;
     ArrayList<HashMap<MapItemKey, String>> dataSet;
