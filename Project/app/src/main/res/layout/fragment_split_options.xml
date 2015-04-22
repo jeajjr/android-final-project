@@ -1,0 +1,50 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.almasosorio.sharethatbill.FragmentGroupBills"
+    android:background="#00000000"
+    >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="#00000000"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="5dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="@string/split_method"
+            android:id="@+id/textView"
+            android:layout_gravity="center"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:textColor="#ffffffff" />
+
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/spinner"
+            android:gravity="center|center_vertical|center_horizontal"
+            android:layout_gravity="center"
+            android:layout_toRightOf="@+id/textView"
+            android:layout_centerVertical="true"
+            android:spinnerMode="dropdown" />
+    </RelativeLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/billName"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:paddingTop="1dp"
+        android:background="#00ffffff" />
+
+</LinearLayout>

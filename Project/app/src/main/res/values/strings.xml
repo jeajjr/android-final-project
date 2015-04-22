@@ -21,6 +21,7 @@
     <!-- create new bill fragment -->
     <string name="who_paid">WHO PAID</string>
     <string name="split_options">SPLIT OPTIONS</string>
+    <string name="split_method">Splitting Method:</string>
 
     <string name="title_activity_activity_bill_details">ActivityBillDetails</string>
     <string name="delete_bill">Delete bill</string>
