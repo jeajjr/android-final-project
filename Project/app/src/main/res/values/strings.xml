@@ -27,10 +27,12 @@
     <string name="and">and</string>
     <string name="owes">owes</string>
     <string name="ok">OK</string>
+    <string name="you">You</string>
     <string name="login_failed">Login failed</string>
     <string name="login_failed_message">Username or password incorrect</string>
     <string name="bills">bills</string>
     <string name="users">users</string>
+    <string name="notifications">notifications</string>
     <string name="recent_activity">recent activity</string>
     <string name="members">members</string>
     <string name="add_new_bill">Add new bill</string>
@@ -55,6 +57,18 @@
     <string name="invalid_email_text">The typed email is invalid</string>
 
     <string name="passwords_dont_match">The passwords do not match</string>
+
+    <string name="created_the_bill">created the bill</string>
+    <string name="edited_the_bill">edited the bill</string>
+    <string name="deleted_the_bill">deleted the bill</string>
+    <string name="added">added</string>
+    <string name="to_the_group">to the group</string>
+
+    <string name="less_than_one_minute_ago">Less than one minute ago</string>
+    <string name="minutes_ago">minutes ago</string>
+    <string name="hours_ago">hours ago</string>
+    <string name="days_ago">days ago</string>
+    <string name="weeks_ago">weeks ago</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

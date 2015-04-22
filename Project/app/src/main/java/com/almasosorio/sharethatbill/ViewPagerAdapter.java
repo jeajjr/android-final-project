@@ -26,24 +26,19 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch (position) {
-
             case 0:
+                return FragmentGroupNotifications.newInstance(context, userName, groupName);
+            case 1:
                 return FragmentGroupBills.newInstance(context, userName, groupName);
-            case 1:
-                return FragmentGroupMembers.newInstance(context, userName, groupName);
-            /*
-            case 1:
-                return new FragmentThreeHoursForecast();
             case 2:
-                return new FragmentDailyForecast();
-                */
+                return FragmentGroupMembers.newInstance(context, userName, groupName);
         }
         return null;
     }
 
     @Override
     public int getCount() {
-        return 2;
+        return 3;
     }
 
     @Override
@@ -53,19 +48,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
 
         switch (position) {
             case 0:
+                name = context.getResources().getString(R.string.notifications);
+                break;
+            case 1:
                 name = context.getResources().getString(R.string.bills);
                 break;
-            case 1:
+            case 2:
                 name = context.getResources().getString(R.string.users);
                 break;
-            /*
-            case 1:
-                name = context.getResources().getString(R.string.tab_title_three_hours_forecast);
-                break;
-            case 2:
-                name = context.getResources().getString(R.string.tab_title_daily_forecast);
-                break;
-                */
         }
         return name.toUpperCase(l);
     }
