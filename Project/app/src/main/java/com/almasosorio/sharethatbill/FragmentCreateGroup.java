@@ -30,6 +30,7 @@ public class FragmentCreateGroup extends Fragment {
     private boolean mIsFirstGroup;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter mRecyclerAdapter;
+    private EditText mGroupName;
     private int mLastEditPosition;
     ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
 
@@ -57,6 +58,8 @@ public class FragmentCreateGroup extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_creategroup, container, false);
 
+        mGroupName = (EditText) v.findViewById(R.id.groupName);
+
         if (mIsFirstGroup)
             ((TextView)v.findViewById(R.id.topTitle)).setText(R.string.create_first_group);
 
@@ -83,6 +86,17 @@ public class FragmentCreateGroup extends Fragment {
         ((Button)v.findViewById(R.id.createGroup)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                if (mGroupName.getText().toString().isEmpty()) {
+                    new AlertDialog.Builder(getActivity())
+                            .setTitle(getActivity().getString(R.string.cant_create_group))
+                            .setMessage(getActivity().getString(R.string.group_name_invalid))
+                            .setPositiveButton(android.R.string.ok, null)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
+                    return;
+                }
+
                 // TODO:
                 // Code to go to other activity where groups are displayed
                 // This should be the group being displayed
@@ -100,7 +114,8 @@ public class FragmentCreateGroup extends Fragment {
 
         mLastEditPosition = position;
 
-        MemberDialog dialog = new MemberDialog("Edit Member", "Enter member's new email",
+        MemberDialog dialog = new MemberDialog(getString(R.string.edit_member),
+                getString(R.string.enter_new_email),
                 dataSet.get(position).get(RecyclerViewAdapter.MapItemKey.TEXT_1));
         dialog.setTargetFragment(FragmentCreateGroup.this, EDIT_MEMBER_REQUEST);
         dialog.show(getFragmentManager(), "EditMemberDialog");
@@ -115,13 +130,30 @@ public class FragmentCreateGroup extends Fragment {
         }
 
         if (requestCode == ADD_MEMBER_REQUEST && dataSet != null) {
-            HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
-            item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
-            dataSet.add(item);
-            mRecyclerAdapter.notifyItemInserted(dataSet.size() - 1);
+            String[] emails = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString().split("\n");
+
+            if (emails == null)
+                return;
+
+            for (int i = 0; i < emails.length; i++) {
+
+                if (emails[i].isEmpty())
+                    continue;
+
+                HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
+                item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, emails[i]);
+                dataSet.add(item);
+                mRecyclerAdapter.notifyItemInserted(dataSet.size() - 1);
+            }
+
         } else if (requestCode == EDIT_MEMBER_REQUEST && dataSet != null) {
-            dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
-            mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
+
+            String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
+
+            if (!newEmail.isEmpty() && !newEmail.contains("\n")) {
+                dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
+                mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
+            }
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -143,6 +175,7 @@ public class FragmentCreateGroup extends Fragment {
 
             final EditText textEdit = new EditText(getActivity());
             textEdit.setText(defaultText);
+            textEdit.setSelection(defaultText.length());
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(textEdit)
                 .setTitle(title)
@@ -153,7 +186,7 @@ public class FragmentCreateGroup extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (getTargetFragment() != null) {
                                     Intent i = new Intent();
-                                    i.putExtra(EXTRA_ENTRY_EMAIL, textEdit.getText());
+                                    i.putExtra(EXTRA_ENTRY_EMAIL, textEdit.getText().toString());
                                     getTargetFragment().onActivityResult(getTargetRequestCode(),
                                             Activity.RESULT_OK, i);
                                 }
