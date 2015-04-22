@@ -23,7 +23,7 @@
     <EditText
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/editText2"
+        android:id="@+id/billName"
         android:layout_alignParentTop="false"
         android:layout_toRightOf="@+id/textView3"
         android:layout_toEndOf="@+id/textView3"
@@ -41,8 +41,8 @@
         android:textColor="#ffffffff"
         android:gravity="center"
         android:layout_below="@+id/textView3"
-        android:layout_toLeftOf="@+id/editText2"
-        android:layout_toStartOf="@+id/editText2"
+        android:layout_toLeftOf="@+id/billName"
+        android:layout_toStartOf="@+id/billName"
         android:textSize="28dp"
         android:layout_marginTop="12dp" />
 

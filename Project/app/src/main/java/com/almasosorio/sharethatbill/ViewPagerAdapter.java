@@ -47,7 +47,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
                 case 2:
                     return FragmentGroupMembers.newInstance(context, userName, groupName);
 
-
                 default:
                     break;
             }

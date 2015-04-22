@@ -68,6 +68,7 @@ public class FragmentCreateGroup extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
         mRecyclerAdapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.CREATE_GROUP_MEMBER_ENTRY);
+        mRecyclerAdapter.setParentFragment(this);
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
         ((Button)v.findViewById(R.id.addMember)).setOnClickListener(new View.OnClickListener() {
