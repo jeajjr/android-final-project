@@ -59,6 +59,8 @@
     <View
         android:layout_width="fill_parent"
         android:layout_height="1sp"
-        android:background="#DFDFE0"
+        android:background="#333333"
+        android:layout_marginLeft="@dimen/list_separator_margin"
+        android:layout_marginRight="@dimen/list_separator_margin"
         />
     </LinearLayout>
