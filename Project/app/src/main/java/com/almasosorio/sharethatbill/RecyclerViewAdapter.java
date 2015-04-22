@@ -2,6 +2,7 @@ package com.almasosorio.sharethatbill;
 
 
 import android.content.Context;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,14 +21,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static String TAG = "RecyclerViewAdapter";
 
     public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM,
-        GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY};
+        GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY, WHO_PAID_LIST_ITEM};
     public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4, CLICKABLE_BILL_NAME};
 
     private Context context;
     ArrayList<HashMap<MapItemKey, String>> dataSet;
     private ItemType listType;
 
-    private FragmentCreateGroup createGroupFrag;
+    private Fragment parentFragment;
 
     private OnListItemClickListener onListItemClickListener;
 
@@ -37,8 +38,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         this.listType = listType;
     }
 
-    public void setCreateGroupFrag(FragmentCreateGroup f) {
-        createGroupFrag = f;
+    public void setParentFragment(Fragment f) {
+        parentFragment = f;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,7 +86,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     imageButton1.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            createGroupFrag.editMember(getPosition());
+                            ((FragmentCreateGroup)parentFragment).editMember(getPosition());
                         }
                     });
 
@@ -96,6 +97,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             notifyItemRemoved(getPosition());
                         }
                     });
+                    break;
+
+                case WHO_PAID_LIST_ITEM:
+                    textView2 = (TextView) v.findViewById(R.id.valuePaid);
                     break;
 
             }
@@ -134,6 +139,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     textView2.setText(data.get(MapItemKey.TEXT_2));
                     textView3.setText(data.get(MapItemKey.TEXT_3));
                     break;
+
+                case WHO_PAID_LIST_ITEM:
+                    textView2.setText(data.get(MapItemKey.TEXT_2));
+                    break;
             }
         }
     }
@@ -161,6 +170,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             case CREATE_GROUP_MEMBER_ENTRY:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_creategroup_addmember, parent, false);
+                break;
+
+            case WHO_PAID_LIST_ITEM:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_whopaid_entry, parent, false);
                 break;
         }
 
