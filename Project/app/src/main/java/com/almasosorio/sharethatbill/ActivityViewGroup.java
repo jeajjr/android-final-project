@@ -1,5 +1,7 @@
 package com.almasosorio.sharethatbill;
 
+import android.graphics.Color;
+import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -38,6 +40,12 @@ public class ActivityViewGroup extends ActionBarActivity {
         setSupportActionBar(toolbar);
         TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
         title.setText(groupName);
+
+        PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.pager_tab_strip);
+        pagerTabStrip.setDrawFullUnderline(true);
+        pagerTabStrip.setTabIndicatorColor(Color.WHITE);
+        pagerTabStrip.setTextColor(Color.WHITE);
+        
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);

@@ -38,6 +38,7 @@
             android:background="#333333"
             android:paddingTop="5dp"
             android:paddingBottom="5dp"
+
             />
 
         </android.support.v4.view.ViewPager>
