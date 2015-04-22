@@ -41,15 +41,12 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             switch (position) {
 
                 case 0:
+                    return FragmentGroupNotifications.newInstance(context, userName, groupName);
+                case 1:
                     return FragmentGroupBills.newInstance(context, userName, groupName);
-                case 1:
-                    return FragmentGroupMembers.newInstance(context, userName, groupName);
-                /*
-                case 1:
-                    return new FragmentThreeHoursForecast();
                 case 2:
-                    return new FragmentDailyForecast();
-                    */
+                    return FragmentGroupMembers.newInstance(context, userName, groupName);
+
 
                 default:
                     break;
@@ -68,7 +65,7 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     @Override
     public int getCount() {
         switch (pagerType) {
-            case GROUP_PAGER: return 2;
+            case GROUP_PAGER: return 3;
             case NEWBILL_PAGER: return 2;
             default: break;
         }
@@ -82,19 +79,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         if (pagerType == PagerType.GROUP_PAGER) {
             switch (position) {
                 case 0:
+                    name = context.getResources().getString(R.string.notifications);
+                    break;
+                case 1:
                     name = context.getResources().getString(R.string.bills);
                     break;
-                case 1:
+                case 2:
                     name = context.getResources().getString(R.string.users);
                     break;
-                /*
-                case 1:
-                    name = context.getResources().getString(R.string.tab_title_three_hours_forecast);
-                    break;
-                case 2:
-                    name = context.getResources().getString(R.string.tab_title_daily_forecast);
-                    break;
-                    */
 
                 default:
                     break;
