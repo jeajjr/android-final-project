@@ -27,12 +27,18 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     ArrayList<HashMap<MapItemKey, String>> dataSet;
     private ItemType listType;
 
+    private FragmentCreateGroup createGroupFrag;
+
     private OnListItemClickListener onListItemClickListener;
 
     public RecyclerViewAdapter(Context context, ArrayList<HashMap<MapItemKey, String>> dataSet, ItemType listType) {
         this.context = context;
         this.dataSet = dataSet;
         this.listType = listType;
+    }
+
+    public void setCreateGroupFrag(FragmentCreateGroup f) {
+        createGroupFrag = f;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -70,9 +76,26 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     break;
 
                 case CREATE_GROUP_MEMBER_ENTRY:
+
                     imageButton1 = (ImageButton) v.findViewById(R.id.editEntry);
                     imageButton2 = (ImageButton) v.findViewById(R.id.removeEntry);
+
                     v.setClickable(false);
+
+                    imageButton1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            createGroupFrag.editMember(getPosition());
+                        }
+                    });
+
+                    imageButton2.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dataSet.remove(getPosition());
+                            notifyItemRemoved(getPosition());
+                        }
+                    });
                     break;
 
             }
