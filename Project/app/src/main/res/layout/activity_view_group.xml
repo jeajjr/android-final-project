@@ -1,46 +1,71 @@
-<LinearLayout
+<android.support.v4.widget.DrawerLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.almasosorio.sharethatbill.ActivityViewGroup"
-    android:orientation="vertical"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:id="@+id/container"
-
-    >
-
-    <android.support.v7.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
-        android:background="#DFDFE0"
-        android:minHeight="?android:attr/actionBarSize"
-        >
-
-        <include
-            layout="@layout/layout_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        </android.support.v7.widget.Toolbar>
-
-    <android.support.v4.view.ViewPager
+    tools:context=".MainActivity">
+    <!-- main content -->
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.almasosorio.sharethatbill.ActivityViewGroup"
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/view_pager"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        android:background="@drawable/background"
+        android:id="@+id/container"
 
-        <android.support.v4.view.PagerTabStrip
-            android:id="@+id/pager_tab_strip"
+        >
+
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#333333"
-            android:paddingTop="5dp"
-            android:paddingBottom="5dp"
+            android:id="@+id/toolbar"
+            android:background="#DFDFE0"
+            android:minHeight="?android:attr/actionBarSize"
+            >
 
-            />
+            <include
+                layout="@layout/layout_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        </android.support.v4.view.ViewPager>
+            </android.support.v7.widget.Toolbar>
+
+        <android.support.v4.view.ViewPager
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/view_pager"
+            xmlns:android="http://schemas.android.com/apk/res/android">
+
+            <android.support.v4.view.PagerTabStrip
+                android:id="@+id/pager_tab_strip"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#333333"
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+
+                />
+
+            </android.support.v4.view.ViewPager>
+
+        </LinearLayout>
+
+    <!-- navigation drawer -->
+    <LinearLayout
+        android:id="@+id/drawer"
+        android:layout_gravity="start"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_width="240dp"
+        android:layout_height="match_parent">
+
+        <include
+            layout="@layout/layout_navigation_drawer" />
 
     </LinearLayout>
+
+
+</android.support.v4.widget.DrawerLayout>

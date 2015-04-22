@@ -45,6 +45,8 @@
     <string name="add_new_bill">Add new bill</string>
     <string name="add_new_member">Add new member</string>
 
+    <string name="my_groups">My groups:</string>
+
     <string name="bundle_user_name">user_name</string>
     <string name="bundle_group_name">group_name</string>
     <string name="bundle_bill_name">bill_name</string>
