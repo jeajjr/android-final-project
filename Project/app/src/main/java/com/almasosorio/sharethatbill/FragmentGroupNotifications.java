@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 
 public class FragmentGroupNotifications extends Fragment {
-    private static final String TAG = "FragmentGroupNotifications";
+    private static final String TAG = "FragmentGroupNot";
 
     private String userName;
     private String groupName;
@@ -33,6 +33,14 @@ public class FragmentGroupNotifications extends Fragment {
     public FragmentGroupNotifications() {
         // Required empty public constructor
     }
+
+    public void updateGroup(String groupName) {
+        Log.d(TAG, "received update request: " + groupName);
+        dataSet.clear();
+        this.groupName = groupName;
+        (new NotificationsDownloader(dataSet, adapter)).execute(groupName, userName);
+    }
+
     public static FragmentGroupNotifications newInstance(Context context, String userName, String groupName) {
         FragmentGroupNotifications fragment = new FragmentGroupNotifications();
 
@@ -106,6 +114,8 @@ public class FragmentGroupNotifications extends Fragment {
 
         @Override
         protected ArrayList doInBackground(String... params) {
+            Log.d(TAG, "group: " + params[0]);
+
             ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> results = new ArrayList<>();
 
             DBHandler db = new DBHandler();
@@ -140,7 +150,6 @@ public class FragmentGroupNotifications extends Fragment {
                         middleString = getActivity().getString(R.string.added);
                         endString = getActivity().getString(R.string.to_the_group);
                         break;
-
                 }
 
                 String notificationUserName = "";

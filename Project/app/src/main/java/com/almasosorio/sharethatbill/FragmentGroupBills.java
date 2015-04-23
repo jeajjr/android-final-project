@@ -32,6 +32,13 @@ public class FragmentGroupBills extends Fragment {
         // Required empty public constructor
     }
 
+    public void updateGroup(String groupName) {
+        Log.d(TAG, "received update request: " + groupName);
+        dataSet.clear();
+        this.groupName = groupName;
+        (new GroupBillsDownloader(dataSet, adapter)).execute(groupName, userName);
+    }
+
     public static FragmentGroupBills newInstance(Context context, String userName, String groupName) {
         FragmentGroupBills fragment = new FragmentGroupBills();
 
@@ -110,6 +117,8 @@ public class FragmentGroupBills extends Fragment {
 
         @Override
         protected ArrayList doInBackground(String... params) {
+            Log.d(TAG, "group: " + params[0]);
+
             ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> results = new ArrayList<>();
 
             DBHandler db = new DBHandler();
