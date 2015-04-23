@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -37,6 +38,8 @@ public class FragmentWhoPaid extends Fragment {
     private static final int EDIT_USER_AMOUNT_REQUEST = 0;
 
     private int mLastPositionEdited;
+    private boolean mLoading = false;
+    ProgressBar mLoadingBar;
     RecyclerView mRecyclerView;
     RecyclerViewAdapter mRecyclerAdapter;
     TextView mTotalPaidLabel;
@@ -63,6 +66,12 @@ public class FragmentWhoPaid extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+    }
+
+    public void setLoading(boolean l) {
+        mLoading = l;
+        if (mLoadingBar != null)
+            mLoadingBar.setVisibility(l ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setTotalPaidLabel(TextView totalPaidLabel) {
@@ -124,6 +133,9 @@ public class FragmentWhoPaid extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_who_paid, container, false);
+
+        mLoadingBar = (ProgressBar)v.findViewById(R.id.progressBar);
+        setLoading(mLoading);
 
         mTotalPaidValue = 0.0;
 

@@ -53,24 +53,6 @@ public class FragmentNewBill extends Fragment {
         f.userList = new ArrayList<>();
         f.groupName = groupName;
         f.userName = sessionUserName;
-        f.downloadGroupMembers(new onDownloadGroupMembers() {
-            @Override
-            public void onDownloadGroupMembers(ArrayList<TwoStringsClass> data) {
-                f.userList.clear();
-
-                for (int i = 0; i < data.size(); i++) {
-                    HashMap<KeyType, ?> newEntry = new HashMap<>();
-                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserEmail, data.get(i).string1);
-                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserName, data.get(i).string2);
-                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountPaid, 0.0);
-                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountToPay, 0.0);
-                    f.userList.add(newEntry);
-                }
-
-                if (f.mViewPagerAdapter != null)
-                    f.mViewPagerAdapter.onUpdateUserList();
-            }
-        });
         return f;
     }
 
@@ -87,7 +69,14 @@ public class FragmentNewBill extends Fragment {
             }
 
             @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                mViewPagerAdapter.setLoadingNewBill(true);
+            }
+
+            @Override
             protected void onPostExecute(ArrayList data) {
+                mViewPagerAdapter.setLoadingNewBill(false);
                 listener.onDownloadGroupMembers(data);
             }
         }.execute(groupName);
@@ -135,6 +124,25 @@ public class FragmentNewBill extends Fragment {
 
         mBillNameEditText = (EditText)v.findViewById(R.id.billName);
         mBillNameEditText.setText(getString(R.string.untitled));
+
+        downloadGroupMembers(new onDownloadGroupMembers() {
+            @Override
+            public void onDownloadGroupMembers(ArrayList<TwoStringsClass> data) {
+                userList.clear();
+
+                for (int i = 0; i < data.size(); i++) {
+                    HashMap<KeyType, ?> newEntry = new HashMap<>();
+                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserEmail, data.get(i).string1);
+                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserName, data.get(i).string2);
+                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountPaid, 0.0);
+                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountToPay, 0.0);
+                    userList.add(newEntry);
+                }
+
+                if (mViewPagerAdapter != null)
+                    mViewPagerAdapter.onUpdateUserList();
+            }
+        });
 
         return v;
     }

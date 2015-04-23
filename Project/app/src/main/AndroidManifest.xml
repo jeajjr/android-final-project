@@ -24,19 +24,17 @@
         <activity
             android:name=".ActivityCreateGroup"
             android:label="@string/title_activity_activity_create_group" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <activity
             android:name=".ActivityNewBill"
             android:label="@string/title_activity_activity_new_bill"
             android:configChanges="orientation|screenSize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
