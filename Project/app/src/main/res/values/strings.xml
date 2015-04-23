@@ -29,9 +29,13 @@
     <string name="click_set_date">CLICK TO SET DATE</string>
     <string name="new_bill">NEW BILL</string>
     <string name="who_paid">WHO PAID</string>
+    <string name="edit_value_paid">Edit Value Paid</string>
+    <string name="enter_value_paid_by">Enter value paid by</string>
     <string name="split_options">SPLIT OPTIONS</string>
     <string name="split_method">Splitting Method:</string>
+    <string name="total">Total</string>
     <string-array name="split_method_options">
+        <item>Define Values</item>
         <item>Split Equally</item>
     </string-array>
 

@@ -4,8 +4,12 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
 
 public class ViewPagerAdapter extends FragmentPagerAdapter {
@@ -16,7 +20,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     private String groupName;
     private enum PagerType {GROUP_PAGER, NEWBILL_PAGER};
     private PagerType pagerType;
-    private ArrayList<String> userList;
+    private FragmentWhoPaid mWhoPaidFrag;
+    private FragmentSplitOptions mSplitOptionsFrag;
 
     public ViewPagerAdapter (FragmentManager fm, Context context, String userName,
                              String groupName) {
@@ -28,12 +33,20 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         this.pagerType = PagerType.GROUP_PAGER;
     }
 
-    public ViewPagerAdapter (FragmentManager fm, Context context, ArrayList<String> userList) {
+    public ViewPagerAdapter (FragmentManager fm, Context context,
+                             ArrayList<HashMap<FragmentNewBill.KeyType, ?>> userList,
+                             TextView totalPaidLabel) {
         super(fm);
         this.fm = fm;
         this.context = context;
-        this.userList = userList;
         this.pagerType = PagerType.NEWBILL_PAGER;
+        mSplitOptionsFrag = FragmentSplitOptions.newInstance(userList);
+        mWhoPaidFrag = FragmentWhoPaid.newInstance(userList, totalPaidLabel, new FragmentWhoPaid.totalPaidListener() {
+            @Override
+            public void onTotalPaidChanged(Double value) {
+                mSplitOptionsFrag.onUpdateTotalPaid(value);
+            }
+        });
     }
 
     @Override
@@ -54,8 +67,8 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
             }
         } else if (pagerType == PagerType.NEWBILL_PAGER) {
             switch (position) {
-                case 0: return FragmentWhoPaid.newInstance();
-                case 1: return FragmentSplitOptions.newInstance();
+                case 0: return mWhoPaidFrag;
+                case 1: return mSplitOptionsFrag;
                 default:
                     break;
             }
