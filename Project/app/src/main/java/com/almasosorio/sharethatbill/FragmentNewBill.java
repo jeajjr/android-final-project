@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -33,19 +34,39 @@ public class FragmentNewBill extends Fragment {
     public static final String TAG = "FragmentNewBill";
     private static final String EXTRA_DATE = "ExtraDatePicked";
     private static final int SET_DATE_REQUEST = 0;
-    private ArrayList<String> userList;
+    public static final String TOTAL_PAID_FORMAT = "$ %.2f";
+    public enum KeyType {UserEmail, AmountPaid, AmountToPay};
+    public static final int ColorPositive = Color.rgb(66, 255, 23);
+    public static final int ColorNegative = Color.rgb(255, 66, 23);
+    private ArrayList<HashMap<KeyType, ?>> userList;
     private Button mDateButton;
 
     static public FragmentNewBill newInstance(ArrayList<String> userList) {
         FragmentNewBill f = new FragmentNewBill();
-        f.userList = userList;
+        f.userList = new ArrayList<>();
+
+        // TODO: remove testing
+        userList = new ArrayList<>();
+        userList.add("test@yahoo.com");
+        userList.add("123@google.com");
+        userList.add("anything@outlook.com");
+        userList.add("another@outlook.com");
+
+        for (int i = 0; i < userList.size(); i++) {
+            HashMap<KeyType, ?> newEntry = new HashMap<>();
+            ((HashMap<KeyType, String>)newEntry).put(KeyType.UserEmail, userList.get(i));
+            ((HashMap<KeyType, Double>)newEntry).put(KeyType.AmountPaid, 0.0);
+            ((HashMap<KeyType, Double>)newEntry).put(KeyType.AmountToPay, 0.0);
+            f.userList.add(newEntry);
+        }
+
         return f;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(false);
+        setRetainInstance(true);
     }
 
     @Override
@@ -55,7 +76,8 @@ public class FragmentNewBill extends Fragment {
         View v = inflater.inflate(R.layout.fragment_newbill, container, false);
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(
-                getActivity().getSupportFragmentManager(), getActivity(), userList);
+                getActivity().getSupportFragmentManager(), getActivity(), userList,
+                (TextView)v.findViewById(R.id.totalPaid));
 
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.view_pager);
         mViewPager.setAdapter(viewPagerAdapter);

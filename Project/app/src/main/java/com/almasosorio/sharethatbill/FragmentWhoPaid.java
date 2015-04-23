@@ -5,6 +5,9 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -25,19 +30,73 @@ import java.util.HashMap;
 public class FragmentWhoPaid extends Fragment {
 
     public static final String TAG = "FragmentWhoPaid";
-    private static final String EXTRA_AMOUNT_PAID = "AmountPaid";
+    public static final String NEW_AMOUNT_EXTRA = "NewAmount";
+    public static final String OLD_AMOUNT_EXTRA = "OldAmount";
     private static final int EDIT_USER_AMOUNT_REQUEST = 0;
 
     private int mLastPositionEdited;
     RecyclerView mRecyclerView;
     RecyclerViewAdapter mRecyclerAdapter;
+    TextView mTotalPaidLabel;
+    Double mTotalPaidValue;
     ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
+    ArrayList<HashMap<FragmentNewBill.KeyType, ?>> mUserList;
 
-    static public FragmentWhoPaid newInstance() {
+    private totalPaidListener mTotalPaidListener;
+
+    public interface totalPaidListener {
+        public void onTotalPaidChanged(Double value);
+    }
+
+    static public FragmentWhoPaid newInstance(ArrayList<HashMap<FragmentNewBill.KeyType, ?>> userList,
+                                              TextView totalPaidLabel, totalPaidListener listener) {
         FragmentWhoPaid f = new FragmentWhoPaid();
         f.dataSet = new ArrayList<>();
-        // TODO: pass members of the group as parameter for dataSet
+        f.mUserList = userList;
+        f.mTotalPaidLabel = totalPaidLabel;
+
+        if (userList != null) for (int i = 0; i < userList.size(); i++) {
+          HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
+            item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, (String)f.mUserList.get(i).get(FragmentNewBill.KeyType.UserEmail));
+            f.dataSet.add(item);
+        }
+
+        f.mTotalPaidListener = listener;
+
         return f;
+    }
+
+    public void updateDataSet(int index, Double oldValue) {
+        dataSet.get(index).put(RecyclerViewAdapter.MapItemKey.TEXT_2,
+                String.format(FragmentNewBill.TOTAL_PAID_FORMAT, (Double) mUserList.get(index).get(FragmentNewBill.KeyType.AmountPaid)));
+        mTotalPaidValue += (Double) mUserList.get(index).get(FragmentNewBill.KeyType.AmountPaid) - oldValue;
+        mTotalPaidLabel.setText(String.format(FragmentNewBill.TOTAL_PAID_FORMAT, mTotalPaidValue));
+        mTotalPaidLabel.setTextColor(mTotalPaidValue >= 0.0 ? FragmentNewBill.ColorPositive : FragmentNewBill.ColorNegative);
+
+        if (mTotalPaidListener != null)
+            mTotalPaidListener.onTotalPaidChanged(mTotalPaidValue);
+
+        mRecyclerAdapter.notifyItemChanged(index);
+    }
+
+    public void updateDataSet() {
+
+        mTotalPaidValue = 0.0;
+
+        for (int i = 0; i < mUserList.size(); i++) {
+            HashMap<FragmentNewBill.KeyType, ?> user = mUserList.get(i);
+            dataSet.get(i).put(RecyclerViewAdapter.MapItemKey.TEXT_2,
+                    String.format(FragmentNewBill.TOTAL_PAID_FORMAT,
+                            (Double)user.get(FragmentNewBill.KeyType.AmountPaid)));
+            mTotalPaidValue += (Double)user.get(FragmentNewBill.KeyType.AmountPaid);
+        }
+
+        if (mTotalPaidListener != null)
+            mTotalPaidListener.onTotalPaidChanged(mTotalPaidValue);
+
+        mRecyclerAdapter.notifyDataSetChanged();
+        mTotalPaidLabel.setText(String.format(FragmentNewBill.TOTAL_PAID_FORMAT, mTotalPaidValue));
+        mTotalPaidLabel.setTextColor(mTotalPaidValue >= 0.0 ? FragmentNewBill.ColorPositive : FragmentNewBill.ColorNegative);
     }
 
     @Override
@@ -52,11 +111,31 @@ public class FragmentWhoPaid extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_who_paid, container, false);
 
+        mTotalPaidValue = 0.0;
+
         mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            private Drawable mDivider = getResources().getDrawable(R.drawable.line_divider);
+            @Override
+            public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                int left = parent.getPaddingLeft();
+                int right = parent.getWidth() - parent.getPaddingRight();
+                int childCount = parent.getChildCount();
+                for (int i = 0; i < childCount - 1; i++) {
+                    View child = parent.getChildAt(i);
+                    RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child.getLayoutParams();
+                    int top = child.getBottom() + params.bottomMargin;
+                    int bottom = top + mDivider.getIntrinsicHeight();
+                    mDivider.setBounds(left, top, right, bottom);
+                    mDivider.draw(c);
+                }
+                super.onDrawOver(c, parent, state);
+            }
+        });
         mRecyclerAdapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.WHO_PAID_LIST_ITEM);
         mRecyclerAdapter.setParentFragment(this);
         mRecyclerAdapter.setOnListItemClickListener(new RecyclerViewAdapter.OnListItemClickListener() {
@@ -67,6 +146,8 @@ public class FragmentWhoPaid extends Fragment {
         });
         mRecyclerView.setAdapter(mRecyclerAdapter);
 
+        updateDataSet();
+
         return v;
     }
 
@@ -74,9 +155,9 @@ public class FragmentWhoPaid extends Fragment {
 
         mLastPositionEdited = position;
 
-        ValuePaidDialog dialog = new ValuePaidDialog("Edit Value Paid",
-                "Enter value paid by " + dataSet.get(position).get(RecyclerViewAdapter.MapItemKey.TEXT_1),
-                dataSet.get(position).get(RecyclerViewAdapter.MapItemKey.TEXT_2));
+        ValuePaidDialog dialog = new ValuePaidDialog(getString(R.string.edit_value_paid),
+                getString(R.string.enter_value_paid_by) + " " + dataSet.get(position).get(RecyclerViewAdapter.MapItemKey.TEXT_1),
+                (Double)mUserList.get(position).get(FragmentNewBill.KeyType.AmountPaid));
         dialog.setTargetFragment(FragmentWhoPaid.this, EDIT_USER_AMOUNT_REQUEST);
         dialog.show(getFragmentManager(), "EditMemberValue");
     }
@@ -90,31 +171,33 @@ public class FragmentWhoPaid extends Fragment {
         }
 
         if (requestCode == EDIT_USER_AMOUNT_REQUEST) {
-            dataSet.get(mLastPositionEdited).put(RecyclerViewAdapter.MapItemKey.TEXT_2,
-                    data.getStringExtra(EXTRA_AMOUNT_PAID));
-            mRecyclerAdapter.notifyItemChanged(mLastPositionEdited);
+            ((HashMap<FragmentNewBill.KeyType, Double>)mUserList.get(mLastPositionEdited)).put(
+                        FragmentNewBill.KeyType.AmountPaid, data.getDoubleExtra(NEW_AMOUNT_EXTRA, 0.0));
+            updateDataSet(mLastPositionEdited, data.getDoubleExtra(OLD_AMOUNT_EXTRA, 0.0));
         }
 
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public class ValuePaidDialog extends DialogFragment {
+    public static class ValuePaidDialog extends DialogFragment {
 
-        private String title, message, defaultText;
+        private String title, message;
+        private Double value;
 
-        public ValuePaidDialog(String title, String message, String defaultText) {
+        public ValuePaidDialog(String title, String message, Double defaultValue) {
             super();
             this.title = title;
             this.message = message;
-            this.defaultText = defaultText;
+            this.value = defaultValue;
         }
 
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             final EditText textEdit = new EditText(getActivity());
-            textEdit.setText(defaultText);
             textEdit.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            textEdit.setText(value.toString());
+            textEdit.setSelection(value.toString().length());
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(textEdit)
                 .setTitle(title)
@@ -125,9 +208,20 @@ public class FragmentWhoPaid extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 if (getTargetFragment() != null) {
                                     Intent i = new Intent();
-                                    i.putExtra(EXTRA_AMOUNT_PAID, textEdit.getText());
-                                    getTargetFragment().onActivityResult(getTargetRequestCode(),
-                                            Activity.RESULT_OK, i);
+                                    Double valuePaid;
+                                    String text = textEdit.getText().toString();
+
+                                    if (text.isEmpty())
+                                        text = "0";
+
+                                    try {
+                                        valuePaid = Double.valueOf(text);
+                                        i.putExtra(NEW_AMOUNT_EXTRA, valuePaid);
+                                        i.putExtra(OLD_AMOUNT_EXTRA, value);
+                                        getTargetFragment().onActivityResult(getTargetRequestCode(),
+                                                Activity.RESULT_OK, i);
+                                    } catch (NumberFormatException ex) {
+                                    }
                                 }
                             }
                         })

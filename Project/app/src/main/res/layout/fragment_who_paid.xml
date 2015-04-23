@@ -13,7 +13,8 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:layout_centerInParent="true"
-        android:background="#00ffffff"
-        android:padding="1dp" />
+        android:background="@drawable/rectangle_outline"
+        android:padding="1dp"
+        android:scrollbars="vertical"/>
 
 </LinearLayout>

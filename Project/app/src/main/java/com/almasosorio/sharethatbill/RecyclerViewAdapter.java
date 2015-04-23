@@ -21,7 +21,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private static String TAG = "RecyclerViewAdapter";
 
     public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM,
-        GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY, WHO_PAID_LIST_ITEM};
+        GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY, WHO_PAID_LIST_ITEM,
+        SPLIT_OPTIONS_LIST_ITEM};
     public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4, CLICKABLE_BILL_NAME};
 
     private Context context;
@@ -100,6 +101,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     break;
 
                 case WHO_PAID_LIST_ITEM:
+                case SPLIT_OPTIONS_LIST_ITEM:
                     textView2 = (TextView) v.findViewById(R.id.valuePaid);
                     break;
 
@@ -141,6 +143,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     break;
 
                 case WHO_PAID_LIST_ITEM:
+                case SPLIT_OPTIONS_LIST_ITEM:
                     textView2.setText(data.get(MapItemKey.TEXT_2));
                     break;
             }
@@ -174,6 +177,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
             case WHO_PAID_LIST_ITEM:
                 v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_whopaid_entry, parent, false);
+                break;
+
+            case SPLIT_OPTIONS_LIST_ITEM:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_whopaid_entry, parent, false);
+                ((TextView)v.findViewById(R.id.valuePaid)).setTextColor(FragmentNewBill.ColorNegative);
                 break;
         }
 
