@@ -41,7 +41,7 @@ public class FragmentGroupMembers extends Fragment {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
         this.groupName = groupName;
-        (new GroupMembersDownloader(dataSet, adapter, progressBar)).execute(groupName, userName);
+        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar)).execute(groupName, userName);
     }
 
     public static FragmentGroupMembers newInstance(Context context, String userName, String groupName) {
@@ -95,7 +95,7 @@ public class FragmentGroupMembers extends Fragment {
 
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-        (new GroupMembersDownloader(dataSet, adapter, progressBar)).execute(groupName, userName);
+        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar)).execute(groupName, userName);
 
         return v;
     }
@@ -107,8 +107,11 @@ public class FragmentGroupMembers extends Fragment {
         private WeakReference<RecyclerViewAdapter> adapter;
         private WeakReference<ProgressBar> progressBar;
 
-        public GroupMembersDownloader(ArrayList dataSet, RecyclerViewAdapter adapter,
+        private Context context;
+
+        public GroupMembersDownloader(Context context, ArrayList dataSet, RecyclerViewAdapter adapter,
                                       ProgressBar progressBar) {
+            this.context = context;
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
             this.progressBar = new WeakReference<>(progressBar);
@@ -144,14 +147,14 @@ public class FragmentGroupMembers extends Fragment {
 
                 if (userBalanceInGroup >= 0) {
                     userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2,
-                            getActivity().getString(R.string.lent_in_total));
+                            context.getString(R.string.lent_in_total));
 
                     userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
                             String.format("$ %.2f", userBalanceInGroup));
                 }
                 else {
                     userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2,
-                            getActivity().getString(R.string.borrowed_in_total));
+                            context.getString(R.string.borrowed_in_total));
 
                     userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
                             String.format("$ %.2f", userBalanceInGroup));

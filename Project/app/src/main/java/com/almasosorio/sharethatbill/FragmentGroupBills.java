@@ -40,7 +40,7 @@ public class FragmentGroupBills extends Fragment {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
         this.groupName = groupName;
-        (new GroupBillsDownloader(dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+        (new GroupBillsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
     }
 
     public static FragmentGroupBills newInstance(Context context, String userName, String groupName) {
@@ -106,7 +106,7 @@ public class FragmentGroupBills extends Fragment {
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         listEmptyText = (TextView) v.findViewById(R.id.text_list_empty);
 
-        (new GroupBillsDownloader(dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+        (new GroupBillsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
 
         return v;
     }
@@ -119,8 +119,12 @@ public class FragmentGroupBills extends Fragment {
         private WeakReference<ProgressBar> progressBar;
         private WeakReference<TextView> emptyListText;
 
-        public GroupBillsDownloader(ArrayList dataSet, RecyclerViewAdapter adapter,
+        private Context context;
+
+
+        public GroupBillsDownloader(Context context, ArrayList dataSet, RecyclerViewAdapter adapter,
                                     ProgressBar progressBar, TextView emptyListText) {
+            this.context = context;
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
             this.progressBar = new WeakReference<>(progressBar);
@@ -163,21 +167,21 @@ public class FragmentGroupBills extends Fragment {
 
                 if (userBalanceInBill > 0) {
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            getActivity().getString(R.string.you_borrowed));
+                            context.getString(R.string.you_borrowed));
 
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4,
                             String.format("$ %.2f", userBalanceInBill));
                 }
                 else if (userBalanceInBill < 0) {
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            getActivity().getString(R.string.you_borrowed));
+                            context.getString(R.string.you_borrowed));
 
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4,
                             String.format("$ %.2f", -userBalanceInBill));
                 }
                 else {
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            getActivity().getString(R.string.not_involved));
+                            context.getString(R.string.not_involved));
 
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4, "");
                 }

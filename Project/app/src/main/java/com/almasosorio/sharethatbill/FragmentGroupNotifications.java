@@ -43,7 +43,7 @@ public class FragmentGroupNotifications extends Fragment {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
         this.groupName = groupName;
-        (new NotificationsDownloader(dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+        (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
     }
 
     public static FragmentGroupNotifications newInstance(Context context, String userName, String groupName) {
@@ -91,7 +91,7 @@ public class FragmentGroupNotifications extends Fragment {
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         listEmptyText = (TextView) v.findViewById(R.id.text_list_empty);
 
-        (new NotificationsDownloader(dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+        (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
 
         return v;
     }
@@ -117,8 +117,11 @@ public class FragmentGroupNotifications extends Fragment {
         private WeakReference<ProgressBar> progressBar;
         private WeakReference<TextView> emptyListText;
 
-        public NotificationsDownloader(ArrayList dataSet, RecyclerViewAdapter adapter,
+        private Context context;
+
+        public NotificationsDownloader(Context context, ArrayList dataSet, RecyclerViewAdapter adapter,
                                        ProgressBar progressBar, TextView emptyListText) {
+            this.context = context;
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
             this.progressBar = new WeakReference<>(progressBar);
@@ -157,23 +160,23 @@ public class FragmentGroupNotifications extends Fragment {
 
                 switch (notifications.get(i).type) {
                     case Notification.BILL_CREATED:
-                        middleString = getActivity().getString(R.string.created_the_bill);
+                        middleString = context.getString(R.string.created_the_bill);
                         endString = "";
                         break;
 
                     case Notification.BILL_EDITED:
-                        middleString = getActivity().getString(R.string.edited_the_bill);
+                        middleString = context.getString(R.string.edited_the_bill);
                         endString = "";
                         break;
 
                     case Notification.BILL_DELETED:
-                        middleString = getActivity().getString(R.string.deleted_the_bill);
+                        middleString = context.getString(R.string.deleted_the_bill);
                         endString = "";
                         break;
 
                     case Notification.USER_ADDED:
-                        middleString = getActivity().getString(R.string.added);
-                        endString = getActivity().getString(R.string.to_the_group);
+                        middleString = context.getString(R.string.added);
+                        endString = context.getString(R.string.to_the_group);
                         break;
                 }
 
@@ -202,16 +205,16 @@ public class FragmentGroupNotifications extends Fragment {
                 String timeStamp = "";
 
                 if (difference < 60)
-                    timeStamp = getActivity().getString(R.string.less_than_one_minute_ago);
+                    timeStamp = context.getString(R.string.less_than_one_minute_ago);
                 else if ((difference /= 60) < 60) // difference is now in minutes
-                    timeStamp = difference + " " + getActivity().getString(R.string.minutes_ago);
+                    timeStamp = difference + " " + context.getString(R.string.minutes_ago);
                 else if ((difference /= 60) < 24) // difference is now in hours
-                    timeStamp = difference +  " " + getActivity().getString(R.string.hours_ago);
+                    timeStamp = difference +  " " + context.getString(R.string.hours_ago);
                 else if ((difference /= 24) < 7) // difference is now in days
-                    timeStamp = difference +  " " + getActivity().getString(R.string.days_ago);
+                    timeStamp = difference +  " " + context.getString(R.string.days_ago);
                 else {
                     difference /= 7; // difference is now in weeks
-                    timeStamp = difference +  " " + getActivity().getString(R.string.weeks_ago);
+                    timeStamp = difference +  " " + context.getString(R.string.weeks_ago);
                 }
 
                 userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2, timeStamp);
