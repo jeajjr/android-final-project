@@ -58,11 +58,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         mWhoPaidFrag.setTotalPaidLabel(totalPaidLabel);
     }
 
-<<<<<<< HEAD
+
     public void onUpdateUserList() {
         mSplitOptionsFrag.onUpdateUserList();
         mWhoPaidFrag.onUpdateUserList();
-=======
+    }
+
     public void updateGroupFragments(String groupName) {
         this.groupName = groupName;
         if (fragNotifications != null)
@@ -71,7 +72,6 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             fragBills.updateGroup(groupName);
         if (fragMembers != null)
             fragMembers.updateGroup(groupName);
->>>>>>> origin/master
     }
 
     @Override
