@@ -23,6 +23,8 @@
     <string name="group_name_invalid">Group name must be valid.</string>
     <string name="edit_member">Edit Member</string>
     <string name="enter_new_email">Enter member\'s new email</string>
+    <string name="group_already_exists">Group name already exists.</string>
+    <string name="failed_to_create_group">Failed to create group.</string>
 
     <!-- create new bill fragment -->
     <string name="title_activity_activity_new_bill">ActivityNewBill</string>
@@ -34,6 +36,10 @@
     <string name="split_options">SPLIT OPTIONS</string>
     <string name="split_method">Splitting Method:</string>
     <string name="total">Total</string>
+    <string name="untitled">Untitled</string>
+    <string name="done">DONE</string>
+    <string name="bill_creation_failed">Failed to create bill</string>
+    <string name="bill_creation_failed_message">The bill couldn\'t be created.</string>
     <string-array name="split_method_options">
         <item>Define Values</item>
         <item>Split Equally</item>
