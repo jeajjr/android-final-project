@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -40,6 +41,7 @@ public class FragmentNewBill extends Fragment {
     public static final int ColorNegative = Color.rgb(255, 66, 23);
     private ArrayList<HashMap<KeyType, ?>> userList;
     private Button mDateButton;
+    private ViewPagerAdapter mViewPagerAdapter;
 
     static public FragmentNewBill newInstance(ArrayList<String> userList) {
         FragmentNewBill f = new FragmentNewBill();
@@ -70,17 +72,23 @@ public class FragmentNewBill extends Fragment {
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        mViewPagerAdapter.updateTotalPaidLabel((TextView)getView().findViewById(R.id.totalPaid));
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_newbill, container, false);
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(
+        mViewPagerAdapter = new ViewPagerAdapter(
                 getActivity().getSupportFragmentManager(), getActivity(), userList,
                 (TextView)v.findViewById(R.id.totalPaid));
 
         ViewPager mViewPager = (ViewPager) v.findViewById(R.id.view_pager);
-        mViewPager.setAdapter(viewPagerAdapter);
+        mViewPager.setAdapter(mViewPagerAdapter);
 
         PagerTabStrip pagerTabStrip = (PagerTabStrip) v.findViewById(R.id.pager_tab_strip);
         pagerTabStrip.setDrawFullUnderline(true);

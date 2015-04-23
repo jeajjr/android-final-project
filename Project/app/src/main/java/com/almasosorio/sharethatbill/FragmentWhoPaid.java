@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -14,6 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +66,15 @@ public class FragmentWhoPaid extends Fragment {
         f.mTotalPaidListener = listener;
 
         return f;
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
+
+    public void setTotalPaidLabel(TextView totalPaidLabel) {
+        mTotalPaidLabel = totalPaidLabel;
     }
 
     public void updateDataSet(int index, Double oldValue) {
@@ -197,7 +208,7 @@ public class FragmentWhoPaid extends Fragment {
             final EditText textEdit = new EditText(getActivity());
             textEdit.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
             textEdit.setText(value.toString());
-            textEdit.setSelection(value.toString().length());
+            textEdit.setSelection(0, value.toString().length());
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(textEdit)
                 .setTitle(title)

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private FragmentManager fm;
     private Context context;
@@ -50,18 +49,8 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         });
     }
 
-    private FragmentGroupNotifications fragNotifications;
-    private FragmentGroupBills fragBills;
-    private FragmentGroupMembers fragMembers;
-
-    public void updateGroupFragments(String groupName) {
-        this.groupName = groupName;
-        if (fragNotifications != null)
-            fragNotifications.updateGroup(groupName);
-        if (fragBills != null)
-            fragBills.updateGroup(groupName);
-        if (fragMembers != null)
-            fragMembers.updateGroup(groupName);
+    public void updateTotalPaidLabel(TextView totalPaidLabel) {
+        mWhoPaidFrag.setTotalPaidLabel(totalPaidLabel);
     }
 
     @Override
@@ -71,11 +60,11 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
             switch (position) {
 
                 case 0:
-                    return (fragNotifications = FragmentGroupNotifications.newInstance(context, userName, groupName));
+                    return FragmentGroupNotifications.newInstance(context, userName, groupName);
                 case 1:
-                    return (fragBills = FragmentGroupBills.newInstance(context, userName, groupName));
+                    return FragmentGroupBills.newInstance(context, userName, groupName);
                 case 2:
-                    return (fragMembers = FragmentGroupMembers.newInstance(context, userName, groupName));
+                    return FragmentGroupMembers.newInstance(context, userName, groupName);
 
                 default:
                     break;

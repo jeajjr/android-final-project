@@ -1,5 +1,6 @@
 package com.almasosorio.sharethatbill;
 
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.PagerTabStrip;
@@ -30,7 +31,7 @@ public class ActivityNewBill extends ActionBarActivity {
         if (savedInstanceState == null) {
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, mFragment)
+                    .add(R.id.container, mFragment, "FragmentNewBill")
                     .commit();
 
         }
