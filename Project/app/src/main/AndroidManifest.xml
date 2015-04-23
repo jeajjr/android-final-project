@@ -29,20 +29,15 @@
         <activity
             android:name=".ActivityNewBill"
             android:label="@string/title_activity_activity_new_bill" >
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-
         </activity>
 
         <activity
             android:name=".ActivityViewGroup"
             android:label="@string/title_activity_activity_view_group" >
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
