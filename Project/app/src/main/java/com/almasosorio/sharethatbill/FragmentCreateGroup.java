@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,17 +34,20 @@ public class FragmentCreateGroup extends Fragment {
     private RecyclerViewAdapter mRecyclerAdapter;
     private EditText mGroupName;
     private int mLastEditPosition;
+    private String mUserName;
     ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
 
-    static public FragmentCreateGroup newInstance(boolean isFirstGroup) {
+    static public FragmentCreateGroup newInstance(boolean isFirstGroup, String userName) {
         FragmentCreateGroup f = new FragmentCreateGroup();
         f.mIsFirstGroup = isFirstGroup;
+        f.mUserName = userName;
         return f;
     }
 
-    static public FragmentCreateGroup newInstance() {
+    static public FragmentCreateGroup newInstance(String userName) {
         FragmentCreateGroup f = new FragmentCreateGroup();
         f.mIsFirstGroup = false;
+        f.mUserName = userName;
         return f;
     }
 
@@ -97,10 +102,57 @@ public class FragmentCreateGroup extends Fragment {
                     return;
                 }
 
-                // TODO:
-                // Code to go to other activity where groups are displayed
-                // This should be the group being displayed
-                // Add members to group/db that are inside ArrayList "dataSet".
+                new AsyncTask<String, Void, Void>() {
+                    private String error = "";
+                    private String groupName;
+                    @Override
+                    protected Void doInBackground(String... params) {
+                        DBHandler db = new DBHandler();
+                        groupName = params[0];
+                        if (db.groupExists(params[0])) {
+                            error = getString(R.string.group_already_exists);
+                            return null;
+                        }
+
+                        if (!db.createGroup(params[0])) {
+                            error = getString(R.string.failed_to_create_group);
+                            return null;
+                        }
+
+                        db.addUserToGroup(mUserName, params[0], mUserName);
+
+                        for (int i = 0; i < dataSet.size(); i++) {
+                            String addedUser = (String)dataSet.get(i).get(RecyclerViewAdapter.MapItemKey.TEXT_1);
+
+                            if (!db.userExists(addedUser))
+                                continue;
+
+                            if (!db.addUserToGroup(addedUser, params[0], mUserName)) {
+
+                            }
+                        }
+
+                        return null;
+                    }
+
+                    @Override
+                    protected void onPostExecute(Void aVoid) {
+                        super.onPostExecute(aVoid);
+
+                        if (!error.isEmpty()) {
+                            new AlertDialog.Builder(getActivity())
+                                    .setTitle(getActivity().getString(R.string.failed_to_create_group))
+                                    .setMessage(error)
+                                    .setPositiveButton(android.R.string.ok, null)
+                                    .setIcon(android.R.drawable.ic_dialog_alert)
+                                    .show();
+                        } else {
+                            Toast.makeText(getActivity(), "Group \"" + groupName + "\" created.", Toast.LENGTH_SHORT).show();
+                            getActivity().finish();
+                        }
+
+                    }
+                }.execute(mGroupName.getText().toString());
             }
         });
 

@@ -23,6 +23,8 @@
     <string name="group_name_invalid">Group name must be valid.</string>
     <string name="edit_member">Edit Member</string>
     <string name="enter_new_email">Enter member\'s new email</string>
+    <string name="group_already_exists">Group name already exists.</string>
+    <string name="failed_to_create_group">Failed to create group.</string>
 
     <!-- create new bill fragment -->
     <string name="title_activity_activity_new_bill">ActivityNewBill</string>
