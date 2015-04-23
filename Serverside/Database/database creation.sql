@@ -71,7 +71,7 @@ INSERT INTO users VALUES ('user2', 'Bob', 'Dilan', '1234');
 INSERT INTO groups VALUES ('group1');
 
 --	id, name, value, dateOcurred, gid, latitute, longitude, picture
-INSERT INTO bills VALUES ('group1bill1', 'bill1', 50.00, '2015-04-01 02:08','group1', '', '', '');
+INSERT INTO bills VALUES ('group1bill1', 'bill1', 50.00, '2015-04-01 02:08','group1', '0', '0', '');
 
 -- uid, gid
 INSERT INTO usersAndGroups VALUES ('user1', 'group1');
