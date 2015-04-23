@@ -58,6 +58,10 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
         mWhoPaidFrag.setTotalPaidLabel(totalPaidLabel);
     }
 
+    public void setLoadingNewBill(boolean loading) {
+        mWhoPaidFrag.setLoading(loading);
+        mSplitOptionsFrag.setLoading(loading);
+    }
 
     public void onUpdateUserList() {
         mSplitOptionsFrag.onUpdateUserList();

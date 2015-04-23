@@ -226,8 +226,11 @@ public class FragmentCreateGroup extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             final EditText textEdit = new EditText(getActivity());
-            textEdit.setText(defaultText);
-            textEdit.setSelection(defaultText.length());
+            if (!defaultText.isEmpty()) {
+                textEdit.setText(defaultText);
+                textEdit.setSelection(defaultText.length());
+                textEdit.setSingleLine();
+            }
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(textEdit)
                 .setTitle(title)
