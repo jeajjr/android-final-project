@@ -43,7 +43,8 @@ public class FragmentGroupNotifications extends Fragment {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
         this.groupName = groupName;
-        (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+        if (isAdded())
+            (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
     }
 
     public static FragmentGroupNotifications newInstance(Context context, String userName, String groupName) {

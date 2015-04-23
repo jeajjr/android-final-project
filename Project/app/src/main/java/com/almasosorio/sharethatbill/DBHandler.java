@@ -13,7 +13,7 @@ public class DBHandler {
     private static final String TAG = "DBHandler";
 
     private static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
-    private static final String HOST = "jdbc:mysql://192.236.71.121/finalproj";
+    private static final String HOST = "jdbc:mysql://192.168.43.134/finalproj";
     private static final String DB_USER = "app";
     private static final String DB_PW = "app";
 

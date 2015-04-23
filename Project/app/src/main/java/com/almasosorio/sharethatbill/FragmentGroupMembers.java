@@ -41,7 +41,8 @@ public class FragmentGroupMembers extends Fragment {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
         this.groupName = groupName;
-        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar)).execute(groupName, userName);
+        if (isAdded())
+            (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar)).execute(groupName, userName);
     }
 
     public static FragmentGroupMembers newInstance(Context context, String userName, String groupName) {
