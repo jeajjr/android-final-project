@@ -75,8 +75,8 @@ public class FragmentLogin extends Fragment {
             final String userNameString = userName.getText().toString();
 
             Intent intent = new Intent(getActivity(), ActivityViewGroup.class);
-            intent.putExtra("user_name", userNameString);
-            intent.putExtra("group_name", firstGroupName);
+            intent.putExtra(getString(R.string.bundle_user_name), userNameString);
+            intent.putExtra(getString(R.string.bundle_group_name), firstGroupName);
             startActivity(intent);
         }
         else

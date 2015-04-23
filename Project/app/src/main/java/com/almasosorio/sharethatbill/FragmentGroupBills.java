@@ -80,7 +80,10 @@ public class FragmentGroupBills extends Fragment {
             public void onClick(View v) {
                 Log.d(TAG, "clicked on addButton");
 
-                //TODO: implement
+                Intent intent = new Intent(getActivity(), ActivityNewBill.class);
+                intent.putExtra(getString(R.string.bundle_user_name), userName);
+                intent.putExtra(getString(R.string.bundle_group_name), groupName);
+                startActivity(intent);
             }
         });
 

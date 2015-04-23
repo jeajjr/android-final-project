@@ -31,16 +31,18 @@ public class ActivityNewBill extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_bill);
 
-        String groupName, userName;
+        String groupName = "", userName = "";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             groupName = extras.getString(getString(R.string.bundle_group_name));
             userName = extras.getString(getString(R.string.bundle_user_name));
         }
         else {
+            /*
             //TODO: remove
             groupName = "group1";
             userName = "user1";
+            */
         }
 
         if (mFragment == null)
