@@ -28,7 +28,8 @@
 
         <activity
             android:name=".ActivityNewBill"
-            android:label="@string/title_activity_activity_new_bill" >
+            android:label="@string/title_activity_activity_new_bill"
+            android:configChanges="orientation|screenSize">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

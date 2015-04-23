@@ -49,6 +49,10 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         });
     }
 
+    public void updateTotalPaidLabel(TextView totalPaidLabel) {
+        mWhoPaidFrag.setTotalPaidLabel(totalPaidLabel);
+    }
+
     @Override
     public Fragment getItem(int position) {
 

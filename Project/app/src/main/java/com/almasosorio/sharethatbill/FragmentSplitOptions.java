@@ -84,12 +84,12 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
         mRecyclerAdapter.notifyDataSetChanged();
     }
 
-    public void onUpdateTotalPaid(Double newvalue) {
+    public void onUpdateTotalPaid(Double newValue) {
 
-        if (newvalue.equals(mTotalPaid))
+        if (newValue.equals(mTotalPaid))
             return;
 
-        mTotalPaid = newvalue;
+        mTotalPaid = newValue;
         updateDataSet();
     }
 
