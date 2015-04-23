@@ -67,6 +67,8 @@ public class ActivityNewBill extends ActionBarActivity {
             public void onClick(View v) {
                 if (mFragment != null) {
                     //setResult(RESULT_OK, mFragment.getIntent());
+                    if (!mFragment.createBill())
+                        Log.d("ActivityNewBill", "DoneButton - creating bill returned false");
                     finish();
                 }
             }

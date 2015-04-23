@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class FragmentNewBill extends Fragment {
     private static final String EXTRA_DATE = "ExtraDatePicked";
     private static final int SET_DATE_REQUEST = 0;
     public static final String TOTAL_PAID_FORMAT = "$ %.2f";
-    public enum KeyType {UserEmail, UserName, AmountPaid, AmountToPay};
+    public enum KeyType {UserEmail, UserName, AmountPaid, AmountToPay, OldAmountToPay};
     public static final int ColorPositive = Color.rgb(66, 255, 23);
     public static final int ColorNegative = Color.rgb(255, 66, 23);
     private ArrayList<HashMap<KeyType, ?>> userList;
@@ -222,14 +223,24 @@ public class FragmentNewBill extends Fragment {
 
         final Bill bill = new Bill();
 
+        if (mDate == null) {
+            mDate = new GregorianCalendar();
+            mDate.setTimeInMillis(System.currentTimeMillis());
+        }
+
         bill.billDate = mDate;
         bill.billName = mBillNameEditText.getText().toString();
         bill.groupName = groupName;
+
         try {
-            bill.billValue = Float.valueOf(((TextView) getView().findViewById(R.id.totalPaid)).toString().substring(2));
+            String str = ((TextView)getView().findViewById(R.id.totalPaid)).getText().toString().substring(2);
+            bill.billValue = Float.valueOf(str);
         } catch (NumberFormatException ex) {
             return false;
         }
+
+        if (userList.isEmpty() || bill.billValue == 0.0)
+            return false;
 
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -247,7 +258,7 @@ public class FragmentNewBill extends Fragment {
 
                 for (int index = 0; index < userList.size(); index++) {
                     if (!db.createUserBillRelation(
-                            (String)userList.get(index).get(KeyType.UserName),
+                            (String)userList.get(index).get(KeyType.UserEmail),
                             groupName, bill.billName, (Double)userList.get(index).get(KeyType.AmountToPay),
                             (Double)userList.get(index).get(KeyType.AmountPaid)
                     )) {
@@ -269,6 +280,8 @@ public class FragmentNewBill extends Fragment {
                         .setPositiveButton(android.R.string.ok, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+                else
+                    Toast.makeText(getActivity(), "Bill \"" + bill.billName + "\" created.", Toast.LENGTH_SHORT).show();
             }
         }.execute();
 
