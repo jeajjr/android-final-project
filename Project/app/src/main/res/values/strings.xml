@@ -36,6 +36,8 @@
     <string name="total">Total</string>
     <string name="untitled">Untitled</string>
     <string name="done">DONE</string>
+    <string name="bill_creation_failed">Failed to create bill</string>
+    <string name="bill_creation_failed_message">The bill couldn\'t be created.</string>
     <string-array name="split_method_options">
         <item>Define Values</item>
         <item>Split Equally</item>

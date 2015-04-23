@@ -241,6 +241,7 @@ public class FragmentNewBill extends Fragment {
 
                 if (!db.createBill(bill, userName)) {
                     success = false;
+                    Log.d("FragmentNewBill - createBill", "Failed to create bill.");
                     return null;
                 }
 
@@ -249,8 +250,10 @@ public class FragmentNewBill extends Fragment {
                             (String)userList.get(index).get(KeyType.UserName),
                             groupName, bill.billName, (Double)userList.get(index).get(KeyType.AmountToPay),
                             (Double)userList.get(index).get(KeyType.AmountPaid)
-                    ))
+                    )) {
                         success = false;
+                        Log.d("FragmentNewBill - createBill", "Failed to create relation.");
+                    }
                 }
 
                 return success;
@@ -259,6 +262,13 @@ public class FragmentNewBill extends Fragment {
             @Override
             protected void onPostExecute(Boolean s) {
                 super.onPostExecute(s);
+                if (!success)
+                    new AlertDialog.Builder(getActivity())
+                        .setTitle(getActivity().getString(R.string.bill_creation_failed))
+                        .setMessage(getActivity().getString(R.string.bill_creation_failed_message))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
             }
         }.execute();
 
