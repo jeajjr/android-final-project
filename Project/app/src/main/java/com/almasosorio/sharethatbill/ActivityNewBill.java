@@ -1,5 +1,6 @@
 package com.almasosorio.sharethatbill;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,14 +11,19 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 
 public class ActivityNewBill extends ActionBarActivity {
 
-    ImageButton mDoneButton;
+    Button mDoneButton;
     FragmentNewBill mFragment;
+
+    public static final String INTENT_VALUES_PAID = "InValuesPaid";
+    public static final String INTENT_VALUES_OWED = "InValuesOwed";
+    public static final String INTENT_USERS_EMAIL = "InUserEmails";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +31,18 @@ public class ActivityNewBill extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_bill);
 
+        String groupName;
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            groupName = extras.getString(getString(R.string.bundle_group_name));
+           }
+        else {
+            //TODO: remove
+            groupName = "group1";
+        }
+
         if (mFragment == null)
-            mFragment = FragmentNewBill.newInstance(null);
+            mFragment = FragmentNewBill.newInstance(groupName);
 
         if (savedInstanceState == null) {
 
@@ -40,19 +56,18 @@ public class ActivityNewBill extends ActionBarActivity {
         toolbar.inflateMenu(R.menu.menu_activity_new_bill);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
 
-        mDoneButton = (ImageButton) findViewById(R.id.done);
-        mDoneButton.setBackgroundColor(Color.alpha(0));
+        mDoneButton = (Button) findViewById(R.id.done);
         mDoneButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mFragment != null) {
-
+                    //setResult(RESULT_OK, mFragment.getIntent());
+                    finish();
                 }
             }
         });
-
-        //TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
-        //title.setText(getString(R.string.new_bill));
     }
 }

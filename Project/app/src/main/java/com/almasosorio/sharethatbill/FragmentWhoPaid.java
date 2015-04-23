@@ -56,15 +56,7 @@ public class FragmentWhoPaid extends Fragment {
         f.dataSet = new ArrayList<>();
         f.mUserList = userList;
         f.mTotalPaidLabel = totalPaidLabel;
-
-        if (userList != null) for (int i = 0; i < userList.size(); i++) {
-          HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
-            item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, (String)f.mUserList.get(i).get(FragmentNewBill.KeyType.UserEmail));
-            f.dataSet.add(item);
-        }
-
         f.mTotalPaidListener = listener;
-
         return f;
     }
 
@@ -95,6 +87,7 @@ public class FragmentWhoPaid extends Fragment {
         mTotalPaidValue = 0.0;
 
         for (int i = 0; i < mUserList.size(); i++) {
+
             HashMap<FragmentNewBill.KeyType, ?> user = mUserList.get(i);
             dataSet.get(i).put(RecyclerViewAdapter.MapItemKey.TEXT_2,
                     String.format(FragmentNewBill.TOTAL_PAID_FORMAT,
@@ -108,6 +101,16 @@ public class FragmentWhoPaid extends Fragment {
         mRecyclerAdapter.notifyDataSetChanged();
         mTotalPaidLabel.setText(String.format(FragmentNewBill.TOTAL_PAID_FORMAT, mTotalPaidValue));
         mTotalPaidLabel.setTextColor(mTotalPaidValue >= 0.0 ? FragmentNewBill.ColorPositive : FragmentNewBill.ColorNegative);
+    }
+
+    public void onUpdateUserList() {
+        dataSet.clear();
+        for (int i = 0; i < mUserList.size(); i++) {
+            HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
+            item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, (String)mUserList.get(i).get(FragmentNewBill.KeyType.UserName));
+            dataSet.add(item);
+        }
+        updateDataSet();
     }
 
     @Override
@@ -156,8 +159,6 @@ public class FragmentWhoPaid extends Fragment {
             }
         });
         mRecyclerView.setAdapter(mRecyclerAdapter);
-
-        updateDataSet();
 
         return v;
     }

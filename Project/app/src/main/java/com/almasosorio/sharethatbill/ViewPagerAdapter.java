@@ -53,6 +53,11 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         mWhoPaidFrag.setTotalPaidLabel(totalPaidLabel);
     }
 
+    public void onUpdateUserList() {
+        mSplitOptionsFrag.onUpdateUserList();
+        mWhoPaidFrag.onUpdateUserList();
+    }
+
     @Override
     public Fragment getItem(int position) {
 

@@ -34,6 +34,8 @@
     <string name="split_options">SPLIT OPTIONS</string>
     <string name="split_method">Splitting Method:</string>
     <string name="total">Total</string>
+    <string name="untitled">Untitled</string>
+    <string name="done">DONE</string>
     <string-array name="split_method_options">
         <item>Define Values</item>
         <item>Split Equally</item>

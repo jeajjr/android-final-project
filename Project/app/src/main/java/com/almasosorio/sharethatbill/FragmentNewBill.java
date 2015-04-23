@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -36,33 +37,59 @@ public class FragmentNewBill extends Fragment {
     private static final String EXTRA_DATE = "ExtraDatePicked";
     private static final int SET_DATE_REQUEST = 0;
     public static final String TOTAL_PAID_FORMAT = "$ %.2f";
-    public enum KeyType {UserEmail, AmountPaid, AmountToPay};
+    public enum KeyType {UserEmail, UserName, AmountPaid, AmountToPay};
     public static final int ColorPositive = Color.rgb(66, 255, 23);
     public static final int ColorNegative = Color.rgb(255, 66, 23);
     private ArrayList<HashMap<KeyType, ?>> userList;
     private Button mDateButton;
+    private Calendar mDate;
+    private EditText mBillNameEditText;
     private ViewPagerAdapter mViewPagerAdapter;
+    private String groupName, userName;
 
-    static public FragmentNewBill newInstance(ArrayList<String> userList) {
-        FragmentNewBill f = new FragmentNewBill();
+    static public FragmentNewBill newInstance(String groupName, String sessionUserName) {
+        final FragmentNewBill f = new FragmentNewBill();
         f.userList = new ArrayList<>();
+        f.groupName = groupName;
+        f.userName = sessionUserName;
+        f.downloadGroupMembers(new onDownloadGroupMembers() {
+            @Override
+            public void onDownloadGroupMembers(ArrayList<TwoStringsClass> data) {
+                f.userList.clear();
 
-        // TODO: remove testing
-        userList = new ArrayList<>();
-        userList.add("test@yahoo.com");
-        userList.add("123@google.com");
-        userList.add("anything@outlook.com");
-        userList.add("another@outlook.com");
+                for (int i = 0; i < data.size(); i++) {
+                    HashMap<KeyType, ?> newEntry = new HashMap<>();
+                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserEmail, data.get(i).string1);
+                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserName, data.get(i).string2);
+                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountPaid, 0.0);
+                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountToPay, 0.0);
+                    f.userList.add(newEntry);
+                }
 
-        for (int i = 0; i < userList.size(); i++) {
-            HashMap<KeyType, ?> newEntry = new HashMap<>();
-            ((HashMap<KeyType, String>)newEntry).put(KeyType.UserEmail, userList.get(i));
-            ((HashMap<KeyType, Double>)newEntry).put(KeyType.AmountPaid, 0.0);
-            ((HashMap<KeyType, Double>)newEntry).put(KeyType.AmountToPay, 0.0);
-            f.userList.add(newEntry);
-        }
-
+                if (f.mViewPagerAdapter != null)
+                    f.mViewPagerAdapter.onUpdateUserList();
+            }
+        });
         return f;
+    }
+
+    private interface onDownloadGroupMembers{
+        public void onDownloadGroupMembers(ArrayList<TwoStringsClass> data);
+    }
+
+    private void downloadGroupMembers(final onDownloadGroupMembers listener) {
+        new AsyncTask<String, Void, ArrayList>() {
+            @Override
+            protected ArrayList doInBackground(String... params) {
+                DBHandler db = new DBHandler();
+                return db.getGroupMembersNames(params[0]);
+            }
+
+            @Override
+            protected void onPostExecute(ArrayList data) {
+                listener.onDownloadGroupMembers(data);
+            }
+        }.execute(groupName);
     }
 
     @Override
@@ -105,6 +132,9 @@ public class FragmentNewBill extends Fragment {
             }
         });
 
+        mBillNameEditText = (EditText)v.findViewById(R.id.billName);
+        mBillNameEditText.setText(getString(R.string.untitled));
+
         return v;
     }
 
@@ -120,6 +150,8 @@ public class FragmentNewBill extends Fragment {
             Date date = (Date)data.getSerializableExtra(EXTRA_DATE);
             if (date != null) {
                 mDateButton.setText(new SimpleDateFormat("MMMM dd/yyyy (EEEE)", Locale.getDefault()).format(date));
+                mDate = new GregorianCalendar();
+                mDate.setTime(date);
             }
         }
 
@@ -165,5 +197,71 @@ public class FragmentNewBill extends Fragment {
 
             return adb.create();
         }
+    }
+
+    public Intent getIntent() {
+        Intent intent = new Intent();
+
+        Double[] valuesPaid = new Double[userList.size()];
+        Double[] valuesOwed = new Double[userList.size()];
+        String[] emailsList = new String[userList.size()];
+
+        for (int index = 0; index < userList.size(); index++) {
+            valuesPaid[index] = (Double)userList.get(index).get(KeyType.AmountPaid);
+            valuesOwed[index] = (Double)userList.get(index).get(KeyType.AmountToPay);
+            emailsList[index] = (String)userList.get(index).get(KeyType.UserEmail);
+        }
+
+        intent.putExtra(ActivityNewBill.INTENT_VALUES_PAID, valuesPaid);
+        intent.putExtra(ActivityNewBill.INTENT_VALUES_OWED, valuesOwed);
+        intent.putExtra(ActivityNewBill.INTENT_USERS_EMAIL, emailsList);
+        return intent;
+    }
+
+    public boolean createBill() {
+
+        final Bill bill = new Bill();
+
+        bill.billDate = mDate;
+        bill.billName = mBillNameEditText.getText().toString();
+        bill.groupName = groupName;
+        try {
+            bill.billValue = Float.valueOf(((TextView) getView().findViewById(R.id.totalPaid)).toString().substring(2));
+        } catch (NumberFormatException ex) {
+            return false;
+        }
+
+        new AsyncTask<Void, Void, Boolean>() {
+
+            private boolean success = true;
+
+            @Override
+            protected Boolean doInBackground(Void... params) {
+                DBHandler db = new DBHandler();
+
+                if (!db.createBill(bill, userName)) {
+                    success = false;
+                    return null;
+                }
+
+                for (int index = 0; index < userList.size(); index++) {
+                    if (!db.createUserBillRelation(
+                            (String)userList.get(index).get(KeyType.UserName),
+                            groupName, bill.billName, (Double)userList.get(index).get(KeyType.AmountToPay),
+                            (Double)userList.get(index).get(KeyType.AmountPaid)
+                    ))
+                        success = false;
+                }
+
+                return success;
+            }
+
+            @Override
+            protected void onPostExecute(Boolean s) {
+                super.onPostExecute(s);
+            }
+        }.execute();
+
+        return true;
     }
 }

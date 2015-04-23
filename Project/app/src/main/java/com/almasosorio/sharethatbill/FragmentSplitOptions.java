@@ -39,13 +39,6 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
         FragmentSplitOptions f = new FragmentSplitOptions();
         f.dataSet = new ArrayList<>();
         f.mUserList = userList;
-
-        if (userList != null) for (int i = 0; i < userList.size(); i++) {
-            HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
-            item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, (String)f.mUserList.get(i).get(FragmentNewBill.KeyType.UserEmail));
-            f.dataSet.add(item);
-        }
-
         return f;
     }
 
@@ -82,6 +75,20 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
 
         mTotalSplitLabel.setText(String.format(getString(R.string.total) + ": " + FragmentNewBill.TOTAL_PAID_FORMAT, mTotalSplitValue));
         mRecyclerAdapter.notifyDataSetChanged();
+    }
+
+    public void onUpdateUserList() {
+
+        dataSet.clear();
+
+        for (int i = 0; i < mUserList.size(); i++) {
+            HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
+            item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, (String)mUserList.get(i).get(FragmentNewBill.KeyType.UserName));
+            dataSet.add(item);
+        }
+
+        updateDataSet();
+
     }
 
     public void onUpdateTotalPaid(Double newValue) {

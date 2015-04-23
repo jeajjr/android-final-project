@@ -17,13 +17,19 @@
         android:minHeight="?android:attr/actionBarSize"
         >
 
-        <ImageButton
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/new_bill"
+            android:text="@string/done"
+            android:textColor="#ff000000"
+            android:textSize="12dp"
+            android:maxHeight="?android:attr/actionBarSize"
             android:layout_gravity="right|end"
+            android:layout_marginRight="5dp"
             android:id="@+id/done"
-            android:src="@drawable/abc_btn_check_to_on_mtrl_015"/>
+            android:background="@drawable/button_background"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"/>
 
         <TextView
             android:layout_width="wrap_content"
