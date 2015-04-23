@@ -84,7 +84,7 @@ public class FragmentBillDetails extends Fragment {
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.BILL_LIST_ITEM);
+        adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.PICTURE_WITH_TEXT);
         recyclerView.setAdapter(adapter);
 
         TextView billName = (TextView) v.findViewById(R.id.textViewBillName);

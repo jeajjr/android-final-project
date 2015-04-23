@@ -100,6 +100,9 @@
 
     <string name="create_new_group">Create new group</string>
 
+    <string name="no_bills">This group does not have any bills yet</string>
+    <string name="no_notifications">No recent updates</string>
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_activity_view_group">ActivityViewGroup</string>
 

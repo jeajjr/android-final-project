@@ -47,7 +47,7 @@ public class ActivityViewGroup extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
+        final TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
         title.setText(groupName);
 
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.pager_tab_strip);
@@ -75,6 +75,12 @@ public class ActivityViewGroup extends ActionBarActivity {
 
         //TODO: close drawer when clicked
 
+        final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
+                userName, groupName);
+
+        final ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setAdapter(viewPagerAdapter);
+
         groupsList = new ArrayList<>();
 
         RecyclerView drawerList = (RecyclerView) findViewById(R.id.recyclerView);
@@ -86,7 +92,11 @@ public class ActivityViewGroup extends ActionBarActivity {
         recyclerViewAdapter.setOnDrawerItemClickListener(new DrawerRecyclerViewAdapter.OnDrawerItemClickListener() {
             @Override
             public void onGroupItemClick(int index) {
-
+                if (!groupName.equals(groupsList.get(index))) {
+                    groupName = groupsList.get(index);
+                    viewPagerAdapter.updateGroupFragments(groupName);
+                    title.setText(groupName);
+                }
             }
 
             @Override
@@ -95,11 +105,7 @@ public class ActivityViewGroup extends ActionBarActivity {
             }
         });
 
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
-                userName, groupName);
 
-        ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
-        mViewPager.setAdapter(viewPagerAdapter);
 
         (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
     }

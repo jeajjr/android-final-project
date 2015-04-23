@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -30,8 +31,17 @@ public class FragmentGroupMembers extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
+    private ProgressBar progressBar;
+
     public FragmentGroupMembers() {
         // Required empty public constructor
+    }
+
+    public void updateGroup(String groupName) {
+        Log.d(TAG, "received update request: " + groupName);
+        dataSet.clear();
+        this.groupName = groupName;
+        (new GroupMembersDownloader(dataSet, adapter, progressBar)).execute(groupName, userName);
     }
 
     public static FragmentGroupMembers newInstance(Context context, String userName, String groupName) {
@@ -83,7 +93,9 @@ public class FragmentGroupMembers extends Fragment {
         adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.GROUP_MEMBERS_LIST_ITEM);
         recyclerView.setAdapter(adapter);
 
-        (new GroupMembersDownloader(dataSet, adapter)).execute(groupName, userName);
+        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+
+        (new GroupMembersDownloader(dataSet, adapter, progressBar)).execute(groupName, userName);
 
         return v;
     }
@@ -93,14 +105,27 @@ public class FragmentGroupMembers extends Fragment {
 
         private WeakReference<ArrayList> dataSet;
         private WeakReference<RecyclerViewAdapter> adapter;
+        private WeakReference<ProgressBar> progressBar;
 
-        public GroupMembersDownloader(ArrayList dataSet, RecyclerViewAdapter adapter) {
+        public GroupMembersDownloader(ArrayList dataSet, RecyclerViewAdapter adapter,
+                                      ProgressBar progressBar) {
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
+            this.progressBar = new WeakReference<>(progressBar);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            final ProgressBar progressBar = this.progressBar.get();
+
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
         protected ArrayList doInBackground(String... params) {
+            Log.d(TAG, "group: " + params[0]);
+
             ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> results = new ArrayList<>();
 
             DBHandler db = new DBHandler();
@@ -148,6 +173,11 @@ public class FragmentGroupMembers extends Fragment {
                 dataSet.addAll(results);
                 adapter.notifyDataSetChanged();
             }
+
+            final ProgressBar progressBar = this.progressBar.get();
+
+            if (progressBar != null)
+                progressBar.setVisibility(View.INVISIBLE);
         }
     }
 }
