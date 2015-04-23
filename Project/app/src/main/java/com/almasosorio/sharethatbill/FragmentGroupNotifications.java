@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -30,6 +32,9 @@ public class FragmentGroupNotifications extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
+    private ProgressBar progressBar;
+    private TextView listEmptyText;
+
     public FragmentGroupNotifications() {
         // Required empty public constructor
     }
@@ -38,7 +43,7 @@ public class FragmentGroupNotifications extends Fragment {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
         this.groupName = groupName;
-        (new NotificationsDownloader(dataSet, adapter)).execute(groupName, userName);
+        (new NotificationsDownloader(dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
     }
 
     public static FragmentGroupNotifications newInstance(Context context, String userName, String groupName) {
@@ -83,7 +88,10 @@ public class FragmentGroupNotifications extends Fragment {
             }
         });
 
-        (new NotificationsDownloader(dataSet, adapter)).execute(groupName, userName);
+        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        listEmptyText = (TextView) v.findViewById(R.id.text_list_empty);
+
+        (new NotificationsDownloader(dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
 
         return v;
     }
@@ -106,10 +114,27 @@ public class FragmentGroupNotifications extends Fragment {
 
         private WeakReference<ArrayList> dataSet;
         private WeakReference<RecyclerViewAdapter> adapter;
+        private WeakReference<ProgressBar> progressBar;
+        private WeakReference<TextView> emptyListText;
 
-        public NotificationsDownloader(ArrayList dataSet, RecyclerViewAdapter adapter) {
+        public NotificationsDownloader(ArrayList dataSet, RecyclerViewAdapter adapter,
+                                       ProgressBar progressBar, TextView emptyListText) {
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
+            this.progressBar = new WeakReference<>(progressBar);
+            this.emptyListText = new WeakReference<>(emptyListText);
+        }
+
+        @Override
+        protected void onPreExecute() {
+            final ProgressBar progressBar = this.progressBar.get();
+            final TextView emptyListText = this.emptyListText.get();
+
+            if (progressBar != null)
+                progressBar.setVisibility(View.VISIBLE);
+
+            if (emptyListText != null)
+                emptyListText.setVisibility(View.INVISIBLE);
         }
 
         @Override
@@ -210,6 +235,18 @@ public class FragmentGroupNotifications extends Fragment {
                 dataSet.clear();
                 dataSet.addAll(results);
                 adapter.notifyDataSetChanged();
+
+                if (dataSet.size() == 0) {
+                    final TextView emptyListText = this.emptyListText.get();
+
+                    if (emptyListText != null)
+                        emptyListText.setVisibility(View.VISIBLE);
+                }
+
+                final ProgressBar progressBar = this.progressBar.get();
+
+                if (progressBar != null)
+                    progressBar.setVisibility(View.INVISIBLE);
             }
         }
     }
