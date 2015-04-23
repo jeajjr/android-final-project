@@ -1,6 +1,7 @@
 package com.almasosorio.sharethatbill;
 
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.support.v4.view.PagerTabStrip;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
@@ -11,13 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 public class ActivityViewGroup extends ActionBarActivity {
@@ -64,7 +63,7 @@ public class ActivityViewGroup extends ActionBarActivity {
                 R.string.bill,
                 R.string.bill) {
             // Only lock drawer when it is closed
-            public void onDrawerOpened(View view){
+            public void onDrawerOpened(View view) {
             }
 
             public void onDrawerClosed(View view) {
@@ -74,20 +73,69 @@ public class ActivityViewGroup extends ActionBarActivity {
         drawerLayout.setDrawerListener(drawerToggle);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
+        //TODO: close drawer when clicked
+
         groupsList = new ArrayList<>();
 
-        RecyclerView drawerList = (RecyclerView) findViewById(R.id.recyclerView1);
+        RecyclerView drawerList = (RecyclerView) findViewById(R.id.recyclerView);
+        drawerList.setHasFixedSize(true);
         drawerList.setLayoutManager(new LinearLayoutManager(this));
         DrawerRecyclerViewAdapter recyclerViewAdapter =
                 new DrawerRecyclerViewAdapter(this, groupsList);
         drawerList.setAdapter(recyclerViewAdapter);
+        recyclerViewAdapter.setOnDrawerItemClickListener(new DrawerRecyclerViewAdapter.OnDrawerItemClickListener() {
+            @Override
+            public void onGroupItemClick(int index) {
+
+            }
+
+            @Override
+            public void onCreateGroupClick() {
+
+            }
+        });
 
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);
 
         ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
         mViewPager.setAdapter(viewPagerAdapter);
+
+        (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
     }
 
-    
+    private class GroupNamesDownloader extends AsyncTask<String, Void , ArrayList> {
+        private static final String TAG = "GroupNamesDownloader";
+
+        private WeakReference<ArrayList<String>> dataSet;
+        private WeakReference<DrawerRecyclerViewAdapter> adapter;
+
+        public GroupNamesDownloader(ArrayList<String> dataSet, DrawerRecyclerViewAdapter adapter) {
+            this.dataSet = new WeakReference<>(dataSet);
+            this.adapter = new WeakReference<>(adapter);
+        }
+
+        @Override
+        protected ArrayList doInBackground(String... params) {
+
+            DBHandler db = new DBHandler();
+
+            return db.getUserGroups(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList results) {
+            Log.d(TAG, "onPostExecute");
+
+            final ArrayList dataSet = this.dataSet.get();
+            final DrawerRecyclerViewAdapter adapter = this.adapter.get();
+
+            if (dataSet != null && adapter != null) {
+                dataSet.clear();
+                dataSet.addAll(results);
+                adapter.notifyDataSetChanged();
+                //TODO: force layout update on item 0
+            }
+        }
+    }
 }

@@ -53,7 +53,7 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
                 @Override
                 public void onClick(View v) {
                     int itemPosition = getPosition();
-                    Log.d(TAG, "clicked item " + itemPosition);
+
 
                     if (itemPosition < groupNames.size()) {
                         currentItem = itemPosition;
@@ -61,11 +61,14 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
                     }
 
                     if (onDrawerItemClickListener != null) {
-                        if (itemPosition < groupNames.size()) {
+                        if (itemPosition < groupNames.size() && groupNames.size() != 0) {
+                            Log.d(TAG, "clicked group " + itemPosition);
                             onDrawerItemClickListener.onGroupItemClick(itemPosition);
                         }
-                        else
+                        else {
+                            Log.d(TAG, "clicked add group item");
                             onDrawerItemClickListener.onCreateGroupClick();
+                        }
                     }
                 }
             });
@@ -108,11 +111,16 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
     @Override
     public DrawerRecyclerViewAdapter.ViewHolder onCreateViewHolder (ViewGroup parent, int viewType) {
         View v;
+        Log.d(TAG, "received viewType " + viewType + " groupNames.size(): " + groupNames.size());
 
-        if (viewType < groupNames.size())
+        if (viewType < groupNames.size()) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_group, parent, false);
-        else
+            Log.d(TAG, "creating drawer_item_group");
+        }
+        else {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_option, parent, false);
+            Log.d(TAG, "creating drawer_item_option");
+        }
 
         ViewHolder vh = new ViewHolder(v);
         return vh;
@@ -120,6 +128,7 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
 
     @Override
     public void onBindViewHolder (ViewHolder holder, int position) {
+        Log.d(TAG, "binding position " + position + " groupNames.size(): " + groupNames.size());
         if (position < groupNames.size())
             holder.bindData(groupNames.get(position));
         else

@@ -28,6 +28,7 @@
 
         <activity
             android:name=".ActivityNewBill"
+<<<<<<< HEAD
             android:label="@string/title_activity_activity_new_bill"
             android:configChanges="orientation|screenSize">
 
@@ -37,13 +38,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
 
+=======
+            android:label="@string/title_activity_activity_new_bill" >
+>>>>>>> origin/master
         </activity>
 
         <activity
             android:name=".ActivityViewGroup"
             android:label="@string/title_activity_activity_view_group" >
-
-
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
