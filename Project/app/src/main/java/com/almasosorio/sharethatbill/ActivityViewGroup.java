@@ -12,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
@@ -55,14 +56,14 @@ public class ActivityViewGroup extends ActionBarActivity {
         pagerTabStrip.setTabIndicatorColor(Color.WHITE);
         pagerTabStrip.setTextColor(Color.WHITE);
 
-        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        final DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawerLayout,
                 toolbar,
-                R.string.bill,
-                R.string.bill) {
-            // Only lock drawer when it is closed
+                R.string.drawer_opened,
+                R.string.drawer_closed) {
+            //TODO: remove if not used
             public void onDrawerOpened(View view) {
             }
 
@@ -72,8 +73,6 @@ public class ActivityViewGroup extends ActionBarActivity {
 
         drawerLayout.setDrawerListener(drawerToggle);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-
-        //TODO: close drawer when clicked
 
         final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);
@@ -96,6 +95,7 @@ public class ActivityViewGroup extends ActionBarActivity {
                     groupName = groupsList.get(index);
                     viewPagerAdapter.updateGroupFragments(groupName);
                     title.setText(groupName);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
                 }
             }
 
@@ -104,8 +104,6 @@ public class ActivityViewGroup extends ActionBarActivity {
 
             }
         });
-
-
 
         (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
     }

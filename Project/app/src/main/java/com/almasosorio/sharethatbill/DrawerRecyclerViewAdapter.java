@@ -78,12 +78,12 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
             this.name.setText(groupName);
 
             if (currentItem == getPosition()) {
-                thisView.setBackgroundColor(0xffffffff);
-                name.setTextColor(0xff000000);
+                thisView.setBackgroundColor(0xff272c2b);
+                name.setTextColor(0xffDFDFE0);
             }
             else {
                 thisView.setBackgroundColor(0x00000000);
-                name.setTextColor(0xffffffff);
+                name.setTextColor(0xff272c2b);
             }
         }
 

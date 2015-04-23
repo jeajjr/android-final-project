@@ -25,6 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:text="Bill Murray"
+            android:textColor="#272c2b"
             android:textSize="26sp"
             />
     </LinearLayout>
@@ -35,6 +36,7 @@
         android:layout_gravity="center_vertical"
         android:text="@string/my_groups"
         android:textSize="16sp"
+        android:textColor="#272c2b"
         android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         />

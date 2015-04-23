@@ -118,7 +118,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
                     name = context.getResources().getString(R.string.bills);
                     break;
                 case 2:
-                    name = context.getResources().getString(R.string.users);
+                    name = context.getResources().getString(R.string.members);
                     break;
 
                 default:
