@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -28,7 +29,7 @@ public class ViewLoading extends RelativeLayout {
     private View mAfterLoadView;
     private boolean mIsLoading, mFailed;
 
-    private static final int FADE_DURATION = 500;
+    private static final int FADE_DURATION = 620;
 
     public ViewLoading(Context context) {
         super(context);
@@ -54,10 +55,7 @@ public class ViewLoading extends RelativeLayout {
         mProgressBar = (ProgressBar)findViewById(R.id.progressBar);
         mTextView = (TextView)findViewById(R.id.textView);
 
-        mIsLoading = false;;
-        mFailed = false;
-
-        setState(true, false);
+        setLoading();
     }
 
     public void setLoadedView(View v) {
@@ -69,10 +67,8 @@ public class ViewLoading extends RelativeLayout {
 
         if (v != null) {
             addView(v);
-            v.setVisibility(VISIBLE);
+            v.setVisibility((mIsLoading || mFailed) ? INVISIBLE : VISIBLE);
         }
-
-        setState(mIsLoading, mFailed);
     }
 
     public boolean isLoading() {
@@ -83,110 +79,168 @@ public class ViewLoading extends RelativeLayout {
         return !mIsLoading && mFailed;
     }
 
-    public void setState(boolean loading, boolean failed) {
-
-        if (!(mIsLoading || mFailed) && mAfterLoadView != null) {
-            mAfterLoadView.setVisibility(INVISIBLE);
-        }
-
-        if (loading) {
-
-            AnimatorListenerAdapter after = new AnimatorListenerAdapter() {
+    private ViewPropertyAnimator fadeOut(View v, long duration) {
+        ViewPropertyAnimator ret =  v.animate().alpha(0f).setDuration(duration);
+        if (v == mProgressBar)
+            ret.setListener( new AnimatorListenerAdapter() {
                 @Override
                 public void onAnimationEnd(Animator animation) {
-                    super.onAnimationEnd(animation);
-                    mTextView.setVisibility(VISIBLE);
-                    mProgressBar.setVisibility(VISIBLE);
-                    mProgressBar.animate().alpha(1f).setDuration(FADE_DURATION).setListener(null);
-
-                    mTextView.setText("LOADING...");
-                    mTextView.setTextColor(Color.WHITE);
-                    mTextView.animate().scaleX(1f).scaleY(1f).setDuration(0).setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mTextView.animate().alpha(1f).setDuration(FADE_DURATION);
-                        }
-                    });
+                    mProgressBar.setVisibility(GONE);
                 }
-            };
+            });
+        return ret;
+    }
 
-            if (mFailed) {
-                mTextView.animate().alpha(0f).setDuration(FADE_DURATION).setListener(after);
-            } else if (!mIsLoading) {
-                mTextView.animate().alpha(0f).setDuration(0).setListener(null);
-                mProgressBar.animate().alpha(0f).setDuration(0).setListener(null);
+    private ViewPropertyAnimator fadeIn(View v, long duration) {
+        if (v == mProgressBar)
+            mProgressBar.setVisibility(VISIBLE);
+        return v.animate().alpha(1f).setDuration(duration).setListener(null);
+    }
 
-                if (mAfterLoadView != null) {
-                    mAfterLoadView.animate().alpha(0f).setDuration(FADE_DURATION).setListener(after);
-                } else {
-                    after.onAnimationEnd(null);
-                }
-            } else if (mAfterLoadView != null)
-                mAfterLoadView.setVisibility(INVISIBLE);
-
-        } else if (failed) {
-
-            mTextView.animate()
-                    .alpha(0f)
-                    .setDuration(FADE_DURATION)
-                    .setListener(null);
-
-            mProgressBar.animate()
-                    .alpha(0f)
-                    .setDuration(FADE_DURATION)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mProgressBar.setVisibility(GONE);
-                            mTextView.setText("FAILED TO LOAD\nTouch to retry");
-                            mTextView.setTextColor(Color.rgb(180, 180, 195));
-
-                            float size = 1.5f;
-
-                            mTextView.animate()
-                                    .scaleX(size).scaleY(size)
-                                    .alpha(1f)
-                                    .setDuration(FADE_DURATION);
-                        }
-                    });
-
-            if (mAfterLoadView != null)
-                mAfterLoadView.setVisibility(INVISIBLE);
-
-        } else {
-
-            mTextView.animate()
-                    .alpha(0f)
-                    .setDuration(FADE_DURATION)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mTextView.setVisibility(GONE);
-                        }
-                    });
-
-            mProgressBar.animate()
-                    .alpha(0f)
-                    .setDuration(FADE_DURATION)
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mProgressBar.setVisibility(GONE);
-                        }
-                    });
-
-            if (mAfterLoadView != null) {
-                mAfterLoadView.setVisibility(VISIBLE);
-                mAfterLoadView.setAlpha(0f);
-                mAfterLoadView.animate()
-                        .alpha(1f)
-                        .setDuration(FADE_DURATION)
+    private void setLoading() {
+        mTextView.setText("LOADING...");
+        mTextView.setTextColor(Color.WHITE);
+        mTextView.clearAnimation();
+        mTextView.animate().scaleX(1f).scaleY(1f).alpha(0f).setDuration(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mTextView.animate().alpha(1f).
+                                setDuration(FADE_DURATION).
+                                setListener(null);
+                    }
+                });
+        mProgressBar.setVisibility(INVISIBLE);
+        mProgressBar.animate().alpha(0f).setDuration(0).setListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                mProgressBar.setVisibility(VISIBLE);
+                mProgressBar.animate().alpha(1f).setDuration(FADE_DURATION)
                         .setListener(null);
             }
+        });
+        if (mAfterLoadView != null)
+            mAfterLoadView.setVisibility(INVISIBLE);
+        mIsLoading = true;
+        mFailed = false;
+    }
+
+    private void toLoading() {
+        if (mIsLoading)
+            return;
+        else if (mFailed) {
+            mTextView.clearAnimation();
+            mTextView.animate().scaleX(1f).scaleY(1f).alpha(0f).setDuration(FADE_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            setLoading();
+                        }
+                    });
+        } else if (mAfterLoadView != null) {
+            mAfterLoadView.clearAnimation();
+            mAfterLoadView.animate().alpha(0f).setDuration(FADE_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            setLoading();
+                        }
+                    });
+        }
+        mIsLoading = true;
+        mFailed = false;
+    }
+
+    private void setFailed() {
+        mProgressBar.setVisibility(GONE);
+        mTextView.setText("FAILED TO LOAD\nTouch to retry");
+        mTextView.setTextColor(Color.rgb(180, 180, 195));
+        mTextView.clearAnimation();
+        mTextView.animate().alpha(0f).scaleX(1f).scaleY(1f).setDuration(0)
+                .setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        mTextView.animate().alpha(1f).scaleX(1.4f).scaleY(1.4f).setDuration(FADE_DURATION)
+                                .setListener(null);
+                    }
+                });
+
+        if (mAfterLoadView != null)
+            mAfterLoadView.setVisibility(INVISIBLE);
+
+        mIsLoading = false;
+        mFailed = true;
+    }
+
+    private void toFailed() {
+        if (mIsLoading) {
+            mTextView.clearAnimation();
+            mTextView.animate().alpha(0f).setDuration(FADE_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            setFailed();
+                        }
+                    });
+            mProgressBar.clearAnimation();
+            mProgressBar.animate().alpha(0f).setDuration(FADE_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mProgressBar.setVisibility(GONE);
+                        }
+                    });
         }
 
-        mIsLoading = loading;
-        mFailed = failed;
+        mIsLoading = false;
+        mFailed = true;
+    }
+
+    private void toView() {
+
+        if (mIsLoading) {
+
+            mTextView.clearAnimation();
+            mTextView.animate().alpha(0f).setDuration(FADE_DURATION)
+                    .setListener(new AnimatorListenerAdapter() {
+                        @Override
+                        public void onAnimationEnd(Animator animation) {
+                            mAfterLoadView.animate().alpha(0f).setDuration(0)
+                                    .setListener(new AnimatorListenerAdapter() {
+                                        @Override
+                                        public void onAnimationEnd(Animator animation) {
+                                            mAfterLoadView.setVisibility(VISIBLE);
+                                            mAfterLoadView.animate().alpha(1f).setDuration(FADE_DURATION)
+                                                    .setListener(null);
+                                        }
+                                    });
+                        }
+                    });
+            mProgressBar.clearAnimation();
+            mProgressBar.animate().alpha(0f).setDuration(FADE_DURATION).setListener(null);
+            mAfterLoadView.setVisibility(INVISIBLE);
+            mAfterLoadView.clearAnimation();
+
+        } else if (mFailed) {
+
+        }
+
+        mIsLoading = false;
+        mFailed = false;
+    }
+
+    public void setState(boolean loading, boolean failed) {
+
+        if (loading) {
+            if (!mIsLoading)
+                toLoading();
+        }
+        else if (failed) {
+            if (!mFailed)
+                toFailed();
+        }
+        else
+            toView();
 
         invalidate();
         requestLayout();
