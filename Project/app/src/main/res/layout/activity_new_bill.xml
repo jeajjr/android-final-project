@@ -38,13 +38,9 @@
             android:text="@string/new_bill"
             android:layout_gravity="center"
             android:id="@+id/toolbar_title"
-<<<<<<< HEAD
-            android:textSize="28dp" />
-=======
             android:textSize="24sp"
             android:textColor="#272c2b"
             />
->>>>>>> 25cf85679b2a9fac47bd4aa98ca052ced681d1f9
 
         </android.support.v7.widget.Toolbar>
 
