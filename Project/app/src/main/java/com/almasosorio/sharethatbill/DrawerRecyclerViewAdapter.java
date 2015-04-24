@@ -89,7 +89,6 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
 
         public void bindCreateGroup() {
             name.setText(context.getString(R.string.create_new_group));
-            icon.setImageResource(R.drawable.gear_dark);
         }
     }
 
