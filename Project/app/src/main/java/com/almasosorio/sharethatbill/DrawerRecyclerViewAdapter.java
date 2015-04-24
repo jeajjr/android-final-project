@@ -105,7 +105,10 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
     
     @Override
     public int getItemViewType(int position) {
-        return position;
+        if (position < groupNames.size())
+            return 0;
+
+        return 1;
     }
 
     @Override
@@ -113,7 +116,7 @@ public class DrawerRecyclerViewAdapter extends RecyclerView.Adapter<DrawerRecycl
         View v;
         Log.d(TAG, "received viewType " + viewType + " groupNames.size(): " + groupNames.size());
 
-        if (viewType < groupNames.size()) {
+        if (viewType == 0) {
             v = LayoutInflater.from(parent.getContext()).inflate(R.layout.drawer_item_group, parent, false);
             Log.d(TAG, "creating drawer_item_group");
         }
