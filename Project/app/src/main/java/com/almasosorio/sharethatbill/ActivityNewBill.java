@@ -62,8 +62,6 @@ public class ActivityNewBill extends ActionBarActivity {
                     //setResult(RESULT_OK, mFragment.getIntent());
                     if (!mFragment.createBill())
                         Log.d("ActivityNewBill", "DoneButton - creating bill returned false");
-                    else
-                        finish();
                 }
             }
         });

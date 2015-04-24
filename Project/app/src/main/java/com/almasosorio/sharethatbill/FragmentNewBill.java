@@ -295,14 +295,17 @@ public class FragmentNewBill extends Fragment {
 
         Double totalSplitValue = mViewPagerAdapter.getTotalSplitValue();
 
-        if (totalSplitValue == null || (totalSplitValue - bill.billValue) > 0.0001d) {
+        if (totalSplitValue == null || Math.abs(totalSplitValue - bill.billValue) > 0.01d) {
             billFailAlert(getActivity().getString(R.string.bill_creation_failed),
                     getActivity().getString(R.string.bill_values_mismatch));
             return false;
         }
 
-        if (userList.isEmpty() || bill.billValue == 0.0)
+        if (userList.isEmpty() || bill.billValue == 0.0) {
+            billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                    getActivity().getString(R.string.bill_paid_value_zero));
             return false;
+        }
 
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -338,8 +341,10 @@ public class FragmentNewBill extends Fragment {
                 if (!success)
                     billFailAlert(getActivity().getString(R.string.bill_creation_failed),
                             getActivity().getString(R.string.bill_creation_failed_message));
-                else
+                else {
                     billSuccessToast(bill.billName);
+                    getActivity().finish();
+                }
             }
         }.execute();
 
@@ -347,15 +352,17 @@ public class FragmentNewBill extends Fragment {
     }
 
     public void billFailAlert(String title, String message) {
-        new AlertDialog.Builder(getActivity())
-            .setTitle(title)
-            .setMessage(message)
-            .setPositiveButton(android.R.string.ok, null)
-            .setIcon(android.R.drawable.ic_dialog_alert)
-            .show();
+        if (getActivity() != null)
+            new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     public void billSuccessToast(String name) {
-        Toast.makeText(getActivity(), "Bill \"" + name + "\" created successfully.", Toast.LENGTH_SHORT).show();
+        if (getActivity() != null)
+            Toast.makeText(getActivity(), "Bill \"" + name + "\" created successfully.", Toast.LENGTH_SHORT).show();
     }
 }
