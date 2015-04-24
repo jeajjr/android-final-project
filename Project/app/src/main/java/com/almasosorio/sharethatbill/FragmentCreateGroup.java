@@ -173,6 +173,26 @@ public class FragmentCreateGroup extends Fragment {
         dialog.show(getFragmentManager(), "EditMemberDialog");
     }
 
+    private interface userExistListener {
+        public void onUserExist(boolean exist);
+    }
+
+    private void checkNewUserEntry(String userEmail, final userExistListener listener) {
+        new AsyncTask<String, Void, Boolean>() {
+            @Override
+            protected Boolean doInBackground(String... params) {
+                DBHandler db = new DBHandler();
+                return db.userExists(params[0]);
+            }
+            @Override
+            protected void onPostExecute(Boolean aBoolean) {
+                super.onPostExecute(aBoolean);
+                if (listener != null)
+                    listener.onUserExist(aBoolean);
+            }
+        }.execute(userEmail);
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -182,27 +202,40 @@ public class FragmentCreateGroup extends Fragment {
         }
 
         if (requestCode == ADD_MEMBER_REQUEST && dataSet != null) {
-            String[] emails = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString().split("\n");
+
+            final String[] emails = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString().split("\n");
 
             if (emails == null)
                 return;
 
             for (int i = 0; i < emails.length; i++) {
 
-                if (emails[i].isEmpty())
+                final String newEmail = emails[i];
+
+                if (newEmail.isEmpty())
+                    continue;
+
+                if (mRecyclerAdapter.getEntryByString(newEmail) != -1)
                     continue;
 
                 HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
                 item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, emails[i]);
                 dataSet.add(item);
                 mRecyclerAdapter.notifyItemInserted(dataSet.size() - 1);
+
+                checkNewUserEntry(emails[i], new userExistListener() {
+                    @Override
+                    public void onUserExist(boolean exist) {
+                        mRecyclerAdapter.setEntryIsValid(mRecyclerAdapter.getEntryByString(newEmail), exist);
+                    }
+                });
             }
 
         } else if (requestCode == EDIT_MEMBER_REQUEST && dataSet != null) {
 
             String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
 
-            if (!newEmail.isEmpty() && !newEmail.contains("\n")) {
+            if (!newEmail.isEmpty() && !newEmail.contains("\n") && mRecyclerAdapter.getEntryByString(newEmail) == -1) {
                 dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
                 mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
             }
@@ -226,11 +259,13 @@ public class FragmentCreateGroup extends Fragment {
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
             final EditText textEdit = new EditText(getActivity());
+
             if (!defaultText.isEmpty()) {
                 textEdit.setText(defaultText);
                 textEdit.setSelection(defaultText.length());
                 textEdit.setSingleLine();
             }
+
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(textEdit)
                 .setTitle(title)
