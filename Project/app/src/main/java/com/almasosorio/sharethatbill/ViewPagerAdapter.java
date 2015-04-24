@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Locale;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentPagerAdapter {
 
     private FragmentManager fm;
     private Context context;

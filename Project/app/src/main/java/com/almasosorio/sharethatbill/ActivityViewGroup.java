@@ -28,6 +28,7 @@ public class ActivityViewGroup extends ActionBarActivity {
     private String groupName;
 
     private ViewPagerAdapter viewPagerAdapter;
+    private DrawerRecyclerViewAdapter recyclerViewAdapter;
 
     private ArrayList<String> groupsList;
 
@@ -112,8 +113,7 @@ public class ActivityViewGroup extends ActionBarActivity {
         RecyclerView drawerList = (RecyclerView) findViewById(R.id.recyclerView);
         drawerList.setHasFixedSize(true);
         drawerList.setLayoutManager(new LinearLayoutManager(this));
-        DrawerRecyclerViewAdapter recyclerViewAdapter =
-                new DrawerRecyclerViewAdapter(this, groupsList);
+        recyclerViewAdapter = new DrawerRecyclerViewAdapter(this, groupsList);
         drawerList.setAdapter(recyclerViewAdapter);
         recyclerViewAdapter.setOnDrawerItemClickListener(new DrawerRecyclerViewAdapter.OnDrawerItemClickListener() {
             @Override
@@ -122,6 +122,8 @@ public class ActivityViewGroup extends ActionBarActivity {
                     groupName = groupsList.get(index);
                     viewPagerAdapter.updateGroupFragments(groupName);
                     title.setText(groupName);
+                    drawerLayout.closeDrawer(Gravity.LEFT);
+
                     drawerLayout.closeDrawer(Gravity.LEFT);
                 }
             }
@@ -133,6 +135,7 @@ public class ActivityViewGroup extends ActionBarActivity {
                 intent.putExtra(getString(R.string.bundle_first_group_create), false);
                 startActivity(intent);
 
+                drawerLayout.closeDrawer(Gravity.LEFT);
             }
         });
 
@@ -144,6 +147,7 @@ public class ActivityViewGroup extends ActionBarActivity {
         super.onResume();
 
         viewPagerAdapter.updateGroupFragments(groupName);
+        (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
     }
 
     private class UserNameDownloader extends AsyncTask<String, Void , String> {
