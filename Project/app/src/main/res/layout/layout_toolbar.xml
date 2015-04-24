@@ -6,14 +6,6 @@
     android:layout_height="match_parent"
     >
 
-    <ImageView
-        android:layout_width="32dp"
-        android:layout_height="32dp"
-        android:id="@+id/imageViewToolboxLeftButton"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/picture"
-        />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

@@ -39,6 +39,7 @@ public class FragmentGroupBills extends Fragment {
     public void updateGroup(String groupName) {
         Log.d(TAG, "received update request: " + groupName);
         dataSet.clear();
+        adapter.notifyDataSetChanged();
         this.groupName = groupName;
         if (isAdded())
             (new GroupBillsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
