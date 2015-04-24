@@ -223,7 +223,7 @@ public class DBHandler {
 
             Connection connect = DriverManager.getConnection(HOST, DB_USER, DB_PW);
 
-            String query = "SELECT valueOwed,valuePaid FROM usersandbills WHERE bid=? AND uid=?";
+            String query = "SELECT valueOwed,valuePaid FROM usersAndBills WHERE bid=? AND uid=?";
             PreparedStatement psmtm = connect.prepareStatement(query);
             psmtm.setString(1, generateBillID(groupName, billName));
             psmtm.setString(2, userName);

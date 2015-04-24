@@ -27,6 +27,8 @@ public class ActivityViewGroup extends ActionBarActivity {
     private String userName;
     private String groupName;
 
+    private ViewPagerAdapter viewPagerAdapter;
+
     private ArrayList<String> groupsList;
 
     @Override
@@ -79,7 +81,7 @@ public class ActivityViewGroup extends ActionBarActivity {
         drawerLayout.setDrawerListener(drawerToggle);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
-        final ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
+        viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);
 
         final ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -133,6 +135,13 @@ public class ActivityViewGroup extends ActionBarActivity {
         });
 
         (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        viewPagerAdapter.updateGroupFragments(groupName);
     }
 
     private class GroupNamesDownloader extends AsyncTask<String, Void , ArrayList> {
