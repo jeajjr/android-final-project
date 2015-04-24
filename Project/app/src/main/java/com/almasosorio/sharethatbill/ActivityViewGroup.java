@@ -78,6 +78,8 @@ public class ActivityViewGroup extends ActionBarActivity {
         };
         drawerToggle.syncState();
 
+        (new UserNameDownloader((TextView) drawerLayout.findViewById(R.id.name))).execute(userName);
+
         drawerLayout.setDrawerListener(drawerToggle);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
 
@@ -142,6 +144,30 @@ public class ActivityViewGroup extends ActionBarActivity {
         super.onResume();
 
         viewPagerAdapter.updateGroupFragments(groupName);
+    }
+
+    private class UserNameDownloader extends AsyncTask<String, Void , String> {
+
+        private WeakReference<TextView> textView;
+
+        public UserNameDownloader (TextView textView) {
+            this.textView = new WeakReference<>(textView);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            DBHandler db = new DBHandler();
+            return db.getUserNamesByEmail(params[0]);
+        }
+
+        @Override
+        protected void onPostExecute(String name) {
+            TextView textView = this.textView.get();
+
+            if (textView != null) {
+                textView.setText(name);
+            }
+        }
     }
 
     private class GroupNamesDownloader extends AsyncTask<String, Void , ArrayList> {
