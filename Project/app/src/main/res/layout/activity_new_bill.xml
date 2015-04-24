@@ -37,7 +37,10 @@
             android:layout_height="wrap_content"
             android:text="@string/new_bill"
             android:layout_gravity="center"
-            android:id="@+id/toolbar_title" />
+            android:id="@+id/toolbar_title"
+            android:textSize="24sp"
+            android:textColor="#272c2b"
+            />
 
         </android.support.v7.widget.Toolbar>
 
