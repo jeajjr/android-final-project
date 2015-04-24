@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
@@ -24,6 +25,7 @@ public class ActivityNewBill extends ActionBarActivity {
 
         String groupName = "", userName = "";
         Bundle extras = getIntent().getExtras();
+
         if (extras != null) {
             groupName = extras.getString(getString(R.string.bundle_group_name));
             userName = extras.getString(getString(R.string.bundle_user_name));
@@ -60,9 +62,24 @@ public class ActivityNewBill extends ActionBarActivity {
                     //setResult(RESULT_OK, mFragment.getIntent());
                     if (!mFragment.createBill())
                         Log.d("ActivityNewBill", "DoneButton - creating bill returned false");
-                    finish();
                 }
             }
         });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                onBackPressed();
+                break;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 }

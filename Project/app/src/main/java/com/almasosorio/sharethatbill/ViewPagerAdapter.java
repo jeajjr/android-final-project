@@ -54,6 +54,14 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
         });
     }
 
+    public Double getTotalSplitValue() {
+
+        if (pagerType != PagerType.NEWBILL_PAGER)
+            return null;
+
+        return mSplitOptionsFrag.mTotalSplitValue;
+    }
+
     public void updateTotalPaidLabel(TextView totalPaidLabel) {
         mWhoPaidFrag.setTotalPaidLabel(totalPaidLabel);
     }

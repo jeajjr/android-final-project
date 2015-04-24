@@ -36,7 +36,11 @@
     <string name="split_options">SPLIT OPTIONS</string>
     <string name="split_method">Splitting Method:</string>
     <string name="total">Total</string>
-    <string name="untitled">Untitled</string>
+    <string name="bill_values_mismatch">Total amount paid can\'t differ from amount split.</string>
+    <string name="bill_paid_value_zero">Total amount paid can\'t be zero.</string>
+    bill_paid_value_zero
+    <string name="bill_name_empty">Bill name can\'t be empty.</string>
+    <string name="bill_name_hint">bill name</string>
     <string name="done">DONE</string>
     <string name="bill_creation_failed">Failed to create bill</string>
     <string name="bill_creation_failed_message">The bill couldn\'t be created.</string>

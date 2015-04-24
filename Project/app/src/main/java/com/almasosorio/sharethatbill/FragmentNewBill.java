@@ -178,7 +178,7 @@ public class FragmentNewBill extends Fragment {
         });
 
         mBillNameEditText = (EditText)v.findViewById(R.id.billName);
-        mBillNameEditText.setHint(getString(R.string.untitled));
+        mBillNameEditText.setHint(getString(R.string.bill_name_hint));
         mBillNameEditText.setHintTextColor(Color.LTGRAY);
 
         loadGroupMembers();
@@ -270,24 +270,42 @@ public class FragmentNewBill extends Fragment {
 
         final Bill bill = new Bill();
 
+        bill.billName = mBillNameEditText.getText().toString();
+
+        if (bill.billName.isEmpty()) {
+            billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                    getActivity().getString(R.string.bill_name_empty));
+            return false;
+        }
+
         if (mDate == null) {
             mDate = new GregorianCalendar();
             mDate.setTimeInMillis(System.currentTimeMillis());
         }
 
         bill.billDate = mDate;
-        bill.billName = mBillNameEditText.getText().toString();
         bill.groupName = groupName;
 
         try {
             String str = ((TextView)getView().findViewById(R.id.totalPaid)).getText().toString().substring(2);
-            bill.billValue = Float.valueOf(str);
+            bill.billValue = Double.valueOf(str);
         } catch (NumberFormatException ex) {
             return false;
         }
 
-        if (userList.isEmpty() || bill.billValue == 0.0)
+        Double totalSplitValue = mViewPagerAdapter.getTotalSplitValue();
+
+        if (totalSplitValue == null || Math.abs(totalSplitValue - bill.billValue) > 0.01d) {
+            billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                    getActivity().getString(R.string.bill_values_mismatch));
             return false;
+        }
+
+        if (userList.isEmpty() || bill.billValue == 0.0) {
+            billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                    getActivity().getString(R.string.bill_paid_value_zero));
+            return false;
+        }
 
         new AsyncTask<Void, Void, Boolean>() {
 
@@ -321,17 +339,30 @@ public class FragmentNewBill extends Fragment {
             protected void onPostExecute(Boolean s) {
                 super.onPostExecute(s);
                 if (!success)
-                    new AlertDialog.Builder(getActivity())
-                        .setTitle(getActivity().getString(R.string.bill_creation_failed))
-                        .setMessage(getActivity().getString(R.string.bill_creation_failed_message))
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-                else
-                    Toast.makeText(getActivity(), "Bill \"" + bill.billName + "\" created.", Toast.LENGTH_SHORT).show();
+                    billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                            getActivity().getString(R.string.bill_creation_failed_message));
+                else {
+                    billSuccessToast(bill.billName);
+                    getActivity().finish();
+                }
             }
         }.execute();
 
         return true;
+    }
+
+    public void billFailAlert(String title, String message) {
+        if (getActivity() != null)
+            new AlertDialog.Builder(getActivity())
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, null)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
+    public void billSuccessToast(String name) {
+        if (getActivity() != null)
+            Toast.makeText(getActivity(), "Bill \"" + name + "\" created successfully.", Toast.LENGTH_SHORT).show();
     }
 }
