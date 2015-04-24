@@ -144,7 +144,14 @@ public class FragmentCreateGroup extends Fragment {
                                     .show();
                         } else {
                             Toast.makeText(getActivity(), "Group \"" + groupName + "\" created.", Toast.LENGTH_SHORT).show();
-                            getActivity().finish();
+                            if (mIsFirstGroup)
+                                getActivity().finish();
+                            else {
+                                Intent intent = new Intent(getActivity(), ActivityViewGroup.class);
+                                intent.putExtra(getString(R.string.bundle_user_name), mUserName);
+                                intent.putExtra(getString(R.string.bundle_first_group_create), false);
+                                startActivity(intent);
+                            }
                         }
 
                     }
