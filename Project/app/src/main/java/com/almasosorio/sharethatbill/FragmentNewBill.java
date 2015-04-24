@@ -270,13 +270,20 @@ public class FragmentNewBill extends Fragment {
 
         final Bill bill = new Bill();
 
+        bill.billName = mBillNameEditText.getText().toString();
+
+        if (bill.billName.isEmpty()) {
+            billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                    getActivity().getString(R.string.bill_name_empty));
+            return false;
+        }
+
         if (mDate == null) {
             mDate = new GregorianCalendar();
             mDate.setTimeInMillis(System.currentTimeMillis());
         }
 
         bill.billDate = mDate;
-        bill.billName = mBillNameEditText.getText().toString();
         bill.groupName = groupName;
 
         try {
