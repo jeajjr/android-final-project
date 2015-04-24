@@ -1,5 +1,6 @@
 package com.almasosorio.sharethatbill;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v4.view.PagerTabStrip;
@@ -86,6 +87,11 @@ public class ActivityViewGroup extends ActionBarActivity {
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
                 if (position == 0)
                     drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 else
@@ -93,13 +99,7 @@ public class ActivityViewGroup extends ActionBarActivity {
             }
 
             @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
             public void onPageScrollStateChanged(int state) {
-
             }
         });
 
@@ -124,6 +124,10 @@ public class ActivityViewGroup extends ActionBarActivity {
 
             @Override
             public void onCreateGroupClick() {
+                Intent intent = new Intent(ActivityViewGroup.this, ActivityCreateGroup.class);
+                intent.putExtra(getString(R.string.bundle_user_name), userName);
+                intent.putExtra(getString(R.string.bundle_first_group_create), false);
+                startActivity(intent);
 
             }
         });
