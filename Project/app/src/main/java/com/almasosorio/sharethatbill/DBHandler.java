@@ -528,7 +528,7 @@ public class DBHandler {
 
             while (resultSet.next()) {
                 b.billName = resultSet.getString(1);
-                b.billValue = Float.parseFloat(resultSet.getString(2));
+                b.billValue = Double.valueOf(resultSet.getString(2));
                 try {
                     b.billDate.setTime(df.parse(resultSet.getString(3)));
                 } catch (Exception e){
@@ -609,7 +609,7 @@ public class DBHandler {
             PreparedStatement psmtm = connect.prepareStatement(query);
             psmtm.setString(1, bill.groupName + bill.billName);
             psmtm.setString(2, bill.billName);
-            psmtm.setFloat(3, bill.billValue);
+            psmtm.setFloat(3, bill.billValue.floatValue());
             psmtm.setString(4, sdf.format(bill.billDate.getTime()));
             psmtm.setString(5, bill.groupName);
             psmtm.setDouble(6, bill.billLocationLatitude);
@@ -715,7 +715,7 @@ public class DBHandler {
                 PreparedStatement psmtm = connect.prepareStatement(query);
                 psmtm.setString(1, generateBillID(updatedBill.groupName, updatedBill.billName));
                 psmtm.setString(2, updatedBill.billName);
-                psmtm.setFloat(3, updatedBill.billValue);
+                psmtm.setFloat(3, updatedBill.billValue.floatValue());
                 psmtm.setDouble(4, updatedBill.billLocationLatitude);
                 psmtm.setDouble(5, updatedBill.billLocationLongitude);
                 psmtm.setString(6, generateBillID(updatedBill.groupName, oldBillName));
