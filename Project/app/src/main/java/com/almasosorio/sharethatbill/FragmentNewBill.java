@@ -297,7 +297,7 @@ public class FragmentNewBill extends Fragment {
 
         if (totalSplitValue == null || !totalSplitValue.equals(bill.billValue)) {
             billFailAlert(getActivity().getString(R.string.bill_creation_failed),
-                    getActivity().getString(R.string.bill_values_unmatch));
+                    getActivity().getString(R.string.bill_values_mismatch));
             return false;
         }
 
