@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 
 public class FragmentCreateGroup extends Fragment {
-
     public static final String TAG = "FragmentCreateGroup";
 
     private static final int ADD_MEMBER_REQUEST = 0;
