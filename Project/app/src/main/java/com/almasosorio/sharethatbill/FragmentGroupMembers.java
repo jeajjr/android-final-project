@@ -33,6 +33,7 @@ public class FragmentGroupMembers extends Fragment {
     private String groupName;
 
     private ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
+    private ArrayList<String> membersEmailList;
 
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
@@ -49,7 +50,7 @@ public class FragmentGroupMembers extends Fragment {
         adapter.notifyDataSetChanged();
         this.groupName = groupName;
         if (isAdded())
-            (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar))
+            (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, membersEmailList, adapter, progressBar))
                     .execute(groupName, userName);
     }
 
@@ -69,6 +70,7 @@ public class FragmentGroupMembers extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
         dataSet = new ArrayList<>();
+        membersEmailList = new ArrayList<>();
     }
 
     @Override
@@ -106,7 +108,7 @@ public class FragmentGroupMembers extends Fragment {
 
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
 
-        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar))
+        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, membersEmailList, adapter, progressBar))
                 .execute(groupName, userName);
 
         return v;
@@ -128,16 +130,25 @@ public class FragmentGroupMembers extends Fragment {
 
             Log.d(TAG, "onActivityResult: add email " + email);
 
-            if (email.length() != 0 && isValidEmail(email))
-                (new AddUserToGroupTask(getActivity().getApplicationContext(), progressBar))
-                        .execute(email, groupName, userName);
-            else {
+            if (email.length() == 0 || !isValidEmail(email)) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle(getActivity().getString(R.string.invalid_email))
                         .setMessage(getActivity().getString(R.string.invalid_email_text))
                         .setPositiveButton(android.R.string.ok, null)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
+            }
+            else if (membersEmailList.contains(email)) {
+                new AlertDialog.Builder(getActivity())
+                        .setTitle(getActivity().getString(R.string.error))
+                        .setMessage(getActivity().getString(R.string.user_already_on_group))
+                        .setPositiveButton(android.R.string.ok, null)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .show();
+            }
+            else {
+                (new AddUserToGroupTask(getActivity().getApplicationContext(), progressBar))
+                        .execute(email, groupName, userName);
             }
         }
 
@@ -149,19 +160,20 @@ public class FragmentGroupMembers extends Fragment {
         //TODO: return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
     }
 
-    private class GroupMembersDownloader extends AsyncTask<String, Void , ArrayList> {
+    private class GroupMembersDownloader extends AsyncTask<String, Void , ArrayList[]> {
         private static final String TAG = "GroupMembersDownloader";
 
         private WeakReference<ArrayList> dataSet;
         private WeakReference<RecyclerViewAdapter> adapter;
         private WeakReference<ProgressBar> progressBar;
-
+        private WeakReference<ArrayList> membersList;
         private Context context;
 
-        public GroupMembersDownloader(Context context, ArrayList dataSet, RecyclerViewAdapter adapter,
-                                      ProgressBar progressBar) {
+        public GroupMembersDownloader(Context context, ArrayList dataSet, ArrayList membersList,
+                                      RecyclerViewAdapter adapter, ProgressBar progressBar) {
             this.context = context;
             this.dataSet = new WeakReference<>(dataSet);
+            this.membersList = new WeakReference<>(membersList);
             this.adapter = new WeakReference<>(adapter);
             this.progressBar = new WeakReference<>(progressBar);
         }
@@ -175,10 +187,11 @@ public class FragmentGroupMembers extends Fragment {
         }
 
         @Override
-        protected ArrayList doInBackground(String... params) {
+        protected ArrayList[] doInBackground(String... params) {
             Log.d(TAG, "group: " + params[0]);
 
             ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> results = new ArrayList<>();
+            ArrayList<String> memberEmails = new ArrayList<>();
 
             DBHandler db = new DBHandler();
 
@@ -190,6 +203,8 @@ public class FragmentGroupMembers extends Fragment {
                 HashMap<RecyclerViewAdapter.MapItemKey, String> userItem = new HashMap<>();
 
                 Float userBalanceInGroup = Float.parseFloat(members.get(i).string2);
+
+                memberEmails.add(members.get(i).string1);
 
                 userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_1,
                         db.getUserNamesByEmail(members.get(i).string1));
@@ -212,18 +227,23 @@ public class FragmentGroupMembers extends Fragment {
                 results.add(userItem);
             }
 
-            return results;
+            ArrayList[] setResults = {results, memberEmails};
+            return setResults;
         }
 
         @Override
-        protected void onPostExecute(ArrayList results) {
+        protected void onPostExecute(ArrayList[] results) {
             final ArrayList dataSet = this.dataSet.get();
+            final ArrayList membersList = this.membersList.get();
             final RecyclerViewAdapter adapter = this.adapter.get();
 
             if (dataSet != null && adapter != null) {
                 dataSet.clear();
-                dataSet.addAll(results);
+                dataSet.addAll(results[0]);
                 adapter.notifyDataSetChanged();
+
+                membersList.clear();
+                membersList.addAll(results[1]);
             }
 
             final ProgressBar progressBar = this.progressBar.get();

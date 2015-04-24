@@ -115,6 +115,7 @@
     <string name="enter_member_email">Enter member email</string>
     <string name="user_added_to_group">User added successfully to group</string>
     <string name="not_possible_add_user">It was not possible to add the user to the group</string>
+    <string name="user_already_on_group">The user you are trying to add is already on the group</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_activity_view_group">ActivityViewGroup</string>
