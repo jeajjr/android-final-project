@@ -82,7 +82,6 @@ public class FragmentNewBill extends Fragment {
             protected void onCancelled(ArrayList arrayList) {
                 super.onCancelled(arrayList);
                 mViewPagerAdapter.setLoadingNewBill(false, false);
-                Log.d("FragmentNewBill", "onCancelled.");
             }
 
             @Override
@@ -94,7 +93,7 @@ public class FragmentNewBill extends Fragment {
             @Override
             protected void onPostExecute(ArrayList data) {
                 mViewPagerAdapter.setLoadingNewBill(false, !success);
-                if (data != null && !isCancelled())
+                if (data != null && !isCancelled() && success)
                     listener.onDownloadGroupMembers(data);
             }
         }.execute(groupName);
