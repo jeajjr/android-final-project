@@ -1,6 +1,8 @@
 package com.almasosorio.sharethatbill;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -18,11 +20,17 @@ import java.util.ArrayList;
 public class FragmentCreateAccount extends Fragment {
     private static final String TAG = "FragmentCreateAccount";
 
+    private ProgressDialog progressDialog;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_create_account, container, false);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
 
         Button createAccountButton = (Button) v.findViewById(R.id.button_create_account);
         createAccountButton.setText(createAccountButton.getText().toString().toUpperCase());
@@ -62,10 +70,12 @@ public class FragmentCreateAccount extends Fragment {
         }
     }
 
-    private void accountCreationSuccessful() {
+    private void accountCreationSuccessful(String userName) {
         Log.d(TAG, "accountCreationSuccessful");
 
-        //TODO: open create group screen
+        Intent intent = new Intent(getActivity(), ActivityCreateGroup.class);
+        intent.putExtra(getString(R.string.bundle_user_name), userName);
+        startActivity(intent);
     }
 
     private boolean isValidEmail(CharSequence target) {
@@ -86,9 +96,13 @@ public class FragmentCreateAccount extends Fragment {
     private class AccountCreator extends AsyncTask<String, Void, Boolean> {
         private static final String TAG = "LoginValidator";
 
+        private String userName;
+
         @Override
         protected Boolean doInBackground(String... params) {
             Log.d(TAG, "doInBackground");
+
+            userName = params[0];
 
             DBHandler db = new DBHandler();
 
@@ -96,11 +110,18 @@ public class FragmentCreateAccount extends Fragment {
         }
 
         @Override
+        protected void onPreExecute() {
+            progressDialog.show();
+        }
+
+        @Override
         protected void onPostExecute(Boolean result) {
             Log.d(TAG, "Received for login: " + result);
 
+            progressDialog.dismiss();
+
             if (result) {
-                accountCreationSuccessful();
+                accountCreationSuccessful(userName);
             }
             else {
                 createAlertDialog(getString(R.string.error), getString(R.string.account_creation_failed));
