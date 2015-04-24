@@ -216,10 +216,26 @@ public class FragmentCreateGroup extends Fragment {
 
                 final String newEmail = emails[i];
 
-                if (newEmail.isEmpty() ||
-                    newEmail.equals(Preferences.getInstance().getUserEmail()) ||
-                    mRecyclerAdapter.getEntryByString(newEmail) != -1)
+                if (newEmail.isEmpty()) {
+                    if (emails.length == 1)
+                        Toast.makeText(getActivity(), "Email can't be empty.",
+                            Toast.LENGTH_SHORT).show();
                     continue;
+                }
+
+                if (newEmail.equals(Preferences.getInstance().getUserEmail())) {
+                    if (emails.length == 1)
+                        Toast.makeText(getActivity(), "You don't have to add yourself.",
+                            Toast.LENGTH_SHORT).show();
+                    continue;
+                }
+
+                if (mRecyclerAdapter.getEntryByString(newEmail) != -1) {
+                    if (emails.length == 1)
+                        Toast.makeText(getActivity(), "User's email already added.",
+                            Toast.LENGTH_SHORT).show();
+                    continue;
+                }
 
                 HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
                 item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, emails[i]);
@@ -230,6 +246,9 @@ public class FragmentCreateGroup extends Fragment {
                     @Override
                     public void onUserExist(boolean exist) {
                         mRecyclerAdapter.setEntryIsValid(mRecyclerAdapter.getEntryByString(newEmail), exist);
+                        if (!exist && emails.length == 1)
+                            Toast.makeText(getActivity(), "User's email \"" + newEmail + "\" couldn't be found.",
+                                    Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -238,14 +257,34 @@ public class FragmentCreateGroup extends Fragment {
 
             final String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
 
-            if (!newEmail.isEmpty() && !newEmail.contains("\n") && mRecyclerAdapter.getEntryByString(newEmail) == -1
-                    && !newEmail.equals(Preferences.getInstance().getUserEmail())) {
+            if (newEmail.isEmpty()) {
+                Toast.makeText(getActivity(), "Email can't be empty.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (newEmail.contains("\n")) {
+                Toast.makeText(getActivity(), "Email must be single line.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (newEmail.equals(Preferences.getInstance().getUserEmail())) {
+                Toast.makeText(getActivity(), "You don't have to add yourself.",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (mRecyclerAdapter.getEntryByString(newEmail) == -1) {
                 dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
                 mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
                 checkNewUserEntry(newEmail, new userExistListener() {
                     @Override
                     public void onUserExist(boolean exist) {
                         mRecyclerAdapter.setEntryIsValid(mRecyclerAdapter.getEntryByString(newEmail), exist);
+                        if (!exist)
+                            Toast.makeText(getActivity(), "User's email \"" + newEmail + "\" couldn't be found.",
+                                    Toast.LENGTH_SHORT).show();
                     }
                 });
             }

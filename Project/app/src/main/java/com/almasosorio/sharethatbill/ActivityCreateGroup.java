@@ -26,7 +26,6 @@ public class ActivityCreateGroup extends ActionBarActivity {
 
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.container, FragmentCreateGroup.newInstance(isFirstGroup, userName))
-                .addToBackStack(null)
                 .commit();
     }
 }

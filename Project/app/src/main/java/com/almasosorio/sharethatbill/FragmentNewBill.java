@@ -321,17 +321,25 @@ public class FragmentNewBill extends Fragment {
             protected void onPostExecute(Boolean s) {
                 super.onPostExecute(s);
                 if (!success)
-                    new AlertDialog.Builder(getActivity())
-                        .setTitle(getActivity().getString(R.string.bill_creation_failed))
-                        .setMessage(getActivity().getString(R.string.bill_creation_failed_message))
-                        .setPositiveButton(android.R.string.ok, null)
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
+                    billFailAlert();
                 else
-                    Toast.makeText(getActivity(), "Bill \"" + bill.billName + "\" created.", Toast.LENGTH_SHORT).show();
+                    billSuccessToast(bill.billName);
             }
         }.execute();
 
         return true;
+    }
+
+    public void billFailAlert() {
+        new AlertDialog.Builder(getActivity())
+            .setTitle(getActivity().getString(R.string.bill_creation_failed))
+            .setMessage(getActivity().getString(R.string.bill_creation_failed_message))
+            .setPositiveButton(android.R.string.ok, null)
+            .setIcon(android.R.drawable.ic_dialog_alert)
+            .show();
+    }
+
+    public void billSuccessToast(String name) {
+        Toast.makeText(getActivity(), "Bill \"" + name + "\" created successfully.", Toast.LENGTH_SHORT).show();
     }
 }
