@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,7 +24,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public enum ItemType {PICTURE_WITH_TEXT, NOTIFICATION_LIST_ITEM, BILL_LIST_ITEM,
         GROUP_MEMBERS_LIST_ITEM, CREATE_GROUP_MEMBER_ENTRY, WHO_PAID_LIST_ITEM,
         SPLIT_OPTIONS_LIST_ITEM};
-    public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4, CLICKABLE_BILL_NAME};
+    public enum MapItemKey {TEXT_1, TEXT_2, TEXT_3, TEXT_4, CLICKABLE_BILL_NAME,
+        CREATE_GROUP_MEMBER_ENTRY_IS_VALID};
 
     private Context context;
     ArrayList<HashMap<MapItemKey, String>> dataSet;
@@ -43,6 +45,29 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         parentFragment = f;
     }
 
+    public void setEntryIsValid(int index, boolean isValid) {
+
+        if (listType != ItemType.CREATE_GROUP_MEMBER_ENTRY)
+            return;
+
+        if (isValid) {
+            dataSet.get(index).put(MapItemKey.CREATE_GROUP_MEMBER_ENTRY_IS_VALID, Boolean.TRUE.toString());
+            notifyItemChanged(index);
+        } else {
+            dataSet.remove(index);
+            notifyItemRemoved(index);
+        }
+    }
+
+    public int getEntryByString(String s) {
+        for (int i = 0; i < dataSet.size(); i++) {
+            if (dataSet.get(i).get(MapItemKey.TEXT_1).equals(s)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ImageView icon;
@@ -51,6 +76,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public TextView textView3;
         public TextView textView4;
         public ImageButton imageButton1, imageButton2;
+        public ProgressBar progressBar1;
 
         public ViewHolder(View v) {
             super(v);
@@ -78,6 +104,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     break;
 
                 case CREATE_GROUP_MEMBER_ENTRY:
+
+                    progressBar1 = (ProgressBar) v.findViewById(R.id.progressBar);
 
                     imageButton1 = (ImageButton) v.findViewById(R.id.editEntry);
                     imageButton2 = (ImageButton) v.findViewById(R.id.removeEntry);
@@ -140,6 +168,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 case GROUP_MEMBERS_LIST_ITEM:
                     textView2.setText(data.get(MapItemKey.TEXT_2));
                     textView3.setText(data.get(MapItemKey.TEXT_3));
+                    break;
+
+                case CREATE_GROUP_MEMBER_ENTRY:
+                    try {
+                        if (Boolean.valueOf(data.get(MapItemKey.CREATE_GROUP_MEMBER_ENTRY_IS_VALID)))
+                            progressBar1.setVisibility(View.INVISIBLE);
+                        else
+                            progressBar1.setVisibility(View.VISIBLE);
+                    } catch (Exception ex) {
+
+                    }
                     break;
 
                 case WHO_PAID_LIST_ITEM:

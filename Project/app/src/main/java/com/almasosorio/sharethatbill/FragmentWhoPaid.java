@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import org.w3c.dom.Text;
@@ -37,9 +38,9 @@ public class FragmentWhoPaid extends Fragment {
     public static final String OLD_AMOUNT_EXTRA = "OldAmount";
     private static final int EDIT_USER_AMOUNT_REQUEST = 0;
 
+    private ViewLoading mViewLoading;
     private int mLastPositionEdited;
     private boolean mLoading = false;
-    ProgressBar mLoadingBar;
     RecyclerView mRecyclerView;
     RecyclerViewAdapter mRecyclerAdapter;
     TextView mTotalPaidLabel;
@@ -68,10 +69,12 @@ public class FragmentWhoPaid extends Fragment {
         super.onConfigurationChanged(newConfig);
     }
 
-    public void setLoading(boolean l) {
+    public void setLoading(boolean l, boolean success) {
+
         mLoading = l;
-        if (mLoadingBar != null)
-            mLoadingBar.setVisibility(l ? View.VISIBLE : View.INVISIBLE);
+
+        if (mViewLoading != null)
+            mViewLoading.setState(l, success);
     }
 
     public void setTotalPaidLabel(TextView totalPaidLabel) {
@@ -134,12 +137,34 @@ public class FragmentWhoPaid extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_who_paid, container, false);
 
-        mLoadingBar = (ProgressBar)v.findViewById(R.id.progressBar);
-        setLoading(mLoading);
+        setLoading(true, false);
 
         mTotalPaidValue = 0.0;
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        mRecyclerView = new RecyclerView(getActivity());
+        int padding = (int)getActivity().getResources().getDisplayMetrics().density;
+        mRecyclerView.setPadding(padding, padding, padding, padding);
+        //mRecyclerView.setBackground(getActivity().getDrawable(R.drawable.rectangle_outline));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);//(RelativeLayout.LayoutParams)mRecyclerView.getLayoutParams();
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        mRecyclerView.setLayoutParams(params);
+
+        mViewLoading = (ViewLoading)v.findViewById(R.id.viewLoader);
+        mViewLoading.setLoadedView(mRecyclerView);
+        mViewLoading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewLoading.hasFailed()) {
+                    FragmentNewBill f = (FragmentNewBill)getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
+                    if (f != null) {
+                        f.loadGroupMembers();
+                    }
+                }
+            }
+        });
+
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
