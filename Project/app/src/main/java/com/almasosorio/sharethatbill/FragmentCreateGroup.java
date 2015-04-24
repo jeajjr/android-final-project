@@ -3,7 +3,6 @@ package com.almasosorio.sharethatbill;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -34,14 +33,14 @@ public class FragmentCreateGroup extends Fragment {
     private RecyclerViewAdapter mRecyclerAdapter;
     private EditText mGroupName;
     private int mLastEditPosition;
-    private String mUserName;
-    private ProgressDialog progressDialog;
+    private String mUserEmail;
     ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
 
-    static public FragmentCreateGroup newInstance(boolean isFirstGroup, String userName) {
+    static public FragmentCreateGroup newInstance(boolean isFirstGroup, String userEmail) {
         FragmentCreateGroup f = new FragmentCreateGroup();
         f.mIsFirstGroup = isFirstGroup;
-        f.mUserName = userName;
+        f.mUserEmail = userEmail;
+        Preferences.getInstance().setUserEmail(userEmail);
         return f;
     }
 
@@ -62,10 +61,6 @@ public class FragmentCreateGroup extends Fragment {
         View v = inflater.inflate(R.layout.fragment_creategroup, container, false);
 
         mGroupName = (EditText) v.findViewById(R.id.groupName);
-
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage(getResources().getString(R.string.loading));
-        progressDialog.setCancelable(false);
 
         if (mIsFirstGroup)
             ((TextView)v.findViewById(R.id.topTitle)).setText(R.string.create_first_group);
@@ -107,13 +102,6 @@ public class FragmentCreateGroup extends Fragment {
                 new AsyncTask<String, Void, Void>() {
                     private String error = "";
                     private String groupName;
-
-                    @Override
-                    protected void onPreExecute() {
-                        if (progressDialog != null)
-                            progressDialog.show();
-                    }
-
                     @Override
                     protected Void doInBackground(String... params) {
                         DBHandler db = new DBHandler();
@@ -128,7 +116,7 @@ public class FragmentCreateGroup extends Fragment {
                             return null;
                         }
 
-                        db.addUserToGroup(mUserName, params[0], mUserName);
+                        db.addUserToGroup(mUserEmail, params[0], mUserEmail);
 
                         for (int i = 0; i < dataSet.size(); i++) {
                             String addedUser = (String)dataSet.get(i).get(RecyclerViewAdapter.MapItemKey.TEXT_1);
@@ -136,7 +124,7 @@ public class FragmentCreateGroup extends Fragment {
                             if (!db.userExists(addedUser))
                                 continue;
 
-                            if (!db.addUserToGroup(addedUser, params[0], mUserName)) {
+                            if (!db.addUserToGroup(addedUser, params[0], mUserEmail)) {
 
                             }
                         }
@@ -161,14 +149,11 @@ public class FragmentCreateGroup extends Fragment {
                                 getActivity().finish();
                             else {
                                 Intent intent = new Intent(getActivity(), ActivityViewGroup.class);
-                                intent.putExtra(getString(R.string.bundle_user_name), mUserName);
+                                intent.putExtra(getString(R.string.bundle_user_name), mUserEmail);
                                 intent.putExtra(getString(R.string.bundle_first_group_create), false);
                                 startActivity(intent);
                             }
                         }
-
-                        if (progressDialog != null)
-                            progressDialog.dismiss();
 
                     }
                 }.execute(mGroupName.getText().toString());

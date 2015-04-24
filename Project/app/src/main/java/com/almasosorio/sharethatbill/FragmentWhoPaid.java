@@ -137,8 +137,6 @@ public class FragmentWhoPaid extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_who_paid, container, false);
 
-        setLoading(true, false);
-
         mTotalPaidValue = 0.0;
 
         mRecyclerView = new RecyclerView(getActivity());
