@@ -121,6 +121,12 @@ public class FragmentBillDetails extends Fragment {
     private class BillDeleter extends AsyncTask<String, Void, Void> {
 
         @Override
+        protected void onPreExecute() {
+            if (progressDialog != null)
+                progressDialog.show();
+        }
+
+        @Override
         protected Void doInBackground(String... params) {
             DBHandler db = new DBHandler();
 
@@ -133,7 +139,12 @@ public class FragmentBillDetails extends Fragment {
         protected void onPostExecute(Void aVoid) {
             Toast.makeText(getActivity(), getString(R.string.bill) + " " + billName + " " +
             getString(R.string.was_deleted), Toast.LENGTH_LONG).show();
-            getActivity().finish();
+
+            if (progressDialog != null)
+                progressDialog.dismiss();
+
+            if (isAdded())
+                getActivity().finish();
         }
     }
 }

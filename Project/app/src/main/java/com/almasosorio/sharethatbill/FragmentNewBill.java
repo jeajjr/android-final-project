@@ -3,6 +3,7 @@ package com.almasosorio.sharethatbill;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -48,6 +49,7 @@ public class FragmentNewBill extends Fragment {
     private EditText mBillNameEditText;
     private ViewPagerAdapter mViewPagerAdapter;
     private String groupName, userName;
+    private ProgressDialog progressDialog;
 
     static public FragmentNewBill newInstance(String groupName, String userEmail) {
         final FragmentNewBill f = new FragmentNewBill();
@@ -156,6 +158,10 @@ public class FragmentNewBill extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_newbill, container, false);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
 
         mViewPagerAdapter = new ViewPagerAdapter(
                 getActivity().getSupportFragmentManager(), getActivity(), userList,
@@ -314,6 +320,12 @@ public class FragmentNewBill extends Fragment {
             private boolean success = true;
 
             @Override
+            protected void onPreExecute() {
+                if (progressDialog != null)
+                    progressDialog.show();
+            }
+
+            @Override
             protected Boolean doInBackground(Void... params) {
                 DBHandler db = new DBHandler();
 
@@ -347,6 +359,9 @@ public class FragmentNewBill extends Fragment {
                     billSuccessToast(bill.billName);
                     getActivity().finish();
                 }
+
+                if (progressDialog != null)
+                    progressDialog.dismiss();
             }
         }.execute();
 
