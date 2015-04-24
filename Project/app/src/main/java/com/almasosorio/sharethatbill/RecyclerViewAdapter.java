@@ -191,7 +191,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     if (email != null && email.equals(Preferences.getInstance().getUserEmail())) {
                         textView1.setTextColor(Color.rgb(255, 165, 55));
-                        textView1.setText(textView1.getText() + "(You)");
+                        textView1.setText(textView1.getText() + " (You)");
                     } else
                         textView1.setTextColor(Color.WHITE);
 
