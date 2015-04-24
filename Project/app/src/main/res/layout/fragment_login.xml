@@ -1,4 +1,4 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
@@ -9,54 +9,65 @@
     >
 
     <TextView
+        android:layout_alignParentTop="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SHARE THAT BILL"
         android:textColor="#DFDFE0"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="60dp"
-        android:textSize="40dp"
+        android:layout_marginTop="60sp"
+        android:textSize="40sp"
         android:textStyle="bold"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/title"
         />
 
     <View
+        android:layout_below="@id/title"
         android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
+        android:layout_height="2sp"
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp"
         android:layout_gravity="center_vertical"
-        android:background="#DFDFE0" />
+        android:background="#DFDFE0"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/dash"
+        />
 
     <EditText
         android:id="@+id/email"
+        android:layout_below="@id/dash"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:textSize="20dp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:layout_marginTop="100sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:textSize="20sp"
         android:hint="@string/email"
         android:gravity="center_horizontal"
         android:inputType="textWebEmailAddress"
+        android:layout_centerHorizontal="true"
         />
 
     <EditText
         android:id="@+id/password"
+        android:layout_below="@id/email"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/text_box"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:textSize="20dp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:layout_marginTop="15sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:textSize="20sp"
         android:hint="@string/password"
         android:gravity="center_horizontal"
         android:inputType="textPassword"
+        android:layout_centerHorizontal="true"
         />
 
     <Button
@@ -64,13 +75,15 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/login_button_backgnd"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginTop="100dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:layout_marginTop="100sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
         android:textColor="#DFDFE0"
         android:text="@string/login"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@id/button_create_account"
         />
 
     <Button
@@ -78,14 +91,17 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/login_button_backgnd"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:layout_marginTop="10sp"
+        android:layout_marginLeft="30sp"
+        android:layout_marginRight="30sp"
+        android:layout_marginBottom="30sp"
         android:textColor="#DFDFE0"
         android:text="@string/create_new_account"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
         />
 
 
-</LinearLayout>
+</RelativeLayout>

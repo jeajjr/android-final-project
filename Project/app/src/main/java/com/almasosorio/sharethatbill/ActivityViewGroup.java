@@ -48,6 +48,9 @@ public class ActivityViewGroup extends ActionBarActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
         final TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
         title.setText(groupName);
 
@@ -70,6 +73,7 @@ public class ActivityViewGroup extends ActionBarActivity {
             public void onDrawerClosed(View view) {
             }
         };
+        drawerToggle.syncState();
 
         drawerLayout.setDrawerListener(drawerToggle);
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
