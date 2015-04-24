@@ -83,12 +83,6 @@ public class FragmentGroupNotifications extends Fragment {
 
         adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.NOTIFICATION_LIST_ITEM);
         recyclerView.setAdapter(adapter);
-        adapter.setOnListItemClickListener(new RecyclerViewAdapter.OnListItemClickListener() {
-            @Override
-            public void onItemClick(int position) {
-                handleClick(position);
-            }
-        });
 
         progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         listEmptyText = (TextView) v.findViewById(R.id.text_list_empty);
@@ -96,19 +90,6 @@ public class FragmentGroupNotifications extends Fragment {
         (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
 
         return v;
-    }
-
-    private void handleClick(int position) {
-        HashMap<RecyclerViewAdapter.MapItemKey, String> itemClicked = dataSet.get(position);
-
-        String billName = itemClicked.get(RecyclerViewAdapter.MapItemKey.CLICKABLE_BILL_NAME);
-        if (billName != null) {
-            Intent intent = new Intent(getActivity(), ActivityBillDetails.class);
-            intent.putExtra(getString(R.string.bundle_user_name), userName);
-            intent.putExtra(getString(R.string.bundle_group_name), groupName);
-            intent.putExtra(getString(R.string.bundle_bill_name), billName);
-            startActivity(intent);
-        }
     }
 
     private class NotificationsDownloader extends AsyncTask<String, Void , ArrayList> {

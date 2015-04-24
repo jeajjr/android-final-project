@@ -85,6 +85,8 @@ public class FragmentLogin extends Fragment {
             intent.putExtra(getString(R.string.bundle_user_name), userNameString);
             intent.putExtra(getString(R.string.bundle_group_name), firstGroupName);
             startActivity(intent);
+
+            getActivity().finish();
         }
         else
             Log.d(TAG, "user has no groups.");

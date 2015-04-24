@@ -33,6 +33,8 @@ public class ActivityViewGroup extends ActionBarActivity {
 
     private ArrayList<String> groupsList;
 
+    private TextView toolbarTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,8 +58,8 @@ public class ActivityViewGroup extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-        final TextView title = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
-        title.setText(groupName);
+        toolbarTitle = (TextView) toolbar.findViewById(R.id.textViewToolboxTitle);
+        toolbarTitle.setText(groupName);
 
         PagerTabStrip pagerTabStrip = (PagerTabStrip) findViewById(R.id.pager_tab_strip);
         pagerTabStrip.setDrawFullUnderline(true);
@@ -129,7 +131,7 @@ public class ActivityViewGroup extends ActionBarActivity {
                 if (!groupName.equals(groupsList.get(index))) {
                     groupName = groupsList.get(index);
                     viewPagerAdapter.updateGroupFragments(groupName);
-                    title.setText(groupName);
+                    toolbarTitle.setText(groupName);
                     drawerLayout.closeDrawer(Gravity.LEFT);
 
                     drawerLayout.closeDrawer(Gravity.LEFT);
@@ -154,6 +156,8 @@ public class ActivityViewGroup extends ActionBarActivity {
     protected void onResume() {
         super.onResume();
 
+        if (groupsList.size() > 0)
+            toolbarTitle.setText(groupsList.get(0));
         viewPagerAdapter.updateGroupFragments(groupName);
         (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
     }

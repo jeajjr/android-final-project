@@ -76,6 +76,8 @@ public class FragmentCreateAccount extends Fragment {
         Intent intent = new Intent(getActivity(), ActivityCreateGroup.class);
         intent.putExtra(getString(R.string.bundle_user_name), userName);
         startActivity(intent);
+
+        getActivity().finish();
     }
 
     private boolean isValidEmail(CharSequence target) {
