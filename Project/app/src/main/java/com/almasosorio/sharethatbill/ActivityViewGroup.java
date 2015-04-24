@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -105,6 +106,13 @@ public class ActivityViewGroup extends ActionBarActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
+            }
+        });
+
+        toolbar.findViewById(R.id.imageViewToolboxRightButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPagerAdapter.updateGroupFragments(groupName);
             }
         });
 

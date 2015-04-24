@@ -23,7 +23,7 @@
     <ImageView
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:src="@drawable/picture"
+        android:src="@drawable/refresh"
         android:id="@+id/imageViewToolboxRightButton"
         android:layout_gravity="center_horizontal|right"
         android:layout_marginRight="16dp" />
