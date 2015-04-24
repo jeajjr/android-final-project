@@ -79,7 +79,7 @@ public class FragmentCreateGroup extends Fragment {
         ((Button)v.findViewById(R.id.addMember)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MemberDialog dialog = new MemberDialog("Add Member", "Enter member email", "");
+                MemberDialog dialog = new MemberDialog(getString(R.string.add_member), getString(R.string.enter_member_email), "");
                 dialog.setTargetFragment(FragmentCreateGroup.this, ADD_MEMBER_REQUEST);
                 dialog.show(getFragmentManager(), "AddMemberDialog");
             }
@@ -218,21 +218,21 @@ public class FragmentCreateGroup extends Fragment {
 
                 if (newEmail.isEmpty()) {
                     if (emails.length == 1)
-                        Toast.makeText(getActivity(), "Email can't be empty.",
+                        Toast.makeText(getActivity(), getString(R.string.email_cant_be_empty),
                             Toast.LENGTH_SHORT).show();
                     continue;
                 }
 
                 if (newEmail.equals(Preferences.getInstance().getUserEmail())) {
                     if (emails.length == 1)
-                        Toast.makeText(getActivity(), "You don't have to add yourself.",
+                        Toast.makeText(getActivity(), getString(R.string.you_dont_add_you),
                             Toast.LENGTH_SHORT).show();
                     continue;
                 }
 
                 if (mRecyclerAdapter.getEntryByString(newEmail) != -1) {
                     if (emails.length == 1)
-                        Toast.makeText(getActivity(), "User's email already added.",
+                        Toast.makeText(getActivity(), getString(R.string.email_already_added),
                             Toast.LENGTH_SHORT).show();
                     continue;
                 }
@@ -247,7 +247,7 @@ public class FragmentCreateGroup extends Fragment {
                     public void onUserExist(boolean exist) {
                         mRecyclerAdapter.setEntryIsValid(mRecyclerAdapter.getEntryByString(newEmail), exist);
                         if (!exist && emails.length == 1)
-                            Toast.makeText(getActivity(), "User's email \"" + newEmail + "\" couldn't be found.",
+                            Toast.makeText(getActivity(), String.format(getString(R.string.email_not_found), newEmail),
                                     Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -258,19 +258,19 @@ public class FragmentCreateGroup extends Fragment {
             final String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
 
             if (newEmail.isEmpty()) {
-                Toast.makeText(getActivity(), "Email can't be empty.",
+                Toast.makeText(getActivity(), getString(R.string.email_cant_be_empty),
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (newEmail.contains("\n")) {
-                Toast.makeText(getActivity(), "Email must be single line.",
+                Toast.makeText(getActivity(), getString(R.string.email_must_be_single),
                         Toast.LENGTH_SHORT).show();
                 return;
             }
 
             if (newEmail.equals(Preferences.getInstance().getUserEmail())) {
-                Toast.makeText(getActivity(), "You don't have to add yourself.",
+                Toast.makeText(getActivity(), getString(R.string.you_dont_add_you),
                         Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -283,7 +283,7 @@ public class FragmentCreateGroup extends Fragment {
                     public void onUserExist(boolean exist) {
                         mRecyclerAdapter.setEntryIsValid(mRecyclerAdapter.getEntryByString(newEmail), exist);
                         if (!exist)
-                            Toast.makeText(getActivity(), "User's email \"" + newEmail + "\" couldn't be found.",
+                            Toast.makeText(getActivity(), String.format(getString(R.string.email_not_found), newEmail),
                                     Toast.LENGTH_SHORT).show();
                     }
                 });

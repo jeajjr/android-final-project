@@ -187,11 +187,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                     String email = data.get(MapItemKey.TEXT_4);
 
-                    Log.d("RecyclerViewAdapter", "Comparing " + (email == null ? "<null>" : email) + " with " +Preferences.getInstance().getUserEmail() );
-
                     if (email != null && email.equals(Preferences.getInstance().getUserEmail())) {
                         textView1.setTextColor(Color.rgb(255, 165, 55));
-                        textView1.setText(textView1.getText() + " (You)");
+                        textView1.setText(textView1.getText() + " " + context.getString(R.string.highlight_you));
                     } else
                         textView1.setTextColor(Color.WHITE);
 
