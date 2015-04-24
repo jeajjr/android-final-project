@@ -26,9 +26,9 @@
     <string name="group_already_exists">Group name already exists.</string>
     <string name="failed_to_create_group">Failed to create group.</string>
     <string name="email_cant_be_empty">Email can\'t be empty.</string>
-    <string name="you_dont_add_you">You don't have to add yourself.</string>
-    <string name="email_already_added">User's email already added.</string>
-    <string name="email_not_found">User's email \"%s\" couldn\'t be found.</string>
+    <string name="you_dont_add_you">You don\'t have to add yourself.</string>
+    <string name="email_already_added">User\'s email already added.</string>
+    <string name="email_not_found">User\'s email \"%s\" couldn\'t be found.</string>
     <string name="email_must_be_single">Email must be single line.</string>
 
     <!-- create new bill fragment -->
