@@ -62,7 +62,7 @@ public class FragmentNewBill extends Fragment {
     }
 
     private void downloadGroupMembers(final onDownloadGroupMembers listener) {
-        AsyncTask task = new AsyncTask<String, Void, ArrayList>() {
+        final AsyncTask task = new AsyncTask<String, Void, ArrayList>() {
             private boolean success = false;
             @Override
             protected ArrayList doInBackground(String... params) {
@@ -78,6 +78,12 @@ public class FragmentNewBill extends Fragment {
             }
 
             @Override
+            protected void onCancelled(ArrayList arrayList) {
+                super.onCancelled(arrayList);
+                mViewPagerAdapter.setLoadingNewBill(false, false);
+            }
+
+            @Override
             protected void onPreExecute() {
                 super.onPreExecute();
                 mViewPagerAdapter.setLoadingNewBill(true, false);
@@ -87,7 +93,7 @@ public class FragmentNewBill extends Fragment {
             protected void onPostExecute(ArrayList data) {
                 mViewPagerAdapter.setLoadingNewBill(false, success);
 
-                if (data != null)
+                if (data != null && !isCancelled())
                     listener.onDownloadGroupMembers(data);
             }
         };
@@ -95,9 +101,14 @@ public class FragmentNewBill extends Fragment {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                AsyncTask.Status status = task.getStatus();
 
+                if (status == AsyncTask.Status.FINISHED)
+                        return;
+
+                task.cancel(true);
             }
-        }, 0);
+        }, Preferences.getInstance().getTimeout());
     }
 
     public void loadGroupMembers() {

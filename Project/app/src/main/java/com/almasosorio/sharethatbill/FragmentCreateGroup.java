@@ -24,7 +24,6 @@ import java.util.HashMap;
 
 
 public class FragmentCreateGroup extends Fragment {
-
     public static final String TAG = "FragmentCreateGroup";
     private static final String EXTRA_ENTRY_EMAIL = "ENTRY_EMAIL";
     private static final int ADD_MEMBER_REQUEST = 0;
@@ -233,11 +232,17 @@ public class FragmentCreateGroup extends Fragment {
 
         } else if (requestCode == EDIT_MEMBER_REQUEST && dataSet != null) {
 
-            String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
+            final String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
 
             if (!newEmail.isEmpty() && !newEmail.contains("\n") && mRecyclerAdapter.getEntryByString(newEmail) == -1) {
                 dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
                 mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
+                checkNewUserEntry(newEmail, new userExistListener() {
+                    @Override
+                    public void onUserExist(boolean exist) {
+                        mRecyclerAdapter.setEntryIsValid(mRecyclerAdapter.getEntryByString(newEmail), exist);
+                    }
+                });
             }
         }
 

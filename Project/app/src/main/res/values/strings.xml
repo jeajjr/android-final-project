@@ -18,7 +18,7 @@
     <string name="create_group">CREATE GROUP</string>
     <string name="create_first_group">CREATE FIRST GROUP</string>
     <string name="invited_members">INVITED MEMBERS</string>
-    <string name="add_member">ADD MEMBER</string>
+    <string name="add_member">Add member</string>
     <string name="cant_create_group">Can\'t Create Group</string>
     <string name="group_name_invalid">Group name must be valid.</string>
     <string name="edit_member">Edit Member</string>
@@ -109,6 +109,12 @@
 
     <string name="drawer_opened">drawer opened</string>
     <string name="drawer_closed">drawer closed</string>
+
+    <string name="loading">Loading</string>
+
+    <string name="enter_member_email">Enter member email</string>
+    <string name="user_added_to_group">User added successfully to group</string>
+    <string name="not_possible_add_user">It was not possible to add the user to the group</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_activity_view_group">ActivityViewGroup</string>

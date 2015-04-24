@@ -9,12 +9,13 @@ public class Preferences {
 
     private String mUserName;
     private String mUserEmail;
+    private int mConnectionTimeout = 10 * 1000;
 
     private Preferences () {
 
     }
 
-    public Preferences getInstance() {
+    public static Preferences getInstance() {
 
         if (mInstance == null) {
             mInstance = new Preferences();
@@ -25,6 +26,14 @@ public class Preferences {
 
     public String getUserName() {
         return mUserName;
+    }
+
+    public String getUserEmail() {
+        return mUserEmail;
+    }
+
+    public int getTimeout() {
+        return mConnectionTimeout;
     }
 
 }
