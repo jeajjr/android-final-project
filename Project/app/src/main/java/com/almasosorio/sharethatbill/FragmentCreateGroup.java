@@ -44,10 +44,7 @@ public class FragmentCreateGroup extends Fragment {
     }
 
     static public FragmentCreateGroup newInstance(String userName) {
-        FragmentCreateGroup f = new FragmentCreateGroup();
-        f.mIsFirstGroup = false;
-        f.mUserName = userName;
-        return f;
+        return newInstance(false, userName);
     }
 
     @Override
@@ -211,10 +208,9 @@ public class FragmentCreateGroup extends Fragment {
 
                 final String newEmail = emails[i];
 
-                if (newEmail.isEmpty())
-                    continue;
-
-                if (mRecyclerAdapter.getEntryByString(newEmail) != -1)
+                if (newEmail.isEmpty() ||
+                    newEmail.equals(Preferences.getInstance().getUserEmail()) ||
+                    mRecyclerAdapter.getEntryByString(newEmail) != -1)
                     continue;
 
                 HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
@@ -234,7 +230,8 @@ public class FragmentCreateGroup extends Fragment {
 
             final String newEmail = data.getStringExtra(EXTRA_ENTRY_EMAIL).toString();
 
-            if (!newEmail.isEmpty() && !newEmail.contains("\n") && mRecyclerAdapter.getEntryByString(newEmail) == -1) {
+            if (!newEmail.isEmpty() && !newEmail.contains("\n") && mRecyclerAdapter.getEntryByString(newEmail) == -1
+                    && !newEmail.equals(Preferences.getInstance().getUserEmail())) {
                 dataSet.get(mLastEditPosition).put(RecyclerViewAdapter.MapItemKey.TEXT_1, data.getStringExtra(EXTRA_ENTRY_EMAIL));
                 mRecyclerAdapter.notifyItemChanged(mLastEditPosition);
                 checkNewUserEntry(newEmail, new userExistListener() {
