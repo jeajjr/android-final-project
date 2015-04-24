@@ -3,6 +3,7 @@ package com.almasosorio.sharethatbill;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -34,6 +35,7 @@ public class FragmentCreateGroup extends Fragment {
     private EditText mGroupName;
     private int mLastEditPosition;
     private String mUserName;
+    private ProgressDialog progressDialog;
     ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet;
 
     static public FragmentCreateGroup newInstance(boolean isFirstGroup, String userName) {
@@ -60,6 +62,10 @@ public class FragmentCreateGroup extends Fragment {
         View v = inflater.inflate(R.layout.fragment_creategroup, container, false);
 
         mGroupName = (EditText) v.findViewById(R.id.groupName);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
 
         if (mIsFirstGroup)
             ((TextView)v.findViewById(R.id.topTitle)).setText(R.string.create_first_group);
@@ -101,6 +107,13 @@ public class FragmentCreateGroup extends Fragment {
                 new AsyncTask<String, Void, Void>() {
                     private String error = "";
                     private String groupName;
+
+                    @Override
+                    protected void onPreExecute() {
+                        if (progressDialog != null)
+                            progressDialog.show();
+                    }
+
                     @Override
                     protected Void doInBackground(String... params) {
                         DBHandler db = new DBHandler();
@@ -153,6 +166,9 @@ public class FragmentCreateGroup extends Fragment {
                                 startActivity(intent);
                             }
                         }
+
+                        if (progressDialog != null)
+                            progressDialog.dismiss();
 
                     }
                 }.execute(mGroupName.getText().toString());

@@ -89,8 +89,8 @@ public class ActivityViewGroup extends ActionBarActivity {
 
         viewPagerAdapter = new ViewPagerAdapter(getSupportFragmentManager(), this,
                 userName, groupName);
-
         final ViewPager mViewPager = (ViewPager) findViewById(R.id.view_pager);
+        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setAdapter(viewPagerAdapter);
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -155,10 +155,11 @@ public class ActivityViewGroup extends ActionBarActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
+/*
         if (groupsList.size() > 0)
             toolbarTitle.setText(groupsList.get(0));
         viewPagerAdapter.updateGroupFragments(groupName);
+        */
         (new GroupNamesDownloader(groupsList, recyclerViewAdapter)).execute(userName);
     }
 
@@ -209,14 +210,19 @@ public class ActivityViewGroup extends ActionBarActivity {
         protected void onPostExecute(ArrayList results) {
             Log.d(TAG, "onPostExecute");
 
-            final ArrayList dataSet = this.dataSet.get();
+            final ArrayList<String> dataSet = this.dataSet.get();
             final DrawerRecyclerViewAdapter adapter = this.adapter.get();
 
             if (dataSet != null && adapter != null) {
                 dataSet.clear();
                 dataSet.addAll(results);
                 adapter.notifyDataSetChanged();
-                //TODO: force layout update on item 0
+
+                toolbarTitle.setText(dataSet.get(0));
+                groupName = dataSet.get(0);
+
+                if (viewPagerAdapter != null)
+                    viewPagerAdapter.updateGroupFragments(groupName);
             }
         }
     }
