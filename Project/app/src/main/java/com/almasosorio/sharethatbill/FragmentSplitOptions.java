@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -102,7 +103,28 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
         if (newValue.equals(mTotalPaid))
             return;
 
+        Log.d("FragmentSplitOptions", "Received " + newValue.toString());
+
         mTotalPaid = newValue;
+
+        if (mSpinnerSelectedIndex == 1)
+            doEvenSplit();
+    }
+
+    private void doEvenSplit() {
+
+        Double value = mTotalPaid / mUserList.size();
+
+        for (int i = 0; i < mUserList.size(); i++) {
+            ((HashMap<FragmentNewBill.KeyType, Double>)mUserList.get(i))
+                    .put(FragmentNewBill.KeyType.OldAmountToPay,
+                            (Double)mUserList.get(i).get(FragmentNewBill.KeyType.AmountToPay));
+
+            ((HashMap<FragmentNewBill.KeyType, Double>)mUserList.get(i))
+                    .put(FragmentNewBill.KeyType.AmountToPay,
+                            value);
+        }
+
         updateDataSet();
     }
 
@@ -227,15 +249,9 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
             mSpinnerSelectedIndex = position;
 
             if (mSpinnerSelectedIndex == 1) {
-                for (int i = 0; i < mUserList.size(); i++) {
 
-                    ((HashMap<FragmentNewBill.KeyType, Double>)mUserList.get(i)).
-                            put(FragmentNewBill.KeyType.OldAmountToPay,
-                                    (Double)mUserList.get(i).get(FragmentNewBill.KeyType.AmountToPay));
+                doEvenSplit();
 
-                    ((HashMap<FragmentNewBill.KeyType, Double>)mUserList.get(i)).
-                            put(FragmentNewBill.KeyType.AmountToPay, mTotalPaid / mUserList.size());
-                }
             } else if (mSpinnerSelectedIndex == 0) {
 
                 for (int i = 0; i < mUserList.size(); i++) {
@@ -244,6 +260,7 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
                             put(FragmentNewBill.KeyType.AmountToPay, (Double)mUserList.get(i).get(FragmentNewBill.KeyType.OldAmountToPay));
                 }
 
+                updateDataSet();
             }
 
             updateDataSet();

@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -14,12 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 /**
  * Created by osorio.bruno on 23/04/2015.
  */
-public class ViewLoading extends LinearLayout {
+public class ViewLoading extends RelativeLayout {
 
     private ProgressBar mProgressBar;
     private TextView mTextView;
@@ -60,10 +62,17 @@ public class ViewLoading extends LinearLayout {
 
     public void setLoadedView(View v) {
 
+        if (mAfterLoadView != null)
+            removeView(mAfterLoadView);
+
         mAfterLoadView = v;
 
-        if (v != null)
-            setState(mIsLoading, mFailed);
+        if (v != null) {
+            addView(v);
+            v.setVisibility(VISIBLE);
+        }
+
+        setState(mIsLoading, mFailed);
     }
 
     public boolean isLoading() {
@@ -79,8 +88,6 @@ public class ViewLoading extends LinearLayout {
         if (!(mIsLoading || mFailed) && mAfterLoadView != null) {
             mAfterLoadView.setVisibility(INVISIBLE);
         }
-
-        Log.d("ViewLoading", Boolean.toString(loading) + " - " + Boolean.toString(failed));
 
         if (loading) {
 

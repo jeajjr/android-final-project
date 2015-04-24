@@ -69,7 +69,8 @@ public class FragmentNewBill extends Fragment {
                 DBHandler db = new DBHandler();
                 try {
                     ArrayList arr = db.getGroupMembersNames(params[0]);
-                    success = true;
+                    if (!isCancelled())
+                        success = true;
                     return arr;
                 } catch (Exception ex) {
 
@@ -81,6 +82,7 @@ public class FragmentNewBill extends Fragment {
             protected void onCancelled(ArrayList arrayList) {
                 super.onCancelled(arrayList);
                 mViewPagerAdapter.setLoadingNewBill(false, false);
+                Log.d("FragmentNewBill", "onCancelled.");
             }
 
             @Override
@@ -91,13 +93,12 @@ public class FragmentNewBill extends Fragment {
 
             @Override
             protected void onPostExecute(ArrayList data) {
-                mViewPagerAdapter.setLoadingNewBill(false, success);
-
+                mViewPagerAdapter.setLoadingNewBill(false, !success);
                 if (data != null && !isCancelled())
                     listener.onDownloadGroupMembers(data);
             }
-        };
-        task.execute(groupName);
+        }.execute(groupName);
+        /*
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -107,8 +108,11 @@ public class FragmentNewBill extends Fragment {
                         return;
 
                 task.cancel(true);
+
+                Log.d("FragmentNewBill", "Task Cancelled.");
             }
         }, Preferences.getInstance().getTimeout());
+        */
     }
 
     public void loadGroupMembers() {
@@ -125,6 +129,8 @@ public class FragmentNewBill extends Fragment {
                     ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountToPay, 0.0);
                     userList.add(newEntry);
                 }
+
+                Log.d("FragmentNewBill", "Downloaded " + data.size() + " from group " + groupName);
 
                 if (mViewPagerAdapter != null)
                     mViewPagerAdapter.onUpdateUserList();

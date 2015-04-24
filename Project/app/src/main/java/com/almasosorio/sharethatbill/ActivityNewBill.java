@@ -38,11 +38,9 @@ public class ActivityNewBill extends ActionBarActivity {
             userName = extras.getString(getString(R.string.bundle_user_name));
         }
         else {
-            /*
             //TODO: remove
             groupName = "group1";
             userName = "user1";
-            */
         }
 
         if (mFragment == null)
