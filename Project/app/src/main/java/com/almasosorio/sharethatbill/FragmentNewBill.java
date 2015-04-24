@@ -288,14 +288,14 @@ public class FragmentNewBill extends Fragment {
 
         try {
             String str = ((TextView)getView().findViewById(R.id.totalPaid)).getText().toString().substring(2);
-            bill.billValue = Float.valueOf(str);
+            bill.billValue = Double.valueOf(str);
         } catch (NumberFormatException ex) {
             return false;
         }
 
         Double totalSplitValue = mViewPagerAdapter.getTotalSplitValue();
 
-        if (totalSplitValue == null || !totalSplitValue.equals(bill.billValue)) {
+        if (totalSplitValue == null || (totalSplitValue - bill.billValue) > 0.0001d) {
             billFailAlert(getActivity().getString(R.string.bill_creation_failed),
                     getActivity().getString(R.string.bill_values_mismatch));
             return false;

@@ -11,7 +11,7 @@ import java.util.Calendar;
 public class Bill {
     String billName;
     String groupName;
-    Float billValue;
+    Double billValue;
     Calendar billDate;
     Double billLocationLatitude = 0.0d;
     Double billLocationLongitude = 0.0d;
