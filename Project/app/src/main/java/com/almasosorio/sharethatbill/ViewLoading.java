@@ -107,11 +107,14 @@ public class ViewLoading extends RelativeLayout {
 
     private void fadeOutLoad(Animator.AnimatorListener listener) {
 
+        Log.d("ViewLoading.java - Fading", "FADE OUT LOAD - " + this.hashCode());
+
         mFading = true;
         mTextView.clearAnimation();
         mProgressBar.clearAnimation();
-        if (mAfterLoadView != null)
+        if (mAfterLoadView != null) {
             mAfterLoadView.clearAnimation();
+        }
 
         mProgressBar.animate().alpha(0f).setDuration(FADE_DURATION)
                 .setListener(null);
@@ -137,6 +140,8 @@ public class ViewLoading extends RelativeLayout {
         mTextView.clearAnimation();
         mProgressBar.clearAnimation();
 
+        Log.d("ViewLoading.java - Fading", "FADE OUT VIEW - " + this.hashCode());
+
         if (mAfterLoadView != null) {
             mAfterLoadView.clearAnimation();
             mAfterLoadView.animate().alpha(0f).setDuration(FADE_DURATION)
@@ -152,6 +157,8 @@ public class ViewLoading extends RelativeLayout {
     }
 
     private void fadeInLoad() {
+
+        Log.d("ViewLoading.java - Fading", "FADE IN LOAD - " + this.hashCode());
 
         mIsLoading = true;
         mFailed = false;
@@ -182,6 +189,7 @@ public class ViewLoading extends RelativeLayout {
         mFading = false;
         mTextView.clearAnimation();
         mProgressBar.clearAnimation();
+
         if (mAfterLoadView != null)
             mAfterLoadView.clearAnimation();
 
@@ -193,6 +201,8 @@ public class ViewLoading extends RelativeLayout {
     }
 
     private void fadeInView() {
+
+        Log.d("ViewLoading.java - Fading", "FADE IN VIEW - " + this.hashCode());
 
         mIsLoading = false;
         mFailed = false;
@@ -207,6 +217,8 @@ public class ViewLoading extends RelativeLayout {
     }
 
     public void setState(boolean loading, boolean failed) {
+
+        Log.d("ViewLoading.java - setState", Boolean.valueOf(loading) + "/" + Boolean.valueOf(failed));
 
         if (mFading)
             return;
@@ -270,8 +282,5 @@ public class ViewLoading extends RelativeLayout {
                 });
             }
         }
-
-        invalidate();
-        requestLayout();
     }
 }
