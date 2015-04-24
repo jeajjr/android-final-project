@@ -120,6 +120,8 @@ public class FragmentWhoPaid extends Fragment {
         for (int i = 0; i < mUserList.size(); i++) {
             HashMap<RecyclerViewAdapter.MapItemKey, String> item = new HashMap<>();
             item.put(RecyclerViewAdapter.MapItemKey.TEXT_1, (String)mUserList.get(i).get(FragmentNewBill.KeyType.UserName));
+            item.put(RecyclerViewAdapter.MapItemKey.TEXT_4, (String)mUserList.get(i).get(FragmentNewBill.KeyType.UserEmail));
+            Log.d("FragmentWhoPaid", "Added - " + (String)mUserList.get(i).get(FragmentNewBill.KeyType.UserEmail));
             dataSet.add(item);
         }
         updateDataSet();

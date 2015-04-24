@@ -172,7 +172,7 @@ public class FragmentGroupBills extends Fragment {
 
                 if (userBalanceInBill > 0) {
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            context.getString(R.string.you_lent));
+                            context.getString(R.string.you_borrowed));
 
                     billItem.put(RecyclerViewAdapter.MapItemKey.TEXT_4,
                             String.format("$ %.2f", userBalanceInBill));

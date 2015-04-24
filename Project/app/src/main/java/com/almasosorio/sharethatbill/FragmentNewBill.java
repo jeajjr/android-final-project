@@ -49,11 +49,13 @@ public class FragmentNewBill extends Fragment {
     private ViewPagerAdapter mViewPagerAdapter;
     private String groupName, userName;
 
-    static public FragmentNewBill newInstance(String groupName, String sessionUserName) {
+    static public FragmentNewBill newInstance(String groupName, String userEmail) {
         final FragmentNewBill f = new FragmentNewBill();
         f.userList = new ArrayList<>();
         f.groupName = groupName;
-        f.userName = sessionUserName;
+        f.userName = userEmail;
+        Preferences.getInstance().setCurrentGroup(groupName);
+        Preferences.getInstance().setUserEmail(userEmail);
         return f;
     }
 

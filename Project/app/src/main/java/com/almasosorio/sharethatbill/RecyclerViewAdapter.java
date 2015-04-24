@@ -2,6 +2,7 @@ package com.almasosorio.sharethatbill;
 
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -183,6 +184,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                 case WHO_PAID_LIST_ITEM:
                 case SPLIT_OPTIONS_LIST_ITEM:
+
+                    String email = data.get(MapItemKey.TEXT_4);
+
+                    Log.d("RecyclerViewAdapter", "Comparing " + (email == null ? "<null>" : email) + " with " +Preferences.getInstance().getUserEmail() );
+
+                    if (email != null && email.equals(Preferences.getInstance().getUserEmail())) {
+                        textView1.setTextColor(Color.rgb(255, 165, 55));
+                        textView1.setText(textView1.getText() + "(You)");
+                    } else
+                        textView1.setTextColor(Color.WHITE);
+
                     textView2.setText(data.get(MapItemKey.TEXT_2));
                     break;
             }
