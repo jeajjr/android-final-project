@@ -221,7 +221,7 @@ public class FragmentGroupMembers extends Fragment {
                             context.getString(R.string.borrowed_in_total));
 
                     userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_3,
-                            String.format("$ %.2f", userBalanceInGroup));
+                            String.format("$ %.2f", -userBalanceInGroup));
                 }
 
                 results.add(userItem);

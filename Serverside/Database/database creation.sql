@@ -68,18 +68,18 @@ INSERT INTO users VALUES ('user1', 'Molson', 'Lucius', '1234');
 INSERT INTO users VALUES ('user2', 'Bob', 'Dilan', '1234');
 
 -- name
-INSERT INTO groups VALUES ('group1');
+INSERT INTO groups VALUES ('NYC Trip');	
 
 --	id, name, value, dateOcurred, gid, latitute, longitude, picture
-INSERT INTO bills VALUES ('group1bill1', 'bill1', 50.00, '2015-04-01 02:08','group1', '0', '0', '');
+INSERT INTO bills VALUES ('NYC TripRestaurant day 1', 'Restaurant day 1', 50.00, '2015-04-01 02:08','NYC Trip', '0', '0', '');
 
 -- uid, gid
-INSERT INTO usersAndGroups VALUES ('user1', 'group1');
-INSERT INTO usersAndGroups VALUES ('user2', 'group1');
+INSERT INTO usersAndGroups VALUES ('user1', 'NYC Trip');
+INSERT INTO usersAndGroups VALUES ('user2', 'NYC Trip');
 
 --	uid, bid, valueOwed, valuePaid
-INSERT INTO usersAndBills VALUES ('user1','group1bill1', 0, 50.00);
-INSERT INTO usersAndBills VALUES ('user2','group1bill1', 50.00, 0);
+INSERT INTO usersAndBills VALUES ('user1','NYC TripRestaurant day 1', 0, 50.00);
+INSERT INTO usersAndBills VALUES ('user2','NYC TripRestaurant day 1', 50.00, 0);
 
 -- nid, gid, uid, type, details, time
-INSERT INTO groupNotifications VALUES ('1', 'group1', 'user1', '1', 'bill1', '2015-04-01 12:00:00');
+INSERT INTO groupNotifications VALUES ('1', 'NYC Trip', 'user1', '1', 'Restaurant day 1', '2015-04-01 12:00:00');
