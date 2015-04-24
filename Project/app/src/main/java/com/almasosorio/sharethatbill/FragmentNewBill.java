@@ -178,7 +178,7 @@ public class FragmentNewBill extends Fragment {
         });
 
         mBillNameEditText = (EditText)v.findViewById(R.id.billName);
-        mBillNameEditText.setHint(getString(R.string.untitled));
+        mBillNameEditText.setHint(getString(R.string.bill_name_hint));
         mBillNameEditText.setHintTextColor(Color.LTGRAY);
 
         loadGroupMembers();
