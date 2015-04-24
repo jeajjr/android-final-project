@@ -327,6 +327,7 @@ public class DBHandler {
                 psmtm.setString(2, groupName);
                 psmtm.executeUpdate();
 
+
                 connect.close();
 
                 this.postNotification(new Notification(groupName, sessionUserName, Notification.USER_ADDED,addedUserName));

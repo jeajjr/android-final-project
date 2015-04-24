@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerTabStrip;
@@ -61,25 +62,63 @@ public class FragmentNewBill extends Fragment {
     }
 
     private void downloadGroupMembers(final onDownloadGroupMembers listener) {
-        new AsyncTask<String, Void, ArrayList>() {
+        AsyncTask task = new AsyncTask<String, Void, ArrayList>() {
+            private boolean success = false;
             @Override
             protected ArrayList doInBackground(String... params) {
                 DBHandler db = new DBHandler();
-                return db.getGroupMembersNames(params[0]);
+                try {
+                    ArrayList arr = db.getGroupMembersNames(params[0]);
+                    success = true;
+                    return arr;
+                } catch (Exception ex) {
+
+                }
+                return null;
             }
 
             @Override
             protected void onPreExecute() {
                 super.onPreExecute();
-                mViewPagerAdapter.setLoadingNewBill(true);
+                mViewPagerAdapter.setLoadingNewBill(true, false);
             }
 
             @Override
             protected void onPostExecute(ArrayList data) {
-                mViewPagerAdapter.setLoadingNewBill(false);
-                listener.onDownloadGroupMembers(data);
+                mViewPagerAdapter.setLoadingNewBill(false, success);
+
+                if (data != null)
+                    listener.onDownloadGroupMembers(data);
             }
-        }.execute(groupName);
+        };
+        task.execute(groupName);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+
+            }
+        }, 0);
+    }
+
+    public void loadGroupMembers() {
+        downloadGroupMembers(new onDownloadGroupMembers() {
+            @Override
+            public void onDownloadGroupMembers(ArrayList<TwoStringsClass> data) {
+                userList.clear();
+
+                for (int i = 0; i < data.size(); i++) {
+                    HashMap<KeyType, ?> newEntry = new HashMap<>();
+                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserEmail, data.get(i).string1);
+                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserName, data.get(i).string2);
+                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountPaid, 0.0);
+                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountToPay, 0.0);
+                    userList.add(newEntry);
+                }
+
+                if (mViewPagerAdapter != null)
+                    mViewPagerAdapter.onUpdateUserList();
+            }
+        });
     }
 
     @Override
@@ -123,26 +162,10 @@ public class FragmentNewBill extends Fragment {
         });
 
         mBillNameEditText = (EditText)v.findViewById(R.id.billName);
-        mBillNameEditText.setText(getString(R.string.untitled));
+        mBillNameEditText.setHint(getString(R.string.untitled));
+        mBillNameEditText.setHintTextColor(Color.LTGRAY);
 
-        downloadGroupMembers(new onDownloadGroupMembers() {
-            @Override
-            public void onDownloadGroupMembers(ArrayList<TwoStringsClass> data) {
-                userList.clear();
-
-                for (int i = 0; i < data.size(); i++) {
-                    HashMap<KeyType, ?> newEntry = new HashMap<>();
-                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserEmail, data.get(i).string1);
-                    ((HashMap<KeyType, String>) newEntry).put(KeyType.UserName, data.get(i).string2);
-                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountPaid, 0.0);
-                    ((HashMap<KeyType, Double>) newEntry).put(KeyType.AmountToPay, 0.0);
-                    userList.add(newEntry);
-                }
-
-                if (mViewPagerAdapter != null)
-                    mViewPagerAdapter.onUpdateUserList();
-            }
-        });
+        loadGroupMembers();
 
         return v;
     }

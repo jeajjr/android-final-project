@@ -44,23 +44,16 @@
             android:background="#ffffffff" />
     </RelativeLayout>
 
-    <ProgressBar
-        style="?android:attr/progressBarStyleLarge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_centerInParent="true"
-        android:indeterminate="true" />
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerView"
+    <view
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        class="com.almasosorio.sharethatbill.ViewLoading"
+        android:id="@+id/viewLoader"
         android:background="@drawable/rectangle_outline"
         android:padding="1dp"
         android:layout_below="@+id/spinnerLayout"
         android:layout_above="@+id/linearLayout2"
-        android:scrollbars="vertical"/>
+        />
 
     <LinearLayout
         android:orientation="horizontal"

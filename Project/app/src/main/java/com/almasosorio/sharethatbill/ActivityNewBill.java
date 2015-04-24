@@ -51,7 +51,7 @@ public class ActivityNewBill extends ActionBarActivity {
         if (savedInstanceState == null) {
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, mFragment, "FragmentNewBill")
+                    .add(R.id.container, mFragment)
                     .commit();
 
         }

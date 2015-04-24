@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -29,7 +30,7 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
     private int mLastPositionEdited;
     private int mSpinnerSelectedIndex;
     private boolean mLoading = false;
-    ProgressBar mLoadingBar;
+    ViewLoading mViewLoading;
     Double mTotalSplitValue, mTotalPaid;
     RecyclerView mRecyclerView;
     RecyclerViewAdapter mRecyclerAdapter;
@@ -45,10 +46,12 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
         return f;
     }
 
-    public void setLoading(boolean l) {
+    public void setLoading(boolean l, boolean success) {
+
         mLoading = l;
-        if (mLoadingBar != null)
-            mLoadingBar.setVisibility(l ? View.VISIBLE : View.INVISIBLE);
+
+        if (mViewLoading != null)
+            mViewLoading.setState(l, success);
     }
 
     public void updateDataSet() {
@@ -115,9 +118,6 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_split_options, container, false);
 
-        mLoadingBar = (ProgressBar)v.findViewById(R.id.progressBar);
-        setLoading(mLoading);
-
         mTotalSplitLabel = (TextView)v.findViewById(R.id.totalValue);
         mTotalSplitValue = 0.0;
 
@@ -128,7 +128,30 @@ public class FragmentSplitOptions extends Fragment implements Spinner.OnItemSele
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         mSpinner.setAdapter(adapter);
 
-        mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        mRecyclerView = new RecyclerView(getActivity());
+        int padding = (int)getActivity().getResources().getDisplayMetrics().density;
+        mRecyclerView.setPadding(padding, padding, padding, padding);
+        //mRecyclerView.setBackground(getActivity().getDrawable(R.drawable.rectangle_outline));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);//(RelativeLayout.LayoutParams)mRecyclerView.getLayoutParams();
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        mRecyclerView.setLayoutParams(params);
+
+        mViewLoading = (ViewLoading)v.findViewById(R.id.viewLoader);
+        mViewLoading.setLoadedView(mRecyclerView);
+        mViewLoading.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mViewLoading.hasFailed()) {
+                    FragmentNewBill f = (FragmentNewBill)getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
+                    if (f != null) {
+                        f.loadGroupMembers();
+                    }
+                }
+            }
+        });
+
         mRecyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
