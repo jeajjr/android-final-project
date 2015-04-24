@@ -2,6 +2,7 @@ package com.almasosorio.sharethatbill;
 
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 public class FragmentLogin extends Fragment {
     private static final String TAG = "FragmentLogin";
 
+    ProgressDialog progressDialog;
+
     public FragmentLogin() {
         // Required empty public constructor
     }
@@ -29,6 +32,10 @@ public class FragmentLogin extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
 
         final EditText userName = (EditText) v.findViewById(R.id.email);
         final EditText password = (EditText) v.findViewById(R.id.password);
@@ -98,6 +105,11 @@ public class FragmentLogin extends Fragment {
         private static final String TAG = "LoginValidator";
 
         @Override
+        protected void onPreExecute() {
+            progressDialog.show();
+        }
+
+        @Override
         protected String[] doInBackground(String... params) {
             Log.d(TAG, "doInBackground");
 
@@ -128,6 +140,8 @@ public class FragmentLogin extends Fragment {
         @Override
         protected void onPostExecute(String... result) {
             Log.d(TAG, "Received for login: " + result);
+
+            progressDialog.dismiss();
 
             // if login was successful
             if (Boolean.parseBoolean(result[0])) {

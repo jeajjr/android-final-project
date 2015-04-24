@@ -1,6 +1,7 @@
 package com.almasosorio.sharethatbill;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Point;
@@ -32,6 +33,8 @@ public class FragmentBillDetails extends Fragment {
     private String groupName;
     private String billName;
 
+    private ProgressDialog progressDialog;
+
     public FragmentBillDetails() {
         // Required empty public constructor
     }
@@ -62,6 +65,10 @@ public class FragmentBillDetails extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_bill_details, container, false);
 
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage(getResources().getString(R.string.loading));
+        progressDialog.setCancelable(false);
+
         this.userName = getArguments().getString(getActivity().getString(R.string.bundle_user_name));
         this.groupName = getArguments().getString(getActivity().getString(R.string.bundle_group_name));
         this.billName = getArguments().getString(getActivity().getString(R.string.bundle_bill_name));
@@ -90,7 +97,7 @@ public class FragmentBillDetails extends Fragment {
         TextView billName = (TextView) v.findViewById(R.id.textViewBillName);
         TextView billValue = (TextView) v.findViewById(R.id.textViewBillValue);
 
-        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet, adapter))
+        (new DownloaderBillDetails(getActivity(), billName, billValue, dataSet, adapter, progressDialog))
                 .execute(this.groupName, this.billName);
         return v;
     }
@@ -112,6 +119,7 @@ public class FragmentBillDetails extends Fragment {
     }
 
     private class BillDeleter extends AsyncTask<String, Void, Void> {
+
         @Override
         protected Void doInBackground(String... params) {
             DBHandler db = new DBHandler();

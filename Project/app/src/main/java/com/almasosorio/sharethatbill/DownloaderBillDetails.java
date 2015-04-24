@@ -1,6 +1,7 @@
 package com.almasosorio.sharethatbill;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
@@ -17,6 +18,7 @@ public class DownloaderBillDetails extends AsyncTask<String, Void, Void> {
     WeakReference<TextView> billValue;
     WeakReference<ArrayList> dataSet;
     WeakReference<RecyclerViewAdapter> adapter;
+    WeakReference<ProgressDialog> progressDialog;
 
     Bill bill;
     ArrayList<TwoStringsClass> groupMembers;
@@ -25,13 +27,22 @@ public class DownloaderBillDetails extends AsyncTask<String, Void, Void> {
 
     public DownloaderBillDetails (Activity activity, TextView billName, TextView billValue,
                                   ArrayList<HashMap<RecyclerViewAdapter.MapItemKey, String>> dataSet,
-                                  RecyclerViewAdapter adapter) {
+                                  RecyclerViewAdapter adapter, ProgressDialog progressDialog) {
 
         this.activity = new WeakReference<>(activity);
         this.billName = new WeakReference<>(billName);
         this.billValue = new WeakReference<>(billValue);
         this.dataSet = new WeakReference<ArrayList>(dataSet);
         this.adapter = new WeakReference<>(adapter);
+        this.progressDialog = new WeakReference<>(progressDialog);
+    }
+
+    @Override
+    protected void onPreExecute() {
+        final ProgressDialog progressDialog = this.progressDialog.get();
+
+        if (progressDialog != null)
+            progressDialog.show();
     }
 
     @Override
@@ -114,5 +125,10 @@ public class DownloaderBillDetails extends AsyncTask<String, Void, Void> {
 
             adapter.notifyDataSetChanged();
         }
+
+        final ProgressDialog progressDialog = this.progressDialog.get();
+
+        if (progressDialog != null)
+            progressDialog.dismiss();
     }
 }
