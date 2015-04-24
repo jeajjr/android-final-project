@@ -206,8 +206,12 @@ public class FragmentGroupMembers extends Fragment {
 
                 memberEmails.add(members.get(i).string1);
 
+                String youTag = "";
+                if (members.get(i).string1.equals(params[1]))
+                    youTag = " (" + getString(R.string.you).toLowerCase() + ")";
+
                 userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_1,
-                        db.getUserNamesByEmail(members.get(i).string1));
+                        db.getUserNamesByEmail(members.get(i).string1) + youTag);
 
                 if (userBalanceInGroup >= 0) {
                     userItem.put(RecyclerViewAdapter.MapItemKey.TEXT_2,
