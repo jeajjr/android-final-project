@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.lang.ref.WeakReference;
@@ -32,7 +33,8 @@ public class FragmentGroupNotifications extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
-    private ProgressBar progressBar;
+    //private ProgressBar progressBar;
+    private ViewLoading viewLoader;
     private TextView listEmptyText;
 
     public FragmentGroupNotifications() {
@@ -45,7 +47,7 @@ public class FragmentGroupNotifications extends Fragment {
         adapter.notifyDataSetChanged();
         this.groupName = groupName;
         if (isAdded())
-            (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+            (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, viewLoader, listEmptyText)).execute(groupName, userName);
     }
 
     public static FragmentGroupNotifications newInstance(Context context, String userName, String groupName) {
@@ -75,7 +77,18 @@ public class FragmentGroupNotifications extends Fragment {
         userName = getArguments().getString(getActivity().getString(R.string.bundle_user_name));
         groupName = getArguments().getString(getActivity().getString(R.string.bundle_group_name));
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        //recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+
+        recyclerView = new RecyclerView(getActivity());
+        int padding = (int)getActivity().getResources().getDisplayMetrics().density;
+        recyclerView.setPadding(padding, padding, padding, padding);
+        //mRecyclerView.setBackground(getActivity().getDrawable(R.drawable.rectangle_outline));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);//(RelativeLayout.LayoutParams)mRecyclerView.getLayoutParams();
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        recyclerView.setLayoutParams(params);
+
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -84,10 +97,13 @@ public class FragmentGroupNotifications extends Fragment {
         adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.NOTIFICATION_LIST_ITEM);
         recyclerView.setAdapter(adapter);
 
-        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        viewLoader = (ViewLoading)v.findViewById(R.id.viewLoader);
+        viewLoader.setLoadedView(recyclerView);
+
+        //progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
         listEmptyText = (TextView) v.findViewById(R.id.text_list_empty);
 
-        (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, progressBar, listEmptyText)).execute(groupName, userName);
+        (new NotificationsDownloader(getActivity().getApplicationContext(), dataSet, adapter, viewLoader, listEmptyText)).execute(groupName, userName);
 
         return v;
     }
@@ -97,27 +113,29 @@ public class FragmentGroupNotifications extends Fragment {
 
         private WeakReference<ArrayList> dataSet;
         private WeakReference<RecyclerViewAdapter> adapter;
-        private WeakReference<ProgressBar> progressBar;
+        private WeakReference<ViewLoading> viewLoader;
         private WeakReference<TextView> emptyListText;
 
         private Context context;
 
         public NotificationsDownloader(Context context, ArrayList dataSet, RecyclerViewAdapter adapter,
-                                       ProgressBar progressBar, TextView emptyListText) {
+                                       ViewLoading viewLoader, TextView emptyListText) {
             this.context = context;
             this.dataSet = new WeakReference<>(dataSet);
             this.adapter = new WeakReference<>(adapter);
-            this.progressBar = new WeakReference<>(progressBar);
+            this.viewLoader = new WeakReference<>(viewLoader);
             this.emptyListText = new WeakReference<>(emptyListText);
         }
 
         @Override
         protected void onPreExecute() {
-            final ProgressBar progressBar = this.progressBar.get();
+            final ViewLoading viewLoader = this.viewLoader.get();
             final TextView emptyListText = this.emptyListText.get();
 
-            if (progressBar != null)
-                progressBar.setVisibility(View.VISIBLE);
+            //if (progressBar != null)
+             //   progressBar.setVisibility(View.VISIBLE);
+            if (viewLoader != null)
+                viewLoader.setState(true, false);
 
             if (emptyListText != null)
                 emptyListText.setVisibility(View.INVISIBLE);
@@ -229,10 +247,13 @@ public class FragmentGroupNotifications extends Fragment {
                         emptyListText.setVisibility(View.VISIBLE);
                 }
 
-                final ProgressBar progressBar = this.progressBar.get();
+                final ViewLoading viewLoader = this.viewLoader.get();
 
-                if (progressBar != null)
-                    progressBar.setVisibility(View.INVISIBLE);
+                //if (progressBar != null)
+                //    progressBar.setVisibility(View.INVISIBLE);
+
+                if (viewLoader != null)
+                    viewLoader.setState(false, false);
             }
         }
     }

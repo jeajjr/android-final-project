@@ -156,7 +156,6 @@ public class FragmentWhoPaid extends Fragment {
         mViewLoading.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if (mViewLoading.hasFailed()) {
                     FragmentNewBill f = (FragmentNewBill)getActivity().getSupportFragmentManager().findFragmentById(R.id.container);
                     if (f != null) {

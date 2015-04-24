@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,7 @@ public class FragmentGroupMembers extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerViewAdapter adapter;
 
-    private ProgressBar progressBar;
+    private ViewLoading viewLoader;
 
     public FragmentGroupMembers() {
         // Required empty public constructor
@@ -50,7 +51,7 @@ public class FragmentGroupMembers extends Fragment {
         adapter.notifyDataSetChanged();
         this.groupName = groupName;
         if (isAdded())
-            (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, membersEmailList, adapter, progressBar))
+            (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, membersEmailList, adapter, viewLoader))
                     .execute(groupName, userName);
     }
 
@@ -97,7 +98,18 @@ public class FragmentGroupMembers extends Fragment {
             }
         });
 
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        //recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+
+        recyclerView = new RecyclerView(getActivity());
+        int padding = (int)getActivity().getResources().getDisplayMetrics().density;
+        recyclerView.setPadding(padding, padding, padding, padding);
+        //mRecyclerView.setBackground(getActivity().getDrawable(R.drawable.rectangle_outline));
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);//(RelativeLayout.LayoutParams)mRecyclerView.getLayoutParams();
+        params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+        recyclerView.setLayoutParams(params);
+
         recyclerView.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -106,9 +118,10 @@ public class FragmentGroupMembers extends Fragment {
         adapter = new RecyclerViewAdapter(getActivity(), dataSet, RecyclerViewAdapter.ItemType.GROUP_MEMBERS_LIST_ITEM);
         recyclerView.setAdapter(adapter);
 
-        progressBar = (ProgressBar) v.findViewById(R.id.progressBar);
+        viewLoader = (ViewLoading) v.findViewById(R.id.viewLoader);
+        viewLoader.setLoadedView(recyclerView);
 
-        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, membersEmailList, adapter, progressBar))
+        (new GroupMembersDownloader(getActivity().getApplicationContext(), dataSet, membersEmailList, adapter, viewLoader))
                 .execute(groupName, userName);
 
         return v;
@@ -147,7 +160,7 @@ public class FragmentGroupMembers extends Fragment {
                         .show();
             }
             else {
-                (new AddUserToGroupTask(getActivity().getApplicationContext(), progressBar))
+                (new AddUserToGroupTask(getActivity().getApplicationContext(), viewLoader))
                         .execute(email, groupName, userName);
             }
         }
@@ -165,25 +178,25 @@ public class FragmentGroupMembers extends Fragment {
 
         private WeakReference<ArrayList> dataSet;
         private WeakReference<RecyclerViewAdapter> adapter;
-        private WeakReference<ProgressBar> progressBar;
+        private WeakReference<ViewLoading> viewLoader;
         private WeakReference<ArrayList> membersList;
         private Context context;
 
         public GroupMembersDownloader(Context context, ArrayList dataSet, ArrayList membersList,
-                                      RecyclerViewAdapter adapter, ProgressBar progressBar) {
+                                      RecyclerViewAdapter adapter, ViewLoading viewLoader) {
             this.context = context;
             this.dataSet = new WeakReference<>(dataSet);
             this.membersList = new WeakReference<>(membersList);
             this.adapter = new WeakReference<>(adapter);
-            this.progressBar = new WeakReference<>(progressBar);
+            this.viewLoader = new WeakReference<>(viewLoader);
         }
 
         @Override
         protected void onPreExecute() {
-            final ProgressBar progressBar = this.progressBar.get();
+            final ViewLoading viewLoader = this.viewLoader.get();
 
-            if (progressBar != null)
-                progressBar.setVisibility(View.VISIBLE);
+            if (viewLoader != null)
+                viewLoader.setState(true, false);
         }
 
         @Override
@@ -250,31 +263,31 @@ public class FragmentGroupMembers extends Fragment {
                 membersList.addAll(results[1]);
             }
 
-            final ProgressBar progressBar = this.progressBar.get();
+            final ViewLoading viewLoader = this.viewLoader.get();
 
-            if (progressBar != null)
-                progressBar.setVisibility(View.INVISIBLE);
+            if (viewLoader != null)
+                viewLoader.setState(false, false);
         }
     }
 
     private class AddUserToGroupTask extends AsyncTask<String, Void , Boolean> {
         private static final String TAG = "AddUserToGroupTask";
 
-        private WeakReference<ProgressBar> progressBar;
+        private WeakReference<ViewLoading> viewLoader;
 
         private Context context;
 
-        public AddUserToGroupTask(Context context, ProgressBar progressBar) {
+        public AddUserToGroupTask(Context context, ViewLoading viewLoader) {
             this.context = context;
-            this.progressBar = new WeakReference<>(progressBar);
+            this.viewLoader = new WeakReference<>(viewLoader);
         }
 
         @Override
         protected void onPreExecute() {
-            final ProgressBar progressBar = this.progressBar.get();
+            final ViewLoading viewLoader = this.viewLoader.get();
 
-            if (progressBar != null)
-                progressBar.setVisibility(View.VISIBLE);
+            if (viewLoader != null)
+                viewLoader.setState(true, false);
         }
 
         @Override
@@ -302,10 +315,10 @@ public class FragmentGroupMembers extends Fragment {
                             .show();
             }
 
-            final ProgressBar progressBar = this.progressBar.get();
+            final ViewLoading viewLoader = this.viewLoader.get();
 
-            if (progressBar != null)
-                progressBar.setVisibility(View.INVISIBLE);
+            if (viewLoader != null)
+                viewLoader.setState(false, false);
         }
     }
 }
