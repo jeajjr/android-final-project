@@ -235,7 +235,7 @@ public class FragmentNewBill extends Fragment {
 
             AlertDialog.Builder adb = new AlertDialog.Builder(getActivity());
             adb.setView(datePicker)
-                    .setTitle("Select Date")
+                    .setTitle(getString(R.string.select_date))
                     .setPositiveButton(android.R.string.ok,
                             new DialogInterface.OnClickListener() {
                                 @Override

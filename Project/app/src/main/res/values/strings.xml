@@ -25,12 +25,19 @@
     <string name="enter_new_email">Enter member\'s new email</string>
     <string name="group_already_exists">Group name already exists.</string>
     <string name="failed_to_create_group">Failed to create group.</string>
+    <string name="email_cant_be_empty">Email can\'t be empty.</string>
+    <string name="you_dont_add_you">You don\'t have to add yourself.</string>
+    <string name="email_already_added">User\'s email already added.</string>
+    <string name="email_not_found">User\'s email \"%s\" couldn\'t be found.</string>
+    <string name="email_must_be_single">Email must be single line.</string>
 
     <!-- create new bill fragment -->
     <string name="title_activity_activity_new_bill">ActivityNewBill</string>
     <string name="click_set_date">CLICK TO SET DATE</string>
+    <string name="select_date">Select Date</string>
     <string name="new_bill">NEW BILL</string>
     <string name="who_paid">WHO PAID</string>
+    <string name="highlight_you">(You)</string>
     <string name="edit_value_paid">Edit Value Paid</string>
     <string name="enter_value_paid_by">Enter value paid by</string>
     <string name="split_options">SPLIT OPTIONS</string>
