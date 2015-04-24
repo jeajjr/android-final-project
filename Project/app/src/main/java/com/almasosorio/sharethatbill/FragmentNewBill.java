@@ -286,6 +286,14 @@ public class FragmentNewBill extends Fragment {
             return false;
         }
 
+        Double totalSplitValue = mViewPagerAdapter.getTotalSplitValue();
+
+        if (totalSplitValue == null || !totalSplitValue.equals(bill.billValue)) {
+            billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                    getActivity().getString(R.string.bill_values_unmatch));
+            return false;
+        }
+
         if (userList.isEmpty() || bill.billValue == 0.0)
             return false;
 
@@ -321,7 +329,8 @@ public class FragmentNewBill extends Fragment {
             protected void onPostExecute(Boolean s) {
                 super.onPostExecute(s);
                 if (!success)
-                    billFailAlert();
+                    billFailAlert(getActivity().getString(R.string.bill_creation_failed),
+                            getActivity().getString(R.string.bill_creation_failed_message));
                 else
                     billSuccessToast(bill.billName);
             }
@@ -330,10 +339,10 @@ public class FragmentNewBill extends Fragment {
         return true;
     }
 
-    public void billFailAlert() {
+    public void billFailAlert(String title, String message) {
         new AlertDialog.Builder(getActivity())
-            .setTitle(getActivity().getString(R.string.bill_creation_failed))
-            .setMessage(getActivity().getString(R.string.bill_creation_failed_message))
+            .setTitle(title)
+            .setMessage(message)
             .setPositiveButton(android.R.string.ok, null)
             .setIcon(android.R.drawable.ic_dialog_alert)
             .show();
