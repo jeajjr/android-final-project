@@ -4,5 +4,8 @@
     <size
         android:width="1px"
         android:height="1px" />
+    <padding
+        android:left="35dp"
+        android:right="35dp" />
     <solid android:color="#ffbbbbbb" />
 </shape>

@@ -172,8 +172,8 @@ public class FragmentWhoPaid extends Fragment {
             private Drawable mDivider = getResources().getDrawable(R.drawable.line_divider);
             @Override
             public void onDrawOver(Canvas c, RecyclerView parent, RecyclerView.State state) {
-                int left = parent.getPaddingLeft();
-                int right = parent.getWidth() - parent.getPaddingRight();
+                int left = parent.getPaddingLeft() + 35;
+                int right = parent.getWidth() - parent.getPaddingRight() - 35;
                 int childCount = parent.getChildCount();
                 for (int i = 0; i < childCount - 1; i++) {
                     View child = parent.getChildAt(i);
